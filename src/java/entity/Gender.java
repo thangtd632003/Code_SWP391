@@ -10,6 +10,7 @@ package entity;
  */
 
 //gender
+
 public enum Gender {
     MALE,
     FEMALE,
