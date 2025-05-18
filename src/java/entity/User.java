@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package entity;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +11,8 @@ public class User {
     private String passwordHash;
     private String fullName;
     private String phone;
+    private Gender gender;           // ✅ Dùng enum thay vì String
+    private Date birthDate;
     private Role role;
     private Status status;
     private Timestamp createdAt;
@@ -41,6 +40,12 @@ public class User {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
+    public Gender getGender() { return gender; }              // ✅ Enum Getter
+    public void setGender(Gender gender) { this.gender = gender; } // ✅ Enum Setter
+
+    public Date getBirthDate() { return birthDate; }
+    public void setBirthDate(Date birthDate) { this.birthDate = birthDate; }
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
