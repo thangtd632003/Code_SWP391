@@ -8,6 +8,8 @@ package entity;
  *
  * @author thang
  */
-public class NewClass {
-    
+public enum Role {
+    TRAVELER,
+    GUIDE,
+    ADMIN;
 }
