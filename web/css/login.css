@@ -1,551 +1,94 @@
-/* Cập nhật một số biến màu và shadow */
+/* Thêm vào phần đầu file CSS */
 :root {
-    --primary: #4f46e5;
-    --secondary: #3730a3;
-    --background: #ffffff;
-    --surface: #f8fafc;
-    --text: #1e293b;
-    --text-light: #64748b;
-    --border: #cbd5e1;  /* Border color đậm hơn */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
-    --card-border: 1px solid var(--border);
+    --transition-speed: 0.3s;
+    --slide-transition: 0.6s;
 }
 
+/* Reset CSS */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body styles */
 body {
-    font-family: 'Inter', sans-serif;
-    background: var(--surface);
-    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
     min-height: 100vh;
+    transition: background-color var(--transition-speed) ease;
 }
 
-/* Main Container */
-.page-container {
-    display: flex;
-    min-height: 100vh;
-}
-
-/* Left Side - Login Form */
-.login-section {
-    flex: 1;
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--background);
-}
-
-.login-container {
-    width: 100%;
-    max-width: 400px;
-}
-
-/* Cập nhật Login Card */
-.login-card {
-    background: var(--background);
-    padding: 2.5rem;
-    border-radius: 1rem;
-    border: var(--card-border);
-    box-shadow: var(--shadow-lg);
-}
-
-/* Right Side - Info Section */
-.info-section {
-    flex: 1.2;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    padding: 2rem;
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.info-content {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    color: white;
-    text-align: center;
-}
-
-/* Cập nhật Slideshow Container */
-.slideshow-container {
-    width: 100%;
-    margin: 2rem 0;
-    position: relative;
-    border-radius: 1rem;
-    overflow: hidden;
-    aspect-ratio: 16/9;
-    border: 3px solid rgba(255, 255, 255, 0.1); /* Thêm border */
-    box-shadow: var(--shadow-lg);
-}
-
-.slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-.slide.active {
-    opacity: 1;
-}
-
-.slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.slide-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    color: white;
-    text-align: center;
-}
-
-/* Form Elements */
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text);
-    font-weight: 500;
-}
-
-/* Cập nhật Form Input */
-.form-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid var(--border); /* Border đậm hơn */
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    background-color: var(--background);
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
-}
-
-/* Hiệu ứng hover cho form inputs */
-.form-input:hover {
-    border-color: var(--primary);
-}
-
-/* Password Input */
-.password-input-container {
-    position: relative;
-}
-
-/* Cập nhật Password Toggle */
-.password-toggle {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-light);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-}
-
-.password-toggle:hover {
-    color: var(--primary);
-    background: rgba(79, 70, 229, 0.1);
-}
-
-/* Cập nhật Button Styles */
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid transparent; /* Thêm border */
-}
-
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    border: none;
-    width: 100%;
-    box-shadow: var(--shadow-sm);
-}
-
-.btn-primary:hover {
-    background: var(--secondary);
-    box-shadow: var(--shadow-md);
-}
-
-/* Cập nhật Features */
-.features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.feature-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    text-align: center;
-    backdrop-filter: blur(8px);
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Thêm border */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-}
-
-.feature-item:hover {
-    transform: translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Social Login */
-.social-login {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 2px solid var(--border); /* Border đậm hơn */
-    text-align: center;
-}
-
-.social-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-/* Cập nhật Social Buttons */
-.btn-social {
-    width: 40px;
-    height: 40px;
-    border-radius: 0.5rem;
-    background: var(--surface);
-    border: 2px solid var(--border); /* Border đậm hơn */
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.btn-social:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-/* Cập nhật Header Controls */
+/* Header Controls */
 .header-controls {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+    position: fixed;
+    top: 20px;
+    right: 20px;
     display: flex;
-    gap: 1rem;
-    z-index: 10;
+    gap: 10px;
+    z-index: 1000;
 }
 
-#lang-switcher, .theme-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    border: 2px solid rgba(255, 255, 255, 0.2); /* Border đậm hơn */
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
+#lang-switcher {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
 }
 
-#lang-switcher:hover, .theme-btn:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.2);
+.theme-btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .page-container {
-        flex-direction: column;
-    }
-
-    .login-section, .info-section {
-        padding: 2rem 1rem;
-    }
-
-    .info-section {
-        min-height: 60vh;
-    }
-
-    .slideshow-container {
-        aspect-ratio: 16/10;
-    }
-
-    .features {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .features {
-        grid-template-columns: 1fr;
-    }
-
-    .header-controls {
-        position: relative;
-        top: 0;
-        right: 0;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
-
-    .login-card {
-        padding: 1.5rem;
-    }
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-card {
-    animation: fadeIn 0.5s ease-out;
-}
-
-/* Cập nhật Dark Mode */
-body.dark-mode {
-    --background: #1e293b;
-    --surface: #0f172a;
-    --text: #f8fafc;
-    --text-light: #cbd5e1;
-    --border: #334155;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-/* Cập nhật Remember Me checkbox */
-.remember-me input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--border);
-    border-radius: 4px;
-    margin-right: 8px;
-}
-
-/* Notice Animation Styles */
-.notice-container {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.5s ease;
-}
-
-.notice-container.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.notice-container.hide {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-}
-
-@keyframes slideInDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutUp {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
+.theme-btn:hover {
+    transform: rotate(180deg);
+    background-color: #f0f0f0;
 }
 
 /* Notice Container Styles */
 .notice-container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1rem;
     position: fixed;
-    top: 20px;
+    top: -100px; /* Bắt đầu ẩn ở trên cùng */
     left: 50%;
-    transform: translateX(-50%) translateY(-100%); /* Bắt đầu ở vị trí ngoài màn hình phía trên */
+    transform: translateX(-50%);
     z-index: 1000;
-    transition: transform 0.5s ease;
-}
-
-.notice-container.show {
-    transform: translateX(-50%) translateY(0); /* Di chuyển thẳng xuống */
-}
-
-.notice-container.hide {
-    transform: translateX(-50%) translateY(-100%); /* Di chuyển thẳng lên */
+    animation: slideDown 0.8s ease forwards;
+    width: auto;
+    min-width: 300px;
 }
 
 .db-notice {
-    background: var(--background);
-    color: var(--text);
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    box-shadow: var(--shadow-lg);
-    border: 2px solid var(--border);
+    padding: 15px 25px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
-    font-weight: 500;
-    font-size: 1.1rem;
-    backdrop-filter: blur(8px);
-}
-
-/* Animation keyframes */
-@keyframes slideInDown {
-    from {
-        transform: translateX(-50%) translateY(-100%);
-    }
-    to {
-        transform: translateX(-50%) translateY(0);
-    }
-}
-
-@keyframes slideOutUp {
-    from {
-        transform: translateX(-50%) translateY(0);
-    }
-    to {
-        transform: translateX(-50%) translateY(-100%);
-    }
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    border-left: 4px solid #0066cc;
+    font-size: 16px;
+    color: #333;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 0.3s;
 }
 
 /* Animation cho notice */
 @keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
+    0% {
+        top: -100px;
     }
-    to {
-        transform: translateY(0);
-        opacity: 1;
+    100% {
+        top: 20px;
     }
 }
 
-/* Hover effect */
-.db-notice:hover {
-    border-color: var(--primary);
-    transform: translateY(-2px);
-    transition: all 0.3s ease;
-}
-
-/* Dark mode adjustments */
-body.dark-mode .db-notice {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: var(--border);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .notice-container {
-        padding: 0.5rem;
-        top: 10px;
-    }
-    
-    .db-notice {
-        font-size: 1rem;
-        padding: 0.75rem 1rem;
-    }
-}
-
-/* Success notice variant */
-.db-notice.success {
-    background: #10b981;
-    color: white;
-    border-color: #059669;
-}
-
-/* Error notice variant */
-.db-notice.error {
-    background: #ef4444;
-    color: white;
-    border-color: #dc2626;
-}
-
-/* Info notice variant */
-.db-notice.info {
-    background: var(--primary);
-    color: white;
-    border-color: var(--secondary);
-}
-/* Welcome Text Styles */
-.login-header {
-    margin-bottom: 2.5rem;
-    text-align: center;
-    position: relative;
-    padding-bottom: 1.5rem;
-}
-
-#welcome-text {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: fadeIn 0.8s ease-out;
-}
-
-#welcome-subtext {
-    font-size: 1.1rem;
-    color: var(--text-light);
-    font-weight: 400;
-    animation: fadeIn 1s ease-out;
-}
-
-.login-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
-    border-radius: 2px;
-}
-
-/* Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -557,174 +100,491 @@ body.dark-mode .db-notice {
     }
 }
 
-/* Dark Mode Adjustments */
-body.dark-mode #welcome-text {
-    background: linear-gradient(to right, #60a5fa, #818cf8);
-    -webkit-background-clip: text;
-    background-clip: text;
+/* Hover effect cho notice */
+.db-notice:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 640px) {
-    #welcome-text {
-        font-size: 1.75rem;
+/* Animation khi notice biến mất */
+.notice-hide {
+    animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+    0% {
+        top: 20px;
+        opacity: 1;
     }
-    
-    #welcome-subtext {
-        font-size: 1rem;
-    }
-    
-    .login-header {
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
+    100% {
+        top: -100px;
+        opacity: 0;
     }
 }
 
-/* Hover Effects */
-.login-header:hover::after {
-    width: 80px;
-    transition: width 0.3s ease;
+/* Dark theme support cho notice */
+.dark-theme .db-notice {
+    background-color: rgba(45, 45, 45, 0.95);
+    color: #fff;
+    border-left-color: #3399ff;
 }
-/* Form Footer Styles */
+
+/* Page Container */
+.page-container {
+    display: flex;
+    min-height: 100vh;
+    gap: 24px; /* Thêm dòng này để hai phần gần nhau hơn */
+}
+
+/* Login Section */
+.login-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px; /* Giảm padding để sát nhau hơn */
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.login-header p {
+    color: #666;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-input:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+    outline: none;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: color var(--transition-speed) ease;
+}
+
+.password-toggle:hover {
+    color: #0066cc;
+}
+
+/* Form footer */
 .form-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 20px;
 }
 
-/* Remember Me Checkbox */
 .remember-me {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
+    gap: 8px;
+    color: #666;
 }
 
-.remember-me span {
-    color: var(--text-light);
-    font-size: 0.9rem;
-}
-
-/* Forgot Password Link */
 .forgot-password {
-    color: var(--primary);
+    color: #0066cc;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    position: relative;
 }
 
-.forgot-password::after {
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 0;
+    top: 50%;
+    left: 50%;
     width: 0;
-    height: 2px;
-    background: var(--primary);
-    transition: width 0.3s ease;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
 }
 
-.forgot-password:hover::after {
-    width: 100%;
+.btn:hover::after {
+    width: 300px;
+    height: 300px;
 }
 
-.forgot-password:hover {
-    color: var(--secondary);
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+    margin-bottom: 20px;
 }
 
-/* Register Link Section */
+.btn-primary:hover {
+    background-color: #0052a3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.social-login-text {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-social {
+    width: auto;
+    padding: 12px 20px;
+    background-color: #f5f5f5;
+    color: #333;
+    transform: translateY(0);
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-social:hover {
+    background-color: #e5e5e5;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Register link */
 .register-link {
     text-align: center;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    color: var(--text-light);
-    font-size: 0.95rem;
+    color: #666;
 }
 
 .register-link a {
-    color: var(--primary);
+    color: #0066cc;
     text-decoration: none;
-    font-weight: 600;
-    margin-left: 0.5rem;
+}
+
+/* Info Section */
+.info-section {
+    flex: 2;
+    background-color: #f5f5f5;
+    padding: 100px 100px; /* Giảm padding để sát nhau hơn */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-content {
+    max-width: 600px;
+    text-align: center;
+}
+
+.info-content h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.info-description {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Slideshow */
+.slideshow-container {
+    margin-bottom: 30px;
     position: relative;
-    transition: all 0.2s ease;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-.register-link a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--primary);
-    transition: width 0.3s ease;
+/* Cập nhật và thêm mới các hiệu ứng */
+.slide {
+    display: none;
+    position: relative;
+    transition: opacity var(--slide-transition) ease-in-out;
+    opacity: 0;
 }
 
-.register-link a:hover::after {
+.slide.active {
+    display: block;
+    opacity: 1;
+}
+
+.slide img {
     width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    transform: scale(1);
+    transition: transform var(--transition-speed) ease;
 }
 
-.register-link a:hover {
-    color: var(--secondary);
+.slide:hover img {
+    transform: scale(1.05);
 }
 
-/* Hover Effects */
-.forgot-password:hover, 
-.register-link a:hover {
-    transform: translateY(-1px);
+.slide-caption {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    opacity: 0;
+    transition: all var(--transition-speed) ease-in-out;
 }
 
-/* Dark Mode Adjustments */
-body.dark-mode .forgot-password,
-body.dark-mode .register-link a {
-    color: #60a5fa;
+.slide.active .slide-caption {
+    bottom: 0;
+    opacity: 1;
 }
 
-body.dark-mode .forgot-password:hover,
-body.dark-mode .register-link a:hover {
-    color: #818cf8;
+/* Features */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 }
 
-body.dark-mode .forgot-password::after,
-body.dark-mode .register-link a::after {
-    background: #60a5fa;
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(0);
+    transition: all var(--transition-speed) ease;
 }
 
-/* Animation */
-@keyframes slideUp {
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-item i {
+    font-size: 24px;
+    color: #0066cc;
+    transition: transform var(--transition-speed) ease;
+}
+
+.feature-item:hover i {
+    transform: scale(1.2);
+}
+
+/* Animations */
+.fade {
+    animation: fade 1.5s ease-in-out;
+}
+
+@keyframes fade {
     from {
-        opacity: 0;
-        transform: translateY(10px);
+        opacity: 0.4;
     }
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
-.register-link {
-    animation: slideUp 0.5s ease-out;
+/* Slideshow Animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 640px) {
-    .form-footer {
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.slide.sliding-in {
+    animation: slideIn var(--slide-transition) ease-out forwards;
+}
+
+.slide.sliding-out {
+    animation: slideOut var(--slide-transition) ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .page-container {
         flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
+    }
+
+    .info-section {
+        padding: 20px;
+    }
+
+    .features {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-card {
+        padding: 20px;
     }
     
-    .forgot-password {
-        align-self: flex-end;
+    .social-buttons {
+        flex-wrap: wrap;
     }
     
-    .register-link {
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
+    .header-controls {
+        flex-direction: column;
     }
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background-color: #1a1a1a;
+}
+
+.dark-theme .login-card {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+.dark-theme .form-input {
+    background-color: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #fff;
+}
+
+.dark-theme .btn-social {
+    background-color: #3d3d3d;
+    color: #fff;
+}
+
+.dark-theme .info-section {
+    background-color: #2d2d2d;
+}
+
+.dark-theme .info-content h2,
+.dark-theme .info-content p {
+    color: #fff;
+}
+
+/* Thêm animation cho Dark Mode transition */
+.dark-theme {
+    transition: all var(--transition-speed) ease;
+}
+
+/* Hover effect cho links */
+a {
+    position: relative;
+    transition: color var(--transition-speed) ease;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #0066cc;
+    transition: width var(--transition-speed) ease;
+}
+
+a:hover::after {
+    width: 100%;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.loading {
+    background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+    background-size: 800px 104px;
+    animation: shimmer 1.5s infinite linear;
 }

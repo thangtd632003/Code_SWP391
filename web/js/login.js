@@ -138,11 +138,14 @@ function setupPasswordToggle() {
 // Slideshow functionality
 function setupSlideshow() {
     const slides = document.querySelectorAll('.slide');
+    if (slides.length === 0) return; // Không có slide thì thoát
+
     let currentSlide = 0;
 
     function showSlide(n) {
-        slides.forEach(slide => slide.style.display = 'none');
-        slides[n].style.display = 'block';
+        slides.forEach((slide, idx) => {
+            slide.style.display = (idx === n) ? 'block' : 'none';
+        });
     }
 
     function nextSlide() {
@@ -233,3 +236,113 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const slideInterval = 5000; // 5 seconds
+
+    function showSlide(index) {
+        // Remove active class and animations from all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active', 'sliding-in', 'sliding-out');
+        });
+
+        // Add sliding-out animation to current slide
+        if (slides[currentSlide]) {
+            slides[currentSlide].classList.add('sliding-out');
+        }
+
+        currentSlide = index;
+
+        // Add active and sliding-in animation to new slide
+        slides[currentSlide].classList.add('active', 'sliding-in');
+    }
+
+    function nextSlide() {
+        let next = currentSlide + 1;
+        if (next >= slides.length) next = 0;
+        showSlide(next);
+    }
+
+    function previousSlide() {
+        let prev = currentSlide - 1;
+        if (prev < 0) prev = slides.length - 1;
+        showSlide(prev);
+    }
+
+    // Auto advance slides
+    if (slides.length > 0) {
+        slides[0].classList.add('active');
+        setInterval(nextSlide, slideInterval);
+    }
+
+    // Optional: Add touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                previousSlide();
+            }
+        }
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const notice = document.getElementById('notice-message');
+    
+    // Tự động ẩn notice sau 5 giây
+    setTimeout(() => {
+        notice.parentElement.classList.add('notice-hide');
+    }, 5000);
+
+    // Thêm sự kiện click để ẩn notice
+    notice.addEventListener('click', () => {
+        notice.parentElement.classList.add('notice-hide');
+    });
+    
+    // Animation khi hover
+    notice.addEventListener('mouseenter', () => {
+        notice.style.transform = 'translateY(-3px)';
+    });
+    
+    notice.addEventListener('mouseleave', () => {
+        notice.style.transform = 'translateY(0)';
+    });
+});
+
+// Hàm để hiển thị thông báo mới
+function showNotice(message) {
+    const notice = document.getElementById('notice-message');
+    notice.textContent = message;
+    notice.parentElement.classList.remove('notice-hide');
+    
+    // Reset animation
+    notice.parentElement.style.animation = 'none';
+    notice.parentElement.offsetHeight; // Trigger reflow
+    notice.parentElement.style.animation = null;
+    
+    // Thêm lại các animation
+    notice.parentElement.style.animation = 'slideDown 0.8s ease forwards';
+    notice.style.animation = 'fadeIn 0.5s ease forwards 0.3s';
+    
+    // Tự động ẩn sau 5 giây
+    setTimeout(() => {
+        notice.parentElement.classList.add('notice-hide');
+    }, 5000);
+}
