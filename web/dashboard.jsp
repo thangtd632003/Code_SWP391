@@ -125,7 +125,9 @@
                     <div class="user-menu">
                         <button class="user-menu-btn">
                             <img src="img/avatar.jpg" alt="User Avatar" class="user-avatar">
-                            <span class="user-name">John Doe</span>
+                            <span class="user-name">
+                                <c:out value="${sessionScope.user.fullName}" />
+                            </span>
                             <i class="fas fa-chevron-down"></i>
                         </button>
                         <div class="dropdown-menu">
