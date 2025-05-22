@@ -1,92 +1,730 @@
-body { font-family: Arial, sans-serif; background: #f2f2f2; }
-.login-container {
-    width: 300px;
-    margin: 100px 0 0 120px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+/* Cập nhật một số biến màu và shadow */
+:root {
+    --primary: #4f46e5;
+    --secondary: #3730a3;
+    --background: #ffffff;
+    --surface: #f8fafc;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #cbd5e1;  /* Border color đậm hơn */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+    --card-border: 1px solid var(--border);
 }
-input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0;
+
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
-input[type="submit"] {
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Main Container */
+.page-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left Side - Login Form */
+.login-section {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background);
+}
+
+.login-container {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: #fff;
+    max-width: 400px;
+}
+
+/* Cập nhật Login Card */
+.login-card {
+    background: var(--background);
+    padding: 2.5rem;
+    border-radius: 1rem;
+    border: var(--card-border);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Right Side - Info Section */
+.info-section {
+    flex: 1.2;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.info-content {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+}
+
+/* Cập nhật Slideshow Container */
+.slideshow-container {
+    width: 100%;
+    margin: 2rem 0;
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    border: 3px solid rgba(255, 255, 255, 0.1); /* Thêm border */
+    box-shadow: var(--shadow-lg);
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    color: white;
+    text-align: center;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Cập nhật Form Input */
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border); /* Border đậm hơn */
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: var(--background);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+/* Hiệu ứng hover cho form inputs */
+.form-input:hover {
+    border-color: var(--primary);
+}
+
+/* Password Input */
+.password-input-container {
+    position: relative;
+}
+
+/* Cập nhật Password Toggle */
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
     border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 4px;
     border-radius: 4px;
+}
+
+.password-toggle:hover {
+    color: var(--primary);
+    background: rgba(79, 70, 229, 0.1);
+}
+
+/* Cập nhật Button Styles */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent; /* Thêm border */
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background: var(--secondary);
+    box-shadow: var(--shadow-md);
+}
+
+/* Cập nhật Features */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Thêm border */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Social Login */
+.social-login {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border); /* Border đậm hơn */
+    text-align: center;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Cập nhật Social Buttons */
+.btn-social {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.5rem;
+    background: var(--surface);
+    border: 2px solid var(--border); /* Border đậm hơn */
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-social:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Cập nhật Header Controls */
+.header-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 1rem;
+    z-index: 10;
+}
+
+#lang-switcher, .theme-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Border đậm hơn */
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+#lang-switcher:hover, .theme-btn:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .page-container {
+        flex-direction: column;
+    }
+
+    .login-section, .info-section {
+        padding: 2rem 1rem;
+    }
+
+    .info-section {
+        min-height: 60vh;
+    }
+
+    .slideshow-container {
+        aspect-ratio: 16/10;
+    }
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .header-controls {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .login-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Cập nhật Dark Mode */
+body.dark-mode {
+    --background: #1e293b;
+    --surface: #0f172a;
+    --text: #f8fafc;
+    --text-light: #cbd5e1;
+    --border: #334155;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Cập nhật Remember Me checkbox */
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+/* Notice Animation Styles */
+.notice-container {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.5s ease;
+}
+
+.notice-container.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.notice-container.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+/* Notice Container Styles */
+.notice-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%); /* Bắt đầu ở vị trí ngoài màn hình phía trên */
+    z-index: 1000;
+    transition: transform 0.5s ease;
+}
+
+.notice-container.show {
+    transform: translateX(-50%) translateY(0); /* Di chuyển thẳng xuống */
+}
+
+.notice-container.hide {
+    transform: translateX(-50%) translateY(-100%); /* Di chuyển thẳng lên */
+}
+
+.db-notice {
+    background: var(--background);
+    color: var(--text);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow-lg);
+    border: 2px solid var(--border);
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+    backdrop-filter: blur(8px);
+}
+
+/* Animation keyframes */
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateX(-50%) translateY(0);
+    }
+    to {
+        transform: translateX(-50%) translateY(-100%);
+    }
+}
+
+/* Animation cho notice */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Hover effect */
+.db-notice:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .db-notice {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: var(--border);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .notice-container {
+        padding: 0.5rem;
+        top: 10px;
+    }
+    
+    .db-notice {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Success notice variant */
+.db-notice.success {
+    background: #10b981;
+    color: white;
+    border-color: #059669;
+}
+
+/* Error notice variant */
+.db-notice.error {
+    background: #ef4444;
+    color: white;
+    border-color: #dc2626;
+}
+
+/* Info notice variant */
+.db-notice.info {
+    background: var(--primary);
+    color: white;
+    border-color: var(--secondary);
+}
+/* Welcome Text Styles */
+.login-header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+#welcome-text {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: fadeIn 0.8s ease-out;
+}
+
+#welcome-subtext {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-weight: 400;
+    animation: fadeIn 1s ease-out;
+}
+
+.login-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    border-radius: 2px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode #welcome-text {
+    background: linear-gradient(to right, #60a5fa, #818cf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    #welcome-text {
+        font-size: 1.75rem;
+    }
+    
+    #welcome-subtext {
+        font-size: 1rem;
+    }
+    
+    .login-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+    }
+}
+
+/* Hover Effects */
+.login-header:hover::after {
+    width: 80px;
+    transition: width 0.3s ease;
+}
+/* Form Footer Styles */
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Remember Me Checkbox */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     cursor: pointer;
 }
-input[type="submit"]:hover {
-    background: #0056b3;
+
+.remember-me span {
+    color: var(--text-light);
+    font-size: 0.9rem;
 }
 
-.btn-effect {
-    transition: background 0.2s, color 0.2s, transform 0.1s;
-    padding: 6px 10px;
-    border-radius: 4px;
-    display: inline-block;
+/* Forgot Password Link */
+.forgot-password {
+    color: var(--primary);
     text-decoration: none;
-}
-.btn-effect:active {
-    background: #007bff;
-    color: #fff !important;
-    transform: scale(0.96);
-}
-.btn-effect:hover {
-    background: #e6e6e6;
-    color: #007bff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-.login-side-image {
-    margin-left: 40px;
-    margin-top: 30px;
-    display: flex;
-    align-items: flex-start;
-}
-.login-side-image img,
-.side-rect-img {
-    width: 1100px;      /* Tăng chiều rộng */
-    height: 600px;     /* Tăng chiều cao */
-    border-radius: 8px;
-    object-fit: cover;
-    box-shadow: 0 0 8px #ccc;
+.forgot-password::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
 }
 
-body.dark-mode {
-    background: #18191a;
-    color: #e4e6eb;
+.forgot-password:hover::after {
+    width: 100%;
 }
-body.dark-mode .login-container {
-    background: #242526;
-    color: #e4e6eb;
-    box-shadow: 0 0 16px #111;
+
+.forgot-password:hover {
+    color: var(--secondary);
 }
-body.dark-mode input,
-body.dark-mode select {
-    background: #3a3b3c;
-    color: #e4e6eb;
-    border: 1px solid #555;
+
+/* Register Link Section */
+.register-link {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-light);
+    font-size: 0.95rem;
 }
-body.dark-mode input[type="submit"] {
-    background: #3a8bfd;
-    color: #fff;
+
+.register-link a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 0.5rem;
+    position: relative;
+    transition: all 0.2s ease;
 }
-body.dark-mode .btn-effect {
-    background: #242526;
-    color: #e4e6eb;
+
+.register-link a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
 }
-body.dark-mode .db-notice {
-    background: #33343a !important;
-    color: #ffe066 !important;
-    border-color: #444;
+
+.register-link a:hover::after {
+    width: 100%;
 }
-body.dark-mode .login-side-image img,
-body.dark-mode .side-rect-img {
-    box-shadow: 0 0 16px #222;
+
+.register-link a:hover {
+    color: var(--secondary);
+}
+
+/* Hover Effects */
+.forgot-password:hover, 
+.register-link a:hover {
+    transform: translateY(-1px);
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .forgot-password,
+body.dark-mode .register-link a {
+    color: #60a5fa;
+}
+
+body.dark-mode .forgot-password:hover,
+body.dark-mode .register-link a:hover {
+    color: #818cf8;
+}
+
+body.dark-mode .forgot-password::after,
+body.dark-mode .register-link a::after {
+    background: #60a5fa;
+}
+
+/* Animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.register-link {
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+    .form-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .forgot-password {
+        align-self: flex-end;
+    }
+    
+    .register-link {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
 }

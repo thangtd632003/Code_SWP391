@@ -1,165 +1,297 @@
-<%-- 
-    Document   : dashboard
-    Created on : May 19, 2025, 3:55:00 PM
-    Author     : Long
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="javax.servlet.http.*,javax.servlet.*,java.util.*"%>
-<%
-    String name = (String) session.getAttribute("name");
-    String email = (String) session.getAttribute("email");
-    String phone = (String) session.getAttribute("phone");
-    Double balance = (Double) request.getAttribute("balance");
-    String errorMsg = (String) request.getAttribute("errorMsg");
-    Integer tourCount = (Integer) request.getAttribute("tourCount");
-    if (tourCount == null) tourCount = 0;
-%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Traveler Dashboard</title>
-        <link rel="stylesheet" type="text/css" href="css/dashboard.css">
-    </head>
-    <body>
-        <div class="dashboard-container">
-            <h2>Traveler Dashboard</h2>
-            <ul>
-                <li>
-                    <strong>Name:</strong> <%= name != null ? name : "N/A" %>
-                    <a href="#" onclick="openModal('modalName')" style="margin-left:10px;">Edit</a>
-                </li>
-                <li>
-                    <strong>Email:</strong> <%= email != null ? email : "N/A" %>
-                    <a href="#" onclick="openModal('modalEmail')" style="margin-left:10px;">Edit</a>
-                </li>
-                <li>
-                    <strong>Phone:</strong> <%= phone != null ? phone : "N/A" %>
-                    <a href="#" onclick="openModal('modalPhone')" style="margin-left:10px;">Edit</a>
-                    <a href="#" onclick="openModal('modalAddPhone')" style="margin-left:10px;color:green;">Add</a>
-                    <a href="#" onclick="openModal('modalDeletePhone')" style="margin-left:10px;color:red;">Delete</a>
-                </li>
-                <li>
-                    <strong>Current Balance:</strong> <%= balance != null ? String.format("%,.2f", balance) : "N/A" %>
-                    <a href="#" onclick="openModal('modalTopup')" style="margin-left:10px;color:#28a745;">Top Up</a>
-                </li>
-                <li>
-                    <strong>Tours Traveled:</strong> <%= tourCount %>
-                </li>
-            </ul>
-            <a href="#" onclick="openModal('modalPassword')">Change Password</a>
-        </div>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-body">
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="Logo" class="logo">
+                <h2 class="brand-text">Tour System</h2>
+                <button id="sidebar-close" class="sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
-        <% if (errorMsg != null) { %>
-        <div class="modal" id="modalError" style="display:block;">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalError')">&times;</span>
-                <p style="color:red;"><%= errorMsg %></p>
-            </div>
-        </div>
-        <% } %>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Main Menu</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="#dashboard" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#bookings" class="nav-link">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Bookings</span>
+                                <span class="badge">12</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#tours" class="nav-link">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>Tours</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#customers" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span>Customers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-        <!-- Modal đổi tên -->
-        <div id="modalName" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalName')">&times;</span>
-                <form action="change-name" method="post">
-                    <label for="newName">New Name:</label>
-                    <input type="text" id="newName" name="newName" required>
-                    <label for="passwordName">Current Password:</label>
-                    <input type="password" id="passwordName" name="password" required>
-                    <button type="submit">Save</button>
-                </form>
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Management</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#guides" class="nav-link">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Tour Guides</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#reviews" class="nav-link">
+                                <i class="fas fa-star"></i>
+                                <span>Reviews</span>
+                                <span class="badge">5</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#reports" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>Reports</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Settings</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#settings" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#profile" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <nav class="top-nav">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="nav-actions">
+                    <button class="nav-action-btn" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <button class="nav-action-btn" id="messagesBtn">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-menu-btn">
+                            <img src="img/avatar.jpg" alt="User Avatar" class="user-avatar">
+                            <span class="user-name">John Doe</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#profile" class="dropdown-item">
+                                <i class="fas fa-user"></i> Profile
+                            </a>
+                            <a href="#settings" class="dropdown-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="logout" class="dropdown-item text-danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Total Revenue</h3>
+                            <div class="stat-value">$54,598</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 12.5%
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Total Bookings</h3>
+                            <div class="stat-value">845</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 8.2%
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Active Tours</h3>
+                            <div class="stat-value">124</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i> 3.1%
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-route"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Customer Rating</h3>
+                            <div class="stat-value">4.8</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 0.3
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="chart-card main-chart">
+                        <div class="chart-header">
+                            <h3>Revenue Overview</h3>
+                            <div class="chart-actions">
+                                <select class="chart-period-select">
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last 3 Months</option>
+                                    <option>Last Year</option>
+                                </select>
+                                <button class="chart-action-btn">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Popular Tours</h3>
+                            <button class="chart-action-btn">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="toursChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="activity-grid">
+                    <!-- Recent Bookings -->
+                    <div class="card recent-bookings">
+                        <div class="card-header">
+                            <h3>Recent Bookings</h3>
+                            <button class="view-all-btn">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Customer</th>
+                                            <th>Tour</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentBookingsTable">
+                                        <!-- Dynamic content will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Reviews -->
+                    <div class="card recent-reviews">
+                        <div class="card-header">
+                            <h3>Recent Reviews</h3>
+                            <button class="view-all-btn">View All</button>
+                        </div>
+                        <div class="card-body" id="recentReviews">
+                            <!-- Dynamic content will be loaded here -->
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <!-- Modal đổi email -->
-        <div id="modalEmail" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalEmail')">&times;</span>
-                <form action="change-email" method="post">
-                    <label for="newEmail">New Email:</label>
-                    <input type="email" id="newEmail" name="newEmail" required>
-                    <label for="passwordEmail">Current Password:</label>
-                    <input type="password" id="passwordEmail" name="password" required>
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal đổi số điện thoại -->
-        <div id="modalPhone" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalPhone')">&times;</span>
-                <form action="change-phone" method="post">
-                    <label for="oldPhone">Current Phone:</label>
-                    <input type="text" id="oldPhone" name="oldPhone" required pattern="[0-9]{9,15}">
-                    <label for="newPhone">New Phone:</label>
-                    <input type="text" id="newPhone" name="newPhone" required pattern="[0-9]{9,15}">
-                    <label for="passwordPhone">Current Password:</label>
-                    <input type="password" id="passwordPhone" name="password" required>
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal thêm số điện thoại -->
-        <div id="modalAddPhone" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalAddPhone')">&times;</span>
-                <form action="add-phone" method="post">
-                    <label for="addPhone">New Phone:</label>
-                    <input type="text" id="addPhone" name="addPhone" required pattern="[0-9]{9,15}">
-                    <label for="passwordAddPhone">Current Password:</label>
-                    <input type="password" id="passwordAddPhone" name="password" required>
-                    <button type="submit">Add</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal xóa số điện thoại -->
-        <div id="modalDeletePhone" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalDeletePhone')">&times;</span>
-                <form action="delete-phone" method="post">
-                    <p>Bạn có chắc chắn muốn xóa số điện thoại này?</p>
-                    <label for="passwordDeletePhone">Current Password:</label>
-                    <input type="password" id="passwordDeletePhone" name="password" required>
-                    <button type="submit" style="background:#dc3545;">Delete</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal đổi mật khẩu -->
-        <div id="modalPassword" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalPassword')">&times;</span>
-                <form action="change-password" method="post">
-                    <label for="oldPassword">Old Password:</label>
-                    <input type="password" id="oldPassword" name="oldPassword" required>
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" name="newPassword" required>
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-        </div>
-        <!-- Modal nạp tiền -->
-        <div id="modalTopup" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal('modalTopup')">&times;</span>
-                <form action="member-register" method="post">
-                    <label for="price">Chọn số tiền nạp:</label>
-                    <select id="price" name="price" required>
-                        <option value="1">100,000 VNĐ</option>
-                        <option value="2">200,000 VNĐ</option>
-                        <option value="5">500,000 VNĐ</option>
-                        <option value="10">1,000,000 VNĐ</option>
-                    </select>
-                    <label for="language">Ngôn ngữ:</label>
-                    <select id="language" name="language">
-                        <option value="vn">Tiếng Việt</option>
-                        <option value="en">English</option>
-                    </select>
-                    <button type="submit" style="background:#28a745;">Nạp tiền</button>
-                </form>
-            </div>
-        </div>
-        <script src="js/dashboard.js"></script>
-    </body>
+        </main>
+    </div>
+
+    <!-- Notification Panel -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <!-- Will be populated dynamically -->
+    </div>
+
+    <!-- Messages Panel -->
+    <div class="messages-panel" id="messagesPanel">
+        <!-- Will be populated dynamically -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
 </html>
