@@ -75,7 +75,7 @@
 </head>
 <body>
 <div class="profile-container">
-    <h2>Thông tin cá nhân</h2>
+    <h2>Personal information</h2>
 
     <c:if test="${param.update == 'success'}">
         <p class="message text-success">Update success!</p>
@@ -89,10 +89,10 @@
         <input type="email" id="email" name="email" value="${user.email}" readonly />
 
         <label for="fullName">FullName:</label>
-        <input type="text" id="fullName" name="fullName" value="${user.fullName}" required />
+        <input type="text" id="fullName" name="fullName" value="${user.fullName}"  required/>
 
         <label for="phone">PhoneNumber:</label>
-        <input type="text" id="phone" name="phone" value="${user.phone}" required />
+        <input type="text" id="phone" name="phone" value="${user.phone}"  />
 
         <label>Gender:</label>
         <label class="inline">
@@ -108,7 +108,7 @@
                    <c:if test="${user.gender.name() == 'OTHER'}">checked</c:if> /> Other
         </label>
 
-        <label for="birthDate">Ngày sinh:</label>
+        <label for="birthDate">Date of Birth:</label>
         <input type="date" id="birthDate" name="birthDate"
                value="${user.birthDate}" />
 
@@ -120,7 +120,7 @@
         <span id="statusDisplay">${user.status.name()}</span>
         <input type="hidden" name="status" value="${user.status.name()}" />
 
-        <button type="submit" class="submit-btn">Cập nhật</button>
+        <button type="submit" class="submit-btn">Update</button>
     </form>
 </div>
 </body>
