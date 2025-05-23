@@ -8,7 +8,10 @@
         <servlet-name>ProfileTravler_thang</servlet-name>
         <servlet-class>controller.ProfileTravler_thang</servlet-class>
     </servlet>
-   
+    <servlet>
+        <servlet-name>index_thang</servlet-name>
+        <servlet-class>controller.index_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -17,5 +20,8 @@
         <servlet-name>ProfileTravler_thang</servlet-name>
         <url-pattern>/ProfileTravler_thang</url-pattern>
     </servlet-mapping>
- 
+    <servlet-mapping>
+        <servlet-name>index_thang</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 </web-app>
