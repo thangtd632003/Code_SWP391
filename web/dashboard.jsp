@@ -124,7 +124,7 @@
                     </button>
                     <div class="user-menu">
                         <button class="user-menu-btn">
-                            <img src="img/avatar.jpg" alt="User Avatar" class="user-avatar">
+                            <img src="img/logi.jpg" alt="User Avatar" class="user-avatar">
                             <span class="user-name">
                                 <c:out value="${sessionScope.user.fullName}" />
                             </span>
