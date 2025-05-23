@@ -15,7 +15,7 @@ public class LoginController_Long extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
-            response.sendRedirect(request.getContextPath() + "/dashboard.jsp"); 
+            response.sendRedirect(request.getContextPath() + "/dashboard"); // Đúng: chuyển sang servlet
             return;
         }
         handleCookieLogin(request, response);
@@ -56,7 +56,8 @@ public class LoginController_Long extends HttpServlet {
                 addCookie(response, "password", "", 0);
             }
 
-            response.getWriter().write("{\"success\": true, \"redirect\": \"" + request.getContextPath() + "/dashboard.jsp\"}");
+            // Đúng: chuyển sang servlet dashboard
+            response.getWriter().write("{\"success\": true, \"redirect\": \"" + request.getContextPath() + "/dashboard\"}");
             
         } catch (Exception e) {
             response.getWriter().write("{\"success\": false}");
@@ -86,7 +87,7 @@ public class LoginController_Long extends HttpServlet {
                     // Cập nhật last login
                     dao.updateLastLogin(user.getId());
                     
-                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/dashboard"); // Đúng: chuyển sang servlet
                     return;
                 }
             }

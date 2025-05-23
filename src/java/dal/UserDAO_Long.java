@@ -26,10 +26,18 @@ public class UserDAO_Long {
                     user.setPasswordHash(rs.getString("password_hash"));
                     user.setFullName(rs.getString("full_name"));
                     user.setPhone(rs.getString("phone"));
-                    user.setGender(Gender.valueOf(rs.getString("gender").toUpperCase()));
+
+                    String genderStr = rs.getString("gender");
+                    user.setGender(genderStr != null ? Gender.valueOf(genderStr.toUpperCase()) : null);
+
                     user.setBirthDate(rs.getDate("birth_date"));
-                    user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
-                    user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+
+                    String roleStr = rs.getString("role");
+                    user.setRole(roleStr != null ? Role.valueOf(roleStr.toUpperCase()) : null);
+
+                    String statusStr = rs.getString("status");
+                    user.setStatus(statusStr != null ? Status.valueOf(statusStr.toUpperCase()) : null);
+
                     user.setCreatedAt(rs.getTimestamp("created_at"));
                     user.setUpdatedAt(rs.getTimestamp("updated_at"));
                     return user;
@@ -49,6 +57,19 @@ public class UserDAO_Long {
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error updating last login: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        UserDAO_Long dao = new UserDAO_Long();
+        // Thử đăng nhập với email và password mẫu
+        String email = "admin@gmail.com";
+        String password = "123456";
+        entity.User user = dao.login(email, password);
+        if (user != null) {
+            System.out.println("Đăng nhập thành công: " + user);
+        } else {
+            System.out.println("Đăng nhập thất bại hoặc không tìm thấy user.");
         }
     }
 }

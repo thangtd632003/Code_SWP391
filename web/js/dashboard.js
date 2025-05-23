@@ -24,6 +24,10 @@ const CONFIG = {
     }
 };
 
+// Thêm biến toàn cục để lưu instance chart
+let revenueChartInstance = null;
+let toursChartInstance = null;
+
 // Dashboard Initialization
 function initializeDashboard() {
     setupCharts();
@@ -69,8 +73,16 @@ function toggleSidebar() {
 
 // Chart Setup
 function setupCharts() {
+    // Destroy old charts if they exist
+    if (revenueChartInstance) {
+        revenueChartInstance.destroy();
+    }
+    if (toursChartInstance) {
+        toursChartInstance.destroy();
+    }
+
     // Revenue Chart
-    const revenueChart = new Chart(
+    revenueChartInstance = new Chart(
         document.getElementById('revenueChart').getContext('2d'),
         {
             type: 'line',
@@ -114,7 +126,7 @@ function setupCharts() {
     );
 
     // Popular Tours Chart
-    const toursChart = new Chart(
+    toursChartInstance = new Chart(
         document.getElementById('toursChart').getContext('2d'),
         {
             type: 'doughnut',
