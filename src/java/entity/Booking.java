@@ -10,18 +10,19 @@ package entity;
  */
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Booking {
     private int id;
     private int travelerId;
-    private int scheduleId;
+    private int tourId;
     private int numPeople;
     private String contactInfo;
     private BookingStatus status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
+private Date departureDate;
     private List<Review> review = new ArrayList<>();
 
     public Booking() {}
@@ -32,8 +33,8 @@ public class Booking {
     public int getTravelerId() { return travelerId; }
     public void setTravelerId(int travelerId) { this.travelerId = travelerId; }
 
-    public int getScheduleId() { return scheduleId; }
-    public void setScheduleId(int scheduleId) { this.scheduleId = scheduleId; }
+    public int getTourId() { return tourId; }
+    public void setTourId(int tourId) { this.tourId = tourId; }
 
     public int getNumPeople() { return numPeople; }
     public void setNumPeople(int numPeople) { this.numPeople = numPeople; }
@@ -51,5 +52,15 @@ public class Booking {
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 
     public List<Review> getReview() { return review; }
-    public void setReview(List<Review> review) { this.review = review; }
+    public void setReview(List<Review> review) { this.review = review; 
+    
+    }
+
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public Date getDepartureDate() {
+        return departureDate;
+    }
 }

@@ -24,7 +24,8 @@ public class Tour {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    private List<TourSchedule> schedules = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
+
 
     public Tour() {}
 
@@ -55,6 +56,13 @@ public class Tour {
     public Timestamp getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 
-    public List<TourSchedule> getSchedules() { return schedules; }
-    public void setSchedules(List<TourSchedule> schedules) { this.schedules = schedules; }
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+  
 }
