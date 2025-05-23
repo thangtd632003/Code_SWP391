@@ -79,6 +79,17 @@ body {
     animation: fadeIn 0.5s ease forwards 0.3s;
 }
 
+/* Thêm vào file css/login.css */
+.db-notice.error {
+    color: #fff;
+    background: #e74c3c;
+    border: 1px solid #c0392b;
+}
+
+.db-notice.error i {
+    margin-right: 8px;
+}
+
 /* Animation cho notice */
 @keyframes slideDown {
     0% {
@@ -587,4 +598,35 @@ html {
     background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
     background-size: 800px 104px;
     animation: shimmer 1.5s infinite linear;
+}
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 3px solid #e74c3c;
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Dark theme support */
+.dark-theme .error-message {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

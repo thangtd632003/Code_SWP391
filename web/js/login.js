@@ -17,7 +17,10 @@ const translations = {
         tourCaption3: "Tour Du lịch Sapa",
         featureDestinations: "100+ Điểm đến",
         featureCustomers: "1000+ Khách hài lòng",
-        featurePriceGuarantee: "Đảm bảo giá tốt nhất"
+        featurePriceGuarantee: "Đảm bảo giá tốt nhất",
+        loginError: "Email hoặc mật khẩu không chính xác",
+        systemError: "Đã xảy ra lỗi trong quá trình đăng nhập",
+        minPasswordLength: "Mật khẩu phải có ít nhất 6 ký tự"
     },
     en: {
         welcomeText: "Welcome Back",
@@ -37,9 +40,43 @@ const translations = {
         tourCaption3: "Sapa Tour",
         featureDestinations: "100+ Destinations",
         featureCustomers: "1000+ Happy Customers",
-        featurePriceGuarantee: "Best Price Guarantee"
+        featurePriceGuarantee: "Best Price Guarantee",
+        loginError: "Invalid email or password",
+        systemError: "An error occurred during login",
+        minPasswordLength: "Password must be at least 6 characters"
     }
 };
+
+// Function để hiển thị thông báo lỗi
+function showError(message) {
+    const errorDiv = document.getElementById('password-error');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.add('show');
+    }
+}
+
+function clearError() {
+    const errorDiv = document.getElementById('password-error');
+    if (errorDiv) {
+        errorDiv.classList.remove('show');
+    }
+}
+
+// Function để kiểm tra và hiển thị thông báo lỗi
+function checkAndShowError() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+    const currentLang = localStorage.getItem('preferred-language') || 'vi';
+    
+    if (error) {
+        const errorDiv = document.getElementById('password-error');
+        if (errorDiv) {
+            errorDiv.textContent = translations[currentLang].loginError;
+            errorDiv.classList.add('show');
+        }
+    }
+}
 
 // Language handling
 function updateLanguage(lang) {
@@ -56,19 +93,19 @@ function updateLanguage(lang) {
     document.getElementById('social-text').textContent = t.socialText;
     document.getElementById('register-text').innerHTML = t.registerText;
     
-    // Kiểm tra sự tồn tại của notice-message trước khi cập nhật
-    const noticeMessage = document.getElementById('notice-message');
-    if (noticeMessage) {
-        noticeMessage.textContent = t.notice;
+    // Update notice text
+    const noticeText = document.getElementById('notice-text');
+    if (noticeText) {
+        noticeText.textContent = t.notice;
     }
 
-    // Cập nhật info section
+    // Update info section
     const infoTitle = document.querySelector('.info-content h2');
     const infoDesc = document.querySelector('.info-description');
     if (infoTitle) infoTitle.textContent = t.infoTitle;
     if (infoDesc) infoDesc.textContent = t.infoDescription;
     
-    // Cập nhật slide captions
+    // Update slide captions
     const slideCaptions = document.querySelectorAll('.slide-caption');
     if (slideCaptions.length >= 3) {
         slideCaptions[0].textContent = t.tourCaption1;
@@ -76,7 +113,7 @@ function updateLanguage(lang) {
         slideCaptions[2].textContent = t.tourCaption3;
     }
     
-    // Cập nhật features
+    // Update features
     const features = document.querySelectorAll('.feature-item span');
     if (features.length >= 3) {
         features[0].textContent = t.featureDestinations;
@@ -84,7 +121,12 @@ function updateLanguage(lang) {
         features[2].textContent = t.featurePriceGuarantee;
     }
 
-    // Lưu preference
+    // Cập nhật thông báo lỗi nếu có
+    const errorDiv = document.getElementById('password-error');
+    if (errorDiv && errorDiv.classList.contains('show')) {
+        errorDiv.textContent = t.loginError;
+    }
+
     localStorage.setItem('preferred-language', lang);
 }
 
@@ -94,16 +136,15 @@ function setTheme(theme) {
     const icon = document.querySelector('#theme-toggle i');
     
     if (theme === 'dark') {
-        body.classList.add('dark-mode');
+        body.classList.add('dark-theme');
         icon.classList.remove('fa-moon');
         icon.classList.add('fa-sun');
     } else {
-        body.classList.remove('dark-mode');
+        body.classList.remove('dark-theme');
         icon.classList.remove('fa-sun');
         icon.classList.add('fa-moon');
     }
     
-    // Lưu theme preference
     localStorage.setItem('theme', theme);
 }
 
@@ -119,17 +160,14 @@ function setupPasswordToggle() {
     const passwordInput = document.getElementById('password');
 
     togglePassword.addEventListener('click', function() {
-        // Toggle type between password and text
         const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
         passwordInput.setAttribute('type', type);
         
-        // Toggle icon between eye and eye-slash
         const icon = this.querySelector('i');
         icon.classList.toggle('fa-eye');
         icon.classList.toggle('fa-eye-slash');
     });
 
-    // Prevent form submission when clicking the toggle button
     togglePassword.addEventListener('mousedown', function(e) {
         e.preventDefault();
     });
@@ -138,211 +176,159 @@ function setupPasswordToggle() {
 // Slideshow functionality
 function setupSlideshow() {
     const slides = document.querySelectorAll('.slide');
-    if (slides.length === 0) return; // Không có slide thì thoát
-
     let currentSlide = 0;
 
-    function showSlide(n) {
-        slides.forEach((slide, idx) => {
-            slide.style.display = (idx === n) ? 'block' : 'none';
+    function showSlide(index) {
+        slides.forEach(slide => {
+            slide.classList.remove('active', 'sliding-in', 'sliding-out');
         });
+
+        if (slides[currentSlide]) {
+            slides[currentSlide].classList.add('sliding-out');
+        }
+
+        currentSlide = index;
+        slides[currentSlide].classList.add('active', 'sliding-in');
     }
 
     function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
+        let next = (currentSlide + 1) % slides.length;
+        showSlide(next);
     }
 
-    // Initialize first slide
-    showSlide(0);
-
-    // Auto advance slides
-    setInterval(nextSlide, 5000);
+    if (slides.length > 0) {
+        slides[0].classList.add('active');
+        setInterval(nextSlide, 5000);
+    }
 }
 
-// Initialize
+// Welcome notice handling
+function showWelcomeNotice() {
+    const welcomeNotice = document.getElementById('welcome-notice');
+    const noticeText = document.getElementById('notice-text');
+    const currentLang = localStorage.getItem('preferred-language') || 'vi';
+
+    if (welcomeNotice && noticeText) {
+        noticeText.textContent = translations[currentLang].notice;
+        welcomeNotice.style.display = 'flex';
+        
+        setTimeout(() => {
+            welcomeNotice.classList.add('hide');
+            setTimeout(() => {
+                welcomeNotice.remove();
+            }, 500);
+        }, 5000);
+    }
+}
+
+// Cập nhật setupFormValidation
+function setupFormValidation() {
+    const passwordInput = document.getElementById('password');
+    const errorDiv = document.getElementById('password-error');
+    
+    if (passwordInput && errorDiv) {
+        passwordInput.addEventListener('input', function() {
+            errorDiv.classList.remove('show');
+        });
+    }
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    clearError();
+    
+    const form = e.target;
+    const email = form.querySelector('#email').value;
+    const password = form.querySelector('#password').value;
+    const remember = form.querySelector('#remember').checked;
+    
+    try {
+        const response = await fetch('login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&remember=${remember ? 'on' : 'off'}`
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            // Hiển thị thông báo thành công (tùy chọn)
+            const noticeContainer = document.querySelector('.notice-container');
+            if (noticeContainer) {
+                const notice = document.createElement('div');
+                notice.className = 'db-notice success';
+                notice.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>Đăng nhập thành công! Đang chuyển hướng...</span>
+                `;
+                noticeContainer.innerHTML = '';
+                noticeContainer.appendChild(notice);
+            }
+
+            // Đợi 1 giây trước khi chuyển hướng để người dùng thấy thông báo
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 1000);
+        } else {
+            const currentLang = localStorage.getItem('preferred-language') || 'vi';
+            showError(translations[currentLang].loginError);
+        }
+    } catch (error) {
+        const currentLang = localStorage.getItem('preferred-language') || 'vi';
+        showError(translations[currentLang].systemError);
+    }
+}
+
+// Trong phần khởi tạo
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+
+    // Nếu có lỗi từ server
+    if (error) {
+        showError();
+    }
+
     // Set up language switcher
     const langSwitch = document.getElementById('lang-switcher');
     langSwitch.addEventListener('change', (e) => {
         updateLanguage(e.target.value);
+        // Nếu đang có lỗi hiển thị, cập nhật lại thông báo lỗi
+        const errorDiv = document.getElementById('password-error');
+        if (errorDiv && errorDiv.classList.contains('show')) {
+            showError();
+        }
     });
 
     // Set up theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', toggleTheme);
 
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-
     // Load saved preferences
+    const savedTheme = localStorage.getItem('theme') || 'light';
     const savedLang = localStorage.getItem('preferred-language') || 'vi';
 
-    // Apply saved language
+    // Apply saved preferences
+    setTheme(savedTheme);
     langSwitch.value = savedLang;
     updateLanguage(savedLang);
 
-    // Handle form submission
-    const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', function(e) {
-        const remember = document.getElementById('remember').checked;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+    // Kiểm tra và hiển thị lỗi ngay khi trang được tải
+    checkAndShowError();
 
-        if (remember) {
-            localStorage.setItem('savedEmail', email);
-            // Note: Storing passwords in localStorage is not secure
-            // This is just for demonstration
-            localStorage.setItem('savedPassword', password);
-        } else {
-            localStorage.removeItem('savedEmail');
-            localStorage.removeItem('savedPassword');
-        }
-    });
-
-    // Load saved credentials
-    const savedEmail = localStorage.getItem('savedEmail');
-    const savedPassword = localStorage.getItem('savedPassword');
-    if (savedEmail && savedPassword) {
-        document.getElementById('email').value = savedEmail;
-        document.getElementById('password').value = savedPassword;
-        document.getElementById('remember').checked = true;
-    }
-    
-    // Setup password toggle
+    // Set up all features
     setupPasswordToggle();
-    
-    // Setup slideshow
     setupSlideshow();
-});
+    showWelcomeNotice();
+    setupFormValidation();
+    // ... other initialization code ...
 
-document.addEventListener('DOMContentLoaded', function() {
-    const noticeContainer = document.querySelector('.notice-container');
-    
-    if (noticeContainer) {
-        // Hiển thị notice
-        noticeContainer.classList.add('show');
-        
-        // Ẩn notice sau 5 giây
-        setTimeout(() => {
-            noticeContainer.classList.remove('show');
-            noticeContainer.classList.add('hide');
-            
-            // Xóa notice sau khi animation kết thúc
-            setTimeout(() => {
-                noticeContainer.remove();
-            }, 500);
-        }, 5000);
+    // Set up form submission
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
     }
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const slideInterval = 5000; // 5 seconds
-
-    function showSlide(index) {
-        // Remove active class and animations from all slides
-        slides.forEach(slide => {
-            slide.classList.remove('active', 'sliding-in', 'sliding-out');
-        });
-
-        // Add sliding-out animation to current slide
-        if (slides[currentSlide]) {
-            slides[currentSlide].classList.add('sliding-out');
-        }
-
-        currentSlide = index;
-
-        // Add active and sliding-in animation to new slide
-        slides[currentSlide].classList.add('active', 'sliding-in');
-    }
-
-    function nextSlide() {
-        let next = currentSlide + 1;
-        if (next >= slides.length) next = 0;
-        showSlide(next);
-    }
-
-    function previousSlide() {
-        let prev = currentSlide - 1;
-        if (prev < 0) prev = slides.length - 1;
-        showSlide(prev);
-    }
-
-    // Auto advance slides
-    if (slides.length > 0) {
-        slides[0].classList.add('active');
-        setInterval(nextSlide, slideInterval);
-    }
-
-    // Optional: Add touch/swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    document.addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-
-    document.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                nextSlide();
-            } else {
-                previousSlide();
-            }
-        }
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    const notice = document.getElementById('notice-message');
-    
-    // Tự động ẩn notice sau 5 giây
-    setTimeout(() => {
-        notice.parentElement.classList.add('notice-hide');
-    }, 5000);
-
-    // Thêm sự kiện click để ẩn notice
-    notice.addEventListener('click', () => {
-        notice.parentElement.classList.add('notice-hide');
-    });
-    
-    // Animation khi hover
-    notice.addEventListener('mouseenter', () => {
-        notice.style.transform = 'translateY(-3px)';
-    });
-    
-    notice.addEventListener('mouseleave', () => {
-        notice.style.transform = 'translateY(0)';
-    });
-});
-
-// Hàm để hiển thị thông báo mới
-function showNotice(message) {
-    const notice = document.getElementById('notice-message');
-    notice.textContent = message;
-    notice.parentElement.classList.remove('notice-hide');
-    
-    // Reset animation
-    notice.parentElement.style.animation = 'none';
-    notice.parentElement.offsetHeight; // Trigger reflow
-    notice.parentElement.style.animation = null;
-    
-    // Thêm lại các animation
-    notice.parentElement.style.animation = 'slideDown 0.8s ease forwards';
-    notice.style.animation = 'fadeIn 0.5s ease forwards 0.3s';
-    
-    // Tự động ẩn sau 5 giây
-    setTimeout(() => {
-        notice.parentElement.classList.add('notice-hide');
-    }, 5000);
-}

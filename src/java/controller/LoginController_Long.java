@@ -13,59 +13,20 @@ public class LoginController_Long extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Kiểm tra xem user đã đăng nhập chưa
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             response.sendRedirect(request.getContextPath() + "/dashboard.jsp"); 
             return;
         }
-
-        // Kiểm tra cookie
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            String savedEmail = null;
-            String savedPassword = null;
-            
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("email")) {
-                    savedEmail = cookie.getValue();
-                }
-                if (cookie.getName().equals("password")) {
-                    savedPassword = cookie.getValue();
-                }
-            }
-            
-            if (savedEmail != null && savedPassword != null) {
-                UserDAO_Long dao = new UserDAO_Long();
-                User user = dao.login(savedEmail, savedPassword);
-                if (user != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", user);
-                    dao.updateLastLogin(user.getId());
-                    
-
-                    // Sửa phần chuyển hướng trong switch case
-                    switch (user.getRole()) {
-                        case ADMIN:
-                            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                            break;
-                        case GUIDE:
-                            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                            break;
-                        default:
-                            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                    }
-                    return;
-                }
-            }
-        }
-        
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        handleCookieLogin(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
         try {
             String email = request.getParameter("email");
             String password = request.getParameter("password");
@@ -74,55 +35,70 @@ public class LoginController_Long extends HttpServlet {
             UserDAO_Long dao = new UserDAO_Long();
             User user = dao.login(email, password);
 
-            if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                dao.updateLastLogin(user.getId());
-
-                if ("on".equals(remember)) {
-                    Cookie emailCookie = new Cookie("email", email);
-                    Cookie passwordCookie = new Cookie("password", password);
-                    
-                    emailCookie.setMaxAge(30 * 24 * 60 * 60);
-                    passwordCookie.setMaxAge(30 * 24 * 60 * 60);
-                    
-                    emailCookie.setHttpOnly(true);
-                    passwordCookie.setHttpOnly(true);
-                    
-                    response.addCookie(emailCookie);
-                    response.addCookie(passwordCookie);
-                } else {
-                    Cookie emailCookie = new Cookie("email", "");
-                    Cookie passwordCookie = new Cookie("password", "");
-                    
-                    emailCookie.setMaxAge(0);
-                    passwordCookie.setMaxAge(0);
-                    
-                    response.addCookie(emailCookie);
-                    response.addCookie(passwordCookie);
-                }
-
-                // Chuyển hướng dựa trên role
-                // Sửa phần chuyển hướng trong switch case
-                switch (user.getRole()) {
-                    case ADMIN:
-                        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                        break;
-                    case GUIDE:
-                        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                        break;
-                    default:
-                        response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
-                }
-            } else {
-                request.setAttribute("notice", "Email hoặc mật khẩu không chính xác!");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+            if (user == null) {
+                response.getWriter().write("{\"success\": false}");
+                return;
             }
+
+            // Tạo session
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            
+            // Cập nhật last login
+            dao.updateLastLogin(user.getId());
+
+            // Xử lý remember me
+            if ("on".equals(remember)) {
+                addCookie(response, "email", email, 30 * 24 * 60 * 60);
+                addCookie(response, "password", password, 30 * 24 * 60 * 60);
+            } else {
+                addCookie(response, "email", "", 0);
+                addCookie(response, "password", "", 0);
+            }
+
+            response.getWriter().write("{\"success\": true, \"redirect\": \"" + request.getContextPath() + "/dashboard.jsp\"}");
+            
         } catch (Exception e) {
-            // Thêm logging
-            e.printStackTrace(); 
-            request.setAttribute("notice", "Lỗi hệ thống: " + e.getMessage());
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            response.getWriter().write("{\"success\": false}");
         }
+    }
+
+    private void handleCookieLogin(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            String savedEmail = null;
+            String savedPassword = null;
+            
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("email")) savedEmail = cookie.getValue();
+                if (cookie.getName().equals("password")) savedPassword = cookie.getValue();
+            }
+            
+            if (savedEmail != null && savedPassword != null) {
+                UserDAO_Long dao = new UserDAO_Long();
+                User user = dao.login(savedEmail, savedPassword);
+                if (user != null) {
+                    // Tạo session cho auto login
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", user);
+                    
+                    // Cập nhật last login
+                    dao.updateLastLogin(user.getId());
+                    
+                    response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                    return;
+                }
+            }
+        }
+        
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
+
+    private void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
     }
 }
