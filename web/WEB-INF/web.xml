@@ -8,7 +8,7 @@
         <servlet-name>ProfileTravler_thang</servlet-name>
         <servlet-class>controller.ProfileTravler_thang</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>tourList_thang</servlet-name>
         <servlet-class>controller.tourList_thang</servlet-class>
     </servlet>
@@ -16,8 +16,11 @@
         <servlet-name>index_thang</servlet-name>
         <servlet-class>controller.index_thang</servlet-class>
     </servlet>
-
-       <servlet-mapping>
+    <servlet>
+        <servlet-name>createTour_thang</servlet-name>
+        <servlet-class>controller.createTour_thang</servlet-class>
+    </servlet>
+    <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
     </servlet-mapping>
@@ -33,5 +36,8 @@
         <servlet-name>index_thang</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
- 
+    <servlet-mapping>
+        <servlet-name>createTour_thang</servlet-name>
+        <url-pattern>/createTour_thang</url-pattern>
+    </servlet-mapping>
 </web-app>
