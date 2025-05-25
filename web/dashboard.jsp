@@ -30,8 +30,8 @@
                             <div class="nav-section">
                                 <h5 class="nav-section-title">Main Menu</h5>
                                 <ul class="nav-list">
-                                    <li class="nav-item active">
-                                        <a href="#dashboard" class="nav-link">
+                                    <li class="nav-item">
+                                        <a href="${pageContext.request.contextPath}/dashboard" class="nav-link">
                                             <i class="fas fa-home"></i>
                                             <span>Dashboard</span>
                                         </a>
@@ -68,7 +68,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#reviews" class="nav-link">
+                                        <a href="#" class="nav-link" onclick="openReviewModal()">
                                             <i class="fas fa-star"></i>
                                             <span>Reviews</span>
                                             <span class="badge">
@@ -324,6 +324,115 @@
                 <!-- Messages Panel -->
                 <div class="messages-panel" id="messagesPanel">
                     <!-- Will be populated dynamically -->
+                </div>
+
+                <!-- Review Modal -->
+                <div class="modal fade" id="reviewModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Manage Reviews</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Review Actions -->
+                                <div class="mb-3">
+                                    <button class="btn btn-primary" onclick="openAddReviewForm()">
+                                        <i class="fas fa-plus"></i> Add Review
+                                    </button>
+                                </div>
+
+                                <!-- Reviews Table -->
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Booking ID</th>
+                                                <th>Guide ID</th>
+                                                <th>Rating</th>
+                                                <th>Comment</th>
+                                                <th>Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="reviewsTableBody">
+                                            <c:choose>
+                                                <c:when test="${not empty recentReviews}">
+                                                    <c:forEach var="review" items="${recentReviews}">
+                                                        <tr>
+                                                            <td>${review.bookingId}</td>
+                                                            <td>${review.guideId}</td>
+                                                            <td>
+                                                                <c:forEach begin="1" end="${review.rating}">
+                                                                    <i class="fas fa-star text-warning"></i>
+                                                                </c:forEach>
+                                                            </td>
+                                                            <td>${review.comment}</td>
+                                                            <td><fmt:formatDate value="${review.createdAt}" pattern="dd/MM/yyyy HH:mm"/></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-info" onclick="editReview(${review.id})">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger" onclick="deleteReview(${review.id})">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">No reviews available</td>
+                                                    </tr>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add/Edit Review Form Modal -->
+                <div class="modal fade" id="reviewFormModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reviewFormTitle">Add Review</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="reviewForm" class="needs-validation" novalidate>
+                                    <input type="hidden" id="reviewId" name="reviewId">
+                                    <div class="mb-3">
+                                        <label for="bookingId" class="form-label">Booking ID</label>
+                                        <input type="number" class="form-control" id="bookingId" name="bookingId" required>
+                                        <div class="invalid-feedback">Please enter a valid Booking ID</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="guideId" class="form-label">Guide ID</label>
+                                        <input type="number" class="form-control" id="guideId" name="guideId" required>
+                                        <div class="invalid-feedback">Please enter a valid Guide ID</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="rating" class="form-label">Rating</label>
+                                        <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+                                        <div class="invalid-feedback">Please enter a rating between 1 and 5</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comment" class="form-label">Comment</label>
+                                        <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                        <div class="invalid-feedback">Please enter a comment</div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="saveReview()">Save</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

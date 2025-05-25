@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeDashboard();
     setupEventListeners();
     loadDashboardData();
@@ -40,33 +40,46 @@ function initializeDashboard() {
 function setupEventListeners() {
     // Sidebar Toggle
     document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
-    
+
     // User Menu
     document.querySelector('.user-menu-btn').addEventListener('click', toggleUserMenu);
-    
+
     // Navigation
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', handleNavigation);
     });
-    
+
     // Notifications & Messages
     setupNotificationHandlers();
-    
+
     // Search Functionality
     setupSearch();
-    
+
     // Window Resize Handler
     window.addEventListener('resize', handleResize);
+
+    // Add event listeners to nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove active class from all items
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to clicked item
+            this.classList.add('active');
+        });
+    });
 }
 
 // Sidebar Functions
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
-    
+
     sidebar.classList.toggle('collapsed');
     mainContent.classList.toggle('expanded');
-    
+
     // Save preference
     localStorage.setItem('sidebarState', sidebar.classList.contains('collapsed'));
 }
@@ -226,6 +239,119 @@ function updateBookingsTable(bookings) {
     setupTableActionListeners();
 }
 
+// Review Management
+let reviewModal;
+let reviewFormModal;
+
+document.addEventListener('DOMContentLoaded', function() {
+    reviewModal = new bootstrap.Modal(document.getElementById('reviewModal'));
+    reviewFormModal = new bootstrap.Modal(document.getElementById('reviewFormModal'));
+});
+
+function openReviewModal() {
+    reviewModal.show();
+}
+
+function openAddReviewForm() {
+    document.getElementById('reviewFormTitle').textContent = 'Add Review';
+    document.getElementById('reviewForm').reset();
+    document.getElementById('reviewId').value = '';
+    new bootstrap.Modal(document.getElementById('reviewFormModal')).show();
+}
+
+function editReview(reviewId) {
+    fetch(`api/reviews/${reviewId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Review not found');
+            }
+            return response.json();
+        })
+        .then(review => {
+            document.getElementById('reviewFormTitle').textContent = 'Edit Review';
+            document.getElementById('reviewId').value = review.id;
+            document.getElementById('bookingId').value = review.bookingId;
+            document.getElementById('guideId').value = review.guideId;
+            document.getElementById('rating').value = review.rating;
+            document.getElementById('comment').value = review.comment;
+            
+            // Close the review list modal and show the edit form modal
+            const reviewModal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+            if (reviewModal) {
+                reviewModal.hide();
+            }
+            const reviewFormModal = new bootstrap.Modal(document.getElementById('reviewFormModal'));
+            reviewFormModal.show();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading review details');
+        });
+}
+
+function deleteReview(reviewId) {
+    if (confirm('Are you sure you want to delete this review?')) {
+        fetch(`api/reviews/${reviewId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Failed to delete review');
+            }
+        })
+        .catch(error => alert('Error deleting review: ' + error));
+    }
+}
+
+function saveReview() {
+    const form = document.getElementById('reviewForm');
+    if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+    }
+
+    const formData = new FormData(form);
+    const reviewId = formData.get('reviewId');
+    
+    // Convert FormData to URL-encoded string
+    const data = new URLSearchParams(formData).toString();
+    
+    const method = reviewId ? 'PUT' : 'POST';
+    const url = reviewId ? `api/reviews/${reviewId}` : 'api/reviews';
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: data
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('reviewFormModal'));
+            modal.hide();
+            // Reload the page to show updated data
+            location.reload();
+        } else {
+            alert('Failed to save review');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error saving review: ' + error.message);
+    });
+}
+
 // Utility Functions
 function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('vi-VN', {
@@ -267,9 +393,9 @@ function showNotification(message, type = 'info') {
         <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
         <span>${message}</span>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
         notification.classList.add('show');
         setTimeout(() => {
@@ -305,7 +431,7 @@ function setupSearch() {
 
 async function performSearch(query) {
     if (!query) return;
-    
+
     try {
         const results = await fetchData(`/api/search?q=${encodeURIComponent(query)}`);
         showSearchResults(results);
@@ -316,3 +442,26 @@ async function performSearch(query) {
 
 // Initialize Dashboard
 initializeDashboard();
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get current URL hash
+    const currentHash = window.location.hash || '#dashboard';
+    
+    // Add click handlers to all nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Add active class to parent nav-item
+            this.closest('.nav-item').classList.add('active');
+        });
+        
+        // Set initial active state based on URL
+        if (link.getAttribute('href') === currentHash) {
+            link.closest('.nav-item').classList.add('active');
+        }
+    });
+});

@@ -51,20 +51,78 @@ public class ReviewDAO_Long {
     }
 
     // Thêm review mới
-    public boolean addReview(Review r) {
-        String sql = "INSERT INTO reviews (booking_id, guide_id, rating, comment, created_at) VALUES (?, ?, ?, ?, ?)";
+    public boolean addReview(Review review) {
+        String sql = "INSERT INTO reviews (booking_id, guide_id, rating, comment) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, r.getBookingId());
-            ps.setInt(2, r.getGuideId());
-            ps.setInt(3, r.getRating());
-            ps.setString(4, r.getComment());
-            ps.setTimestamp(5, r.getCreatedAt());
-            return ps.executeUpdate() > 0;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, review.getBookingId());
+            stmt.setInt(2, review.getGuideId());
+            stmt.setInt(3, review.getRating());
+            stmt.setString(4, review.getComment());
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Cập nhật review
+    public boolean updateReview(Review review) {
+        String sql = "UPDATE reviews SET booking_id=?, guide_id=?, rating=?, comment=? WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, review.getBookingId());
+            stmt.setInt(2, review.getGuideId());
+            stmt.setInt(3, review.getRating());
+            stmt.setString(4, review.getComment());
+            stmt.setInt(5, review.getId());
+            
+            // Add debug logging
+            System.out.println("Executing update for review ID: " + review.getId());
+            System.out.println("SQL: " + sql);
+            
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error updating review: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Xóa review
+    public boolean deleteReview(int reviewId) {
+        String sql = "DELETE FROM reviews WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, reviewId);
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Lấy review theo ID
+    public Review getReviewById(int reviewId) {
+        String sql = "SELECT * FROM reviews WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, reviewId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Review review = new Review();
+                review.setId(rs.getInt("id"));
+                review.setBookingId(rs.getInt("booking_id"));
+                review.setGuideId(rs.getInt("guide_id"));
+                review.setRating(rs.getInt("rating"));
+                review.setComment(rs.getString("comment"));
+                review.setCreatedAt(rs.getTimestamp("created_at"));
+                return review;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     // Lấy các review gần đây
