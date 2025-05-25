@@ -5,6 +5,7 @@
 
 package controller;
 
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -57,8 +58,8 @@ public class index_thang extends HttpServlet {
          HttpSession session = request.getSession(false); 
        
 if (session != null) {
-String userName = (String) session.getAttribute("userName");
-       if ( userName != null) {
+User usersession = (User) session.getAttribute("user");
+       if ( usersession.getEmail() != null) {
             response.sendRedirect(request.getContextPath() + "/ProfileTravler_thang");
             return;
         } }

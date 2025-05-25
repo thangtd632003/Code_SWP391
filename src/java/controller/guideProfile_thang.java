@@ -78,13 +78,17 @@ public class guideProfile_thang extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
      
-      //  HttpSession session = request.getSession(false);
-      //  Integer userId = (Integer) (session != null ? session.getAttribute("userId") : null);
-        //String userRole = (String) (session != null ? session.getAttribute("userRole") : null);
-        System.out.println(">>> ENTERED guideProfile_thang.doGet");
+             HttpSession session = request.getSession(false);
+Integer userId = null;
+String userRole = null;
 
-String userRole = "guide";
-Integer userId=1 ;
+if (session != null) {
+    User user = (User) session.getAttribute("user");
+    if (user != null) {
+        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
+        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+    }
+}
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
@@ -134,9 +138,17 @@ config.put("api_secret", "40cUiErsEb9g_KiLRclptLFRKac");
 
 Cloudinary cloudinary = new Cloudinary(config);
 
-   //     HttpSession session = request.getSession(false);
-    //    Integer userId = (Integer) (session != null ? session.getAttribute("userId") : null);
-Integer userId = 1;
+          HttpSession session = request.getSession(false);
+Integer userId = null;
+String userRole = null;
+
+if (session != null) {
+    User user = (User) session.getAttribute("user");
+    if (user != null) {
+        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
+        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+    }
+}
         if (userId == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;

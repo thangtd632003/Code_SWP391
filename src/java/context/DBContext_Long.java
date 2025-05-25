@@ -16,10 +16,10 @@ public class DBContext_Long {
 
     /*Change/update information of your database connection, DO NOT change name of instance variables in this class*/
     private final String serverName = "localhost";
-    private final String dbName = "smiledev";
+    private final String dbName = "swp391_db2";
     private final String portNumber = "3306"; // MySQL default port
     private final String userID = "root";     // Thay đổi nếu user khác
-    private final String password = "admin"; // Thay đổi password cho phù hợp
+    private final String password = "123456"; // Thay đổi password cho phù hợp
     public static void main(String[] args) {
         try {
             Connection conn = new DBContext_Long().getConnection();

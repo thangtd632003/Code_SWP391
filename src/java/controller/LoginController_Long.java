@@ -17,7 +17,7 @@ public class LoginController_Long extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             response.sendRedirect(request.getContextPath() + "/dashboard"); // Đúng: chuyển sang servlet
             return;
-        }
+        } 
         handleCookieLogin(request, response);
     }
 

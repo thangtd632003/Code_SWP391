@@ -63,15 +63,18 @@ public class ProfileTravler_thang extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       
-   //     HttpSession session = request.getSession();
+       String email=null;
+       HttpSession session = request.getSession();
+       User userSession=(User) session.getAttribute("user");
+       if(userSession !=null){
+        email= userSession.getEmail();}
     //    String email = (String) session.getAttribute("userEmail");
 
-     //   if (email == null) {
-     //       response.sendRedirect("login.jsp");
-     //       return;
-     //   }
-     String email="traveler2@example.com";
+        if (email == null) {
+            response.sendRedirect("login.jsp");
+           return;
+       }
+    
        try (Connection conn = new DBContext().getConnection()) {
         userDao_thang userDAO = new userDao_thang(conn);
         User user = userDAO.getUserByEmail(email);
@@ -104,14 +107,18 @@ public class ProfileTravler_thang extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        // HttpSession session = request.getSession();
-       // String email = (String) session.getAttribute("userEmail");
+   String email=null;
+       HttpSession session = request.getSession();
+       User userSession=(User) session.getAttribute("user");
+       if(userSession !=null){
+        email= userSession.getEmail();}
+    //    String email = (String) session.getAttribute("userEmail");
 
-    //    if (email == null) {
-      //      response.sendRedirect("login.jsp");
-      //      return;
-     //   }
-    String email="traveler2@example.com";
+        if (email == null) {
+            response.sendRedirect("login.jsp");
+           return;
+       }
+    
      
          User updatedUser = new User();
     updatedUser.setFullName(request.getParameter("fullName"));

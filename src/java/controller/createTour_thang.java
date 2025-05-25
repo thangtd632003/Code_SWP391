@@ -8,6 +8,7 @@ package controller;
 import dal.DBContext;
 import dal.tourDao_thang;
 import entity.Tour;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -62,11 +63,18 @@ public class createTour_thang extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       //  HttpSession session = request.getSession(false);
-      //  Integer userId = session != null ? (Integer) session.getAttribute("userId") : null;
-        //String userRole = session != null ? (String) session.getAttribute("userRole") : null;
-Integer userId=1;
-String userRole="guide";
+         HttpSession session = request.getSession(false);
+Integer userId = null;
+String userRole = null;
+
+if (session != null) {
+    User user = (User) session.getAttribute("user");
+    if (user != null) {
+        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
+        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+    }
+}
+
         if (userId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
@@ -86,11 +94,18 @@ String userRole="guide";
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       //  HttpSession session = request.getSession(false);
-       // Integer guideId = session != null ? (Integer) session.getAttribute("userId") : null;
-       // String userRole = session != null ? (String) session.getAttribute("userRole") : null;
-Integer guideId=1;
-String userRole="guide";
+   HttpSession session = request.getSession(false);
+Integer guideId = null;
+String userRole = null;
+
+if (session != null) {
+    User user = (User) session.getAttribute("user");
+    if (user != null) {
+        guideId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
+        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+    }
+}
+
         if (guideId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;

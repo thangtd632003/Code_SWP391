@@ -1,6 +1,6 @@
 package dal;
 
-import context.DBContext_Long;
+import dal.DBContext;
 import entity.User;
 import entity.Gender;
 import entity.Role;
@@ -12,7 +12,7 @@ public class UserDAO_Long {
     public User login(String email, String password) {
         String query = "SELECT * FROM users WHERE email = ? AND password_hash = ? AND status = 'active'";
         
-        try (Connection conn = new DBContext_Long().getConnection();
+        try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
             ps.setString(1, email);
@@ -51,7 +51,7 @@ public class UserDAO_Long {
 
     public void updateLastLogin(int userId) {
         String query = "UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-        try (Connection conn = new DBContext_Long().getConnection();
+        try (Connection conn = new DBContext().getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, userId);
             ps.executeUpdate();

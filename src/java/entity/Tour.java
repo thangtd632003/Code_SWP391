@@ -74,5 +74,41 @@ public class Tour {
         this.bookings = bookings;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getMaxPeoplePerBooking() {
+        return maxPeoplePerBooking;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setItinerary(String itinerary) {
+        this.itinerary = itinerary;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setMaxPeoplePerBooking(int maxPeoplePerBooking) {
+        this.maxPeoplePerBooking = maxPeoplePerBooking;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     
     }

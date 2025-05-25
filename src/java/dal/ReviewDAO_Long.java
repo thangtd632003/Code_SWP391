@@ -1,6 +1,6 @@
 package dal;
 
-import context.DBContext_Long;
+import dal.DBContext;
 import entity.Review;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 public class ReviewDAO_Long {
 
     private Connection getConnection() throws Exception {
-        return new DBContext_Long().getConnection();
+        return new DBContext().getConnection();
     }
 
     // Lấy tất cả review
