@@ -37,7 +37,7 @@
                     <p id="welcome-subtext">Vui lòng đăng nhập để tiếp tục</p>
                 </div>
 
-                <form id="loginForm" onsubmit="return false;">
+                <form id="loginForm" method="post" action="login">
                     <div class="form-group">
                         <label for="email" id="email-label">Địa chỉ email</label>
                         <input type="email" id="email" name="email" class="form-input" required>

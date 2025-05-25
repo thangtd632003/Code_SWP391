@@ -76,7 +76,7 @@ if (session != null) {
 }
 
         if (userId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -107,7 +107,7 @@ if (session != null) {
 }
 
         if (guideId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
