@@ -1,0 +1,632 @@
+/* Thêm vào phần đầu file CSS */
+:root {
+    --transition-speed: 0.3s;
+    --slide-transition: 0.6s;
+}
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    transition: background-color var(--transition-speed) ease;
+}
+
+/* Header Controls */
+.header-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+#lang-switcher {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+}
+
+.theme-btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.theme-btn:hover {
+    transform: rotate(180deg);
+    background-color: #f0f0f0;
+}
+
+/* Notice Container Styles */
+.notice-container {
+    position: fixed;
+    top: -100px; /* Bắt đầu ẩn ở trên cùng */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    animation: slideDown 0.8s ease forwards;
+    width: auto;
+    min-width: 300px;
+}
+
+.db-notice {
+    padding: 15px 25px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    border-left: 4px solid #0066cc;
+    font-size: 16px;
+    color: #333;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 0.3s;
+}
+
+/* Thêm vào file css/login.css */
+.db-notice.error {
+    color: #fff;
+    background: #e74c3c;
+    border: 1px solid #c0392b;
+}
+
+.db-notice.error i {
+    margin-right: 8px;
+}
+
+/* Animation cho notice */
+@keyframes slideDown {
+    0% {
+        top: -100px;
+    }
+    100% {
+        top: 20px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover effect cho notice */
+.db-notice:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation khi notice biến mất */
+.notice-hide {
+    animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+    0% {
+        top: 20px;
+        opacity: 1;
+    }
+    100% {
+        top: -100px;
+        opacity: 0;
+    }
+}
+
+/* Dark theme support cho notice */
+.dark-theme .db-notice {
+    background-color: rgba(45, 45, 45, 0.95);
+    color: #fff;
+    border-left-color: #3399ff;
+}
+
+/* Page Container */
+.page-container {
+    display: flex;
+    min-height: 100vh;
+    gap: 24px; /* Thêm dòng này để hai phần gần nhau hơn */
+}
+
+/* Login Section */
+.login-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px; /* Giảm padding để sát nhau hơn */
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.login-header p {
+    color: #666;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-input:focus {
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+    outline: none;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: color var(--transition-speed) ease;
+}
+
+.password-toggle:hover {
+    color: #0066cc;
+}
+
+/* Form footer */
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+}
+
+.forgot-password {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+/* Buttons */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #0052a3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.social-login-text {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-social {
+    width: auto;
+    padding: 12px 20px;
+    background-color: #f5f5f5;
+    color: #333;
+    transform: translateY(0);
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-social:hover {
+    background-color: #e5e5e5;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Register link */
+.register-link {
+    text-align: center;
+    color: #666;
+}
+
+.register-link a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+/* Info Section */
+.info-section {
+    flex: 2;
+    background-color: #f5f5f5;
+    padding: 100px 100px; /* Giảm padding để sát nhau hơn */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-content {
+    max-width: 600px;
+    text-align: center;
+}
+
+.info-content h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.info-description {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Slideshow */
+.slideshow-container {
+    margin-bottom: 30px;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Cập nhật và thêm mới các hiệu ứng */
+.slide {
+    display: none;
+    position: relative;
+    transition: opacity var(--slide-transition) ease-in-out;
+    opacity: 0;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
+}
+
+.slide img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    transform: scale(1);
+    transition: transform var(--transition-speed) ease;
+}
+
+.slide:hover img {
+    transform: scale(1.05);
+}
+
+.slide-caption {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    opacity: 0;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.slide.active .slide-caption {
+    bottom: 0;
+    opacity: 1;
+}
+
+/* Features */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(0);
+    transition: all var(--transition-speed) ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.feature-item i {
+    font-size: 24px;
+    color: #0066cc;
+    transition: transform var(--transition-speed) ease;
+}
+
+.feature-item:hover i {
+    transform: scale(1.2);
+}
+
+/* Animations */
+.fade {
+    animation: fade 1.5s ease-in-out;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slideshow Animation */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.slide.sliding-in {
+    animation: slideIn var(--slide-transition) ease-out forwards;
+}
+
+.slide.sliding-out {
+    animation: slideOut var(--slide-transition) ease-out forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .page-container {
+        flex-direction: column;
+    }
+
+    .info-section {
+        padding: 20px;
+    }
+
+    .features {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-card {
+        padding: 20px;
+    }
+    
+    .social-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .header-controls {
+        flex-direction: column;
+    }
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background-color: #1a1a1a;
+}
+
+.dark-theme .login-card {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+.dark-theme .form-input {
+    background-color: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #fff;
+}
+
+.dark-theme .btn-social {
+    background-color: #3d3d3d;
+    color: #fff;
+}
+
+.dark-theme .info-section {
+    background-color: #2d2d2d;
+}
+
+.dark-theme .info-content h2,
+.dark-theme .info-content p {
+    color: #fff;
+}
+
+/* Thêm animation cho Dark Mode transition */
+.dark-theme {
+    transition: all var(--transition-speed) ease;
+}
+
+/* Hover effect cho links */
+a {
+    position: relative;
+    transition: color var(--transition-speed) ease;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #0066cc;
+    transition: width var(--transition-speed) ease;
+}
+
+a:hover::after {
+    width: 100%;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading Animation */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.loading {
+    background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+    background-size: 800px 104px;
+    animation: shimmer 1.5s infinite linear;
+}
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-left: 3px solid #e74c3c;
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Dark theme support */
+.dark-theme .error-message {
+    background-color: rgba(231, 76, 60, 0.2);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

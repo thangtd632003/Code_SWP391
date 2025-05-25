@@ -9,8 +9,6 @@ package entity;
  * @author thang
  */
 
-//
-
 public enum Gender {
     MALE,
     FEMALE,

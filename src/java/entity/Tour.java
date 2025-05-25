@@ -27,34 +27,44 @@ public class Tour {
     private List<Booking> bookings = new ArrayList<>();
 
 
-    public Tour() {}
+    public Tour() {
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public int getGuideId() { return guideId; }
-    public void setGuideId(int guideId) { this.guideId = guideId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public int getGuideId() {
+        return guideId;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setGuideId(int guideId) {
+        this.guideId = guideId;
+    }
 
-    public String getItinerary() { return itinerary; }
-    public void setItinerary(String itinerary) { this.itinerary = itinerary; }
+    public String getName() {
+        return name;
+    }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getMaxPeoplePerBooking() { return maxPeoplePerBooking; }
-    public void setMaxPeoplePerBooking(int maxPeoplePerBooking) { this.maxPeoplePerBooking = maxPeoplePerBooking; }
+    public String getDescription() {
+        return description;
+    }
 
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public String getItinerary() {
+        return itinerary;
+    }
 
     public List<Booking> getBookings() {
         return bookings;
@@ -65,4 +75,4 @@ public class Tour {
     }
 
     
-}
+    }
