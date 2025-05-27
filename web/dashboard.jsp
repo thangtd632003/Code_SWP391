@@ -153,6 +153,48 @@
 
                         <!-- Dashboard Content -->
                         <div class="dashboard-content">
+                            <!-- User Information Section -->
+<div id="userProfileSection" class="card mb-4" style="display: none;">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="mb-0">User Information</h3>
+        <button class="btn btn-primary" onclick="openSettingsModal()">
+            <i class="fas fa-edit"></i> Edit Profile
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3 text-center mb-3">
+                <img src="img/logi.jpg" alt="User Avatar" class="rounded-circle img-fluid mb-2" style="max-width: 150px;">
+                <h4>${sessionScope.user.fullName}</h4>
+                <p class="text-muted">${sessionScope.user.role}</p>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Full Name:</label>
+                        <p>${sessionScope.user.fullName}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Email:</label>
+                        <p>${sessionScope.user.email}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Phone Number:</label>
+                        <p>${sessionScope.user.phone}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Gender:</label>
+                        <p>${sessionScope.user.gender}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="fw-bold">Birth Date:</label>
+                        <p><fmt:formatDate value="${sessionScope.user.birthDate}" pattern="dd/MM/yyyy"/></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                             <!-- Statistics Cards -->
                             <div class="stats-grid">
                                 <div class="stat-card">

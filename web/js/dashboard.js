@@ -465,3 +465,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Thêm event listener cho các profile links
+document.addEventListener('DOMContentLoaded', function() {
+    const profileLinks = document.querySelectorAll('a[href="#profile"]');
+    profileLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const userProfileSection = document.getElementById('userProfileSection');
+            if (userProfileSection) {
+                // Ẩn các section khác nếu cần
+                document.querySelectorAll('.dashboard-content > div').forEach(div => {
+                    if (div !== userProfileSection) {
+                        div.style.display = 'none';
+                    }
+                });
+                // Hiển thị profile section
+                userProfileSection.style.display = 'block';
+            }
+        });
+    });
+});

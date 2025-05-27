@@ -649,3 +649,76 @@ img {
     background: #e3e6f0;
     border-radius: 4px;
 }
+
+/* User Information Styles */
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.rounded-circle {
+    border: 3px solid #e3e6f0;
+}
+
+.fw-bold {
+    font-weight: 600;
+    color: #4e73df;
+    margin-bottom: 0.25rem;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+/* User Profile Section Styles */
+#userProfileSection {
+    transition: all 0.3s ease;
+}
+
+#userProfileSection .card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+#userProfileSection .rounded-circle {
+    border: 3px solid #e3e6f0;
+    transition: transform 0.3s ease;
+}
+
+#userProfileSection .rounded-circle:hover {
+    transform: scale(1.05);
+}
+
+#userProfileSection .fw-bold {
+    color: #4e73df;
+    margin-bottom: 0.25rem;
+}
+
+#userProfileSection .card-body p {
+    margin-bottom: 0.5rem;
+}
+
+#userProfileSection .btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    transition: all 0.3s ease;
+}
+
+#userProfileSection .btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+    transform: translateY(-2px);
+}
