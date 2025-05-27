@@ -20,6 +20,10 @@
         <servlet-name>createTour_thang</servlet-name>
         <servlet-class>controller.createTour_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>editTour_thang</servlet-name>
+        <servlet-class>controller.editTour_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -40,7 +44,7 @@
         <servlet-name>createTour_thang</servlet-name>
         <url-pattern>/createTour_thang</url-pattern>
     </servlet-mapping>
-      <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/css/*</url-pattern>
     </servlet-mapping>
@@ -52,8 +56,12 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/img/*</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>editTour_thang</servlet-name>
+        <url-pattern>/editTour_thang</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -154,6 +154,9 @@ public boolean toggleTourStatus(int tourId) throws SQLException {
                     t.setItinerary(rs.getString("itinerary"));
                     t.setPrice(rs.getBigDecimal("price"));
                     t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                    t.setDays(rs.getInt("days"));
+                       t.setLanguage(rs.getString("language"));
+                    t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
                     t.setCreatedAt(rs.getTimestamp("created_at"));
                     t.setUpdatedAt(rs.getTimestamp("updated_at"));
                     return t;
