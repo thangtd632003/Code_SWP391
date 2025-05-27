@@ -1,3 +1,9 @@
+<%-- 
+    Document   : dashboardGuide
+    Created on : May 27, 2025, 4:01:59 PM
+    Author     : thang
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -36,25 +42,8 @@
                                             <span>Dashboard</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="#bookings" class="nav-link">
-                                            <i class="fas fa-calendar-check"></i>
-                                            <span>Bookings</span>
-                                            <span class="badge">12</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#tours" class="nav-link">
-                                            <i class="fas fa-map-marked-alt"></i>
-                                            <span>Tours</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#customers" class="nav-link">
-                                            <i class="fas fa-users"></i>
-                                            <span>Customers</span>
-                                        </a>
-                                    </li>
+                                   
+                                  
                                 </ul>
                             </div>
 
@@ -67,6 +56,19 @@
                                             <span>Tour Guides</span>
                                         </a>
                                     </li>
+                                     <li class="nav-item">
+                                        <a href="/Code_SWP391/tourList_thang" class="nav-link">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <span>Bookings List</span>
+                                           
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Code_SWP391/tourList_thang" class="nav-link">
+                                            <i class="fas fa-map-marked-alt"></i>
+                                            <span>Tours List</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item">
                                         <a href="#reviews" class="nav-link">
                                             <i class="fas fa-star"></i>
@@ -76,12 +78,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="#reports" class="nav-link">
-                                            <i class="fas fa-chart-bar"></i>
-                                            <span>Reports</span>
-                                        </a>
-                                    </li>
+                                
                                 </ul>
                             </div>
 
@@ -94,10 +91,17 @@
                                             <span>Settings</span>
                                         </a>
                                     </li>
+                                    <!-- thông tin account đã code -->
                                     <li class="nav-item">
                                         <a href="/Code_SWP391/ProfileTravler_thang" class="nav-link">
                                             <i class="fas fa-user-circle"></i>
-                                            <span>Profile</span>
+                                            <span>Account information</span>
+                                        </a>
+                                    </li>
+                                     <li class="nav-item">
+                                        <a href="/Code_SWP391/guideProfile_thang" class="nav-link">
+                                            <i class="fas fa-user-circle"></i>
+                                            <span>Guide Profile</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -137,6 +141,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="/Code_SWP391/ProfileTravler_thang" class="dropdown-item">
+                                            <i class="fas fa-user"></i> Account information
+                                        </a>
+                                         <a href="/Code_SWP391/guideProfile_thang" class="dropdown-item">
                                             <i class="fas fa-user"></i> Profile
                                         </a>
                                         <a href="#settings" class="dropdown-item">

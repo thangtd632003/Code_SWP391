@@ -20,9 +20,59 @@
     .message { text-align:center; margin-bottom:12px; padding:8px; }
     .success { color:#155724; background:#d4edda; }
     .fail    { color:#721c24; background:#f8d7da; }
+            label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+  }
+
+  option {
+    padding: 0.5rem;
+  }
+    .top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.top-bar a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.top-bar a:hover {
+  color: #0056b3;
+}
   </style>
 </head>
 <body>
+    <div class="top-bar">
+  <a href="/Code_SWP391/tourList_thang">← Dashboard</a>
+</div>
   <div class="form-box">
     <h2>Create New Tour</h2>
 
@@ -33,24 +83,36 @@
       <div class="message fail">Failed to create tour. Please check your input.</div>
     </c:if>
 
-    <form action="createTour_thang" method="post">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+ <form action="createTour_thang" method="post">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required />
 
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="4"></textarea>
+  <label for="description">Description:</label>
+  <textarea id="description" name="description" rows="4"></textarea>
 
-      <label for="itinerary">Itinerary:</label>
-      <textarea id="itinerary" name="itinerary" rows="4"></textarea>
+  <label for="itinerary">Itinerary:</label>
+  <textarea id="itinerary" name="itinerary" rows="4"></textarea>
 
-      <label for="price">Price:</label>
-      <input type="number" id="price" name="price" step="0.01" required />
+  <label for="price">Price:</label>
+  <input type="number" id="price" name="price" step="0.01" required />
 
-      <label for="maxPeople">Max People Per Booking:</label>
-      <input type="number" id="maxPeople" name="maxPeople" required />
+  <label for="maxPeople">Max People Per Booking:</label>
+  <input type="number" id="maxPeople" name="maxPeople" required />
 
-      <button type="submit">Create Tour</button>
-    </form>
+  <label for="days">Days:</label>
+  <input type="number" id="days" name="days" min="1" required />
+
+  <label for="language">Language:</label>
+  <select id="language" name="language" required>
+    <option value="English">English</option>
+    <option value="Japanese">Japanese</option>
+    <option value="Chinese">Chinese</option>
+    <option value="Germany">Germany</option>
+    <option value="VietNamese">VietNamese</option>
+  </select>
+
+  <button type="submit">Create Tour</button>
+</form>
   </div>
 </body>
 </html>

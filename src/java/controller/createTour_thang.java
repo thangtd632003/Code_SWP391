@@ -7,6 +7,7 @@ package controller;
 
 import dal.DBContext;
 import dal.tourDao_thang;
+import entity.Status;
 import entity.Tour;
 import entity.User;
 import java.io.IOException;
@@ -117,13 +118,18 @@ if (session != null) {
         String itinerary   = request.getParameter("itinerary");
         String priceStr    = request.getParameter("price");
         String maxPeopleStr= request.getParameter("maxPeople");
+String daysStr    = request.getParameter("days");
+String language   = request.getParameter("language");
 
+int days = 0;
         // Chuyển kiểu
         BigDecimal price = BigDecimal.ZERO;
         int maxPeople   = 0;
         try {
             price     = new BigDecimal(priceStr);
             maxPeople = Integer.parseInt(maxPeopleStr);
+                days      = Integer.parseInt(daysStr);
+
         } catch (NumberFormatException e) {
             // nếu parse lỗi, chuyển về form với báo lỗi
             response.sendRedirect(request.getContextPath() + "/createTour_thang?create=fail");
@@ -138,7 +144,9 @@ if (session != null) {
         tour.setItinerary(itinerary);
         tour.setPrice(price);
         tour.setMaxPeoplePerBooking(maxPeople);
-
+    tour.setDays(days);
+    tour.setLanguage(language);
+    tour.setStatus(Status.ACTIVE);
         // Gọi DAO
         boolean created = false;
         try (Connection conn = new DBContext().getConnection()) {

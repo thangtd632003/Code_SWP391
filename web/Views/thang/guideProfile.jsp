@@ -97,10 +97,33 @@
       }
       .message.success { background: #e8f5e9; color: #2e7d32; }
       .message.fail    { background: #ffebee; color: #c62828; }
+          .top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.top-bar a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.top-bar a:hover {
+  color: #0056b3;
+}
     </style>
 </head>
 <body>
-
+<div class="top-bar">
+  <a href="/Code_SWP391/login">← Dashboard</a>
+</div>
   <c:if test="${not empty param.update}">
     <div class="message ${param.update == 'success' ? 'success' : 'fail'}">
       <c:choose>

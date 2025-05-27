@@ -23,7 +23,9 @@ public class Tour {
     private int maxPeoplePerBooking;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
+private int days; // số ngày của tour
+    private String language; // ngôn ngữ hướng dẫn
+    private Status status; // 'active' hoặc 'deactive'
     private List<Booking> bookings = new ArrayList<>();
 
 
@@ -108,6 +110,30 @@ public class Tour {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     

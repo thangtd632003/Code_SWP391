@@ -71,6 +71,27 @@
         button.submit-btn:hover {
             background-color: #434190;
         }
+        .top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.top-bar a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.top-bar a:hover {
+  color: #0056b3;
+}
     </style>
 </head>
 <body>
@@ -83,7 +104,9 @@
     <c:if test="${param.update == 'fail'}">
         <p class="message text-error">Update fail.</p>
     </c:if>
-
+<div class="top-bar">
+  <a href="/Code_SWP391/login">← Dashboard</a>
+</div>
     <form action="ProfileTravler_thang" method="post">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="${user.email}" readonly />

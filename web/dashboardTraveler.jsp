@@ -1,3 +1,10 @@
+<%-- 
+    Document   : dashboardTraveler.jsp
+    Created on : May 27, 2025, 4:03:44 PM
+    Author     : thang
+--%>
+
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -97,7 +104,7 @@
                                     <li class="nav-item">
                                         <a href="/Code_SWP391/ProfileTravler_thang" class="nav-link">
                                             <i class="fas fa-user-circle"></i>
-                                            <span>Profile</span>
+                                            <span>Account information</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -137,7 +144,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="/Code_SWP391/ProfileTravler_thang" class="dropdown-item">
-                                            <i class="fas fa-user"></i> Profile
+                                            <i class="fas fa-user"></i> Account information
                                         </a>
                                         <a href="#settings" class="dropdown-item">
                                             <i class="fas fa-cog"></i> Settings

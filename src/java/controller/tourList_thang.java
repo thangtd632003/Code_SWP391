@@ -126,7 +126,7 @@ if (session != null) {
             int tourId = Integer.parseInt(idParam);
             try (Connection conn = new DBContext().getConnection()) {
                 tourDao_thang dao = new tourDao_thang(conn);
-                dao.deleteTour(tourId);
+                dao.toggleTourStatus(tourId);
             } catch (Exception ex) {
                 Logger.getLogger(tourList_thang.class.getName()).log(Level.SEVERE, null, ex);
                 // bạn có thể set thông báo lỗi vào request/session nếu muốn
