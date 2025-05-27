@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet("/api/reviews/*")
-public class ReviewServlet extends HttpServlet {
+public class ReviewServlet_Long extends HttpServlet {
     private ReviewDAO_Long reviewDAO;
 
     @Override

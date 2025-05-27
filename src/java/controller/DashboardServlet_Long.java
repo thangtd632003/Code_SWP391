@@ -3,6 +3,7 @@ package controller;
 import dal.UserDAO_Long;
 import dal.ReviewDAO_Long;
 import entity.Review;
+import entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -16,6 +17,20 @@ public class DashboardServlet_Long extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ReviewDAO_Long reviewDAO = new ReviewDAO_Long();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Refresh user data from database
+        UserDAO_Long userDAO = new UserDAO_Long();
+        User refreshedUser = UserDAO_Long.getUserById(user.getId());
+        if (refreshedUser != null) {
+            session.setAttribute("user", refreshedUser);
+        }
 
         double averageRating = reviewDAO.getAverageRating();
         int totalGuides = UserDAO_Long.countGuides();

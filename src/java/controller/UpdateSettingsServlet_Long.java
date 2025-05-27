@@ -31,29 +31,42 @@ public class UpdateSettingsServlet_Long extends HttpServlet {
                 return;
             }
 
-            String currentPassword = request.getParameter("currentPassword");
+            // Lấy các thông tin từ request
+            String fullName = request.getParameter("fullName");
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String gender = request.getParameter("gender");
+            String birthDate = request.getParameter("birthDate");
             String newPassword = request.getParameter("newPassword");
             
+            // Validate fullName
+            if (fullName == null || fullName.trim().isEmpty()) {
+                out.write("{\"success\": false, \"message\": \"Name cannot be empty\"}");
+                return;
+            }
+
             // Cập nhật thông tin user
-            currentUser.setFullName(request.getParameter("fullName"));
-            currentUser.setEmail(request.getParameter("email"));
-            currentUser.setPhone(request.getParameter("phone"));
-            currentUser.setGender(Gender.valueOf(request.getParameter("gender")));
-            currentUser.setBirthDate(Date.valueOf(request.getParameter("birthDate")));
+            currentUser.setFullName(fullName.trim());
+            currentUser.setEmail(email);
+            currentUser.setPhone(phone);
+            currentUser.setGender(Gender.valueOf(gender));
+            currentUser.setBirthDate(Date.valueOf(birthDate));
             
             // Lưu vào database
             UserDAO_Long userDAO = new UserDAO_Long();
-            boolean updated = userDAO.updateUser(currentUser, currentPassword, newPassword);
+            boolean updated = userDAO.updateUser(currentUser, null, newPassword);
             
             if (updated) {
+                // Cập nhật session với thông tin mới
                 session.setAttribute("user", currentUser);
-                out.write("{\"success\": true}");
+                out.write("{\"success\": true, \"message\": \"Settings updated successfully\"}");
             } else {
-                out.write("{\"success\": false, \"message\": \"Failed to update settings. Please check your current password.\"}");
+                out.write("{\"success\": false, \"message\": \"Failed to update settings\"}");
             }
             
         } catch (Exception e) {
-            out.write("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
+            e.printStackTrace(); // In ra console để debug
+            out.write("{\"success\": false, \"message\": \"Error: " + e.getMessage() + "\"}");
         }
     }
 }

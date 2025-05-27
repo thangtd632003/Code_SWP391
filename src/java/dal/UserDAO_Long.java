@@ -137,6 +137,45 @@ public class UserDAO_Long {
         }
     }
 
+    public static User getUserById(int userId) {
+        String query = "SELECT * FROM users WHERE id = ?";
+        
+        try (Connection conn = new DBContext_Long().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ps.setInt(1, userId);
+        
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+                user.setFullName(rs.getString("full_name")); 
+                user.setPhone(rs.getString("phone"));
+                
+                String genderStr = rs.getString("gender");
+                user.setGender(genderStr != null ? Gender.valueOf(genderStr.toUpperCase()) : null);
+                
+                user.setBirthDate(rs.getDate("birth_date"));
+                
+                String roleStr = rs.getString("role");
+                user.setRole(roleStr != null ? Role.valueOf(roleStr.toUpperCase()) : null);
+                
+                String statusStr = rs.getString("status"); 
+                user.setStatus(statusStr != null ? Status.valueOf(statusStr.toUpperCase()) : null);
+                
+                user.setCreatedAt(rs.getTimestamp("created_at"));
+                user.setUpdatedAt(rs.getTimestamp("updated_at"));
+                
+                return user;
+            }
+        }
+    } catch (Exception e) {
+        System.out.println("Error getting user by ID: " + e.getMessage());
+    }
+    return null;
+}
     public static void main(String[] args) {
         UserDAO_Long dao = new UserDAO_Long();
         // Thử đăng nhập với email và password mẫu

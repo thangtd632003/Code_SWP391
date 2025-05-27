@@ -13,10 +13,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function openSettingsModal() {
-    const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
-    settingsModal.show();
+    const settingsModal = document.getElementById('settingsModal');
+    const modal = new bootstrap.Modal(settingsModal, {
+        keyboard: true,
+        backdrop: true,
+        focus: true
+    });
+    
+    // Remove aria-hidden when showing modal
+    settingsModal.addEventListener('shown.bs.modal', function () {
+        settingsModal.removeAttribute('aria-hidden');
+    });
+    
+    modal.show();
 }
 
+// Trong file settings.js, sửa lại hàm saveSettings()
 function saveSettings() {
     const form = document.getElementById('settingsForm');
     if (!form.checkValidity()) {
@@ -24,15 +36,20 @@ function saveSettings() {
         return;
     }
 
-    // Tạo đối tượng FormData
-    const formData = new FormData();
-    formData.append('fullName', document.getElementById('fullName').value);
-    formData.append('email', document.getElementById('email').value);
-    formData.append('phone', document.getElementById('phone').value);
-    formData.append('gender', document.getElementById('gender').value);
-    formData.append('birthDate', document.getElementById('birthDate').value);
+    const fullName = document.getElementById('fullName').value;
+    if (!fullName || fullName.trim() === '') {
+        alert('Full name cannot be empty');
+        return;
+    }
 
-    // Xử lý password nếu được nhập
+    // Thay đổi cách gửi dữ liệu
+    const data = new URLSearchParams();
+    data.append('fullName', fullName.trim());
+    data.append('email', document.getElementById('email').value);
+    data.append('phone', document.getElementById('phone').value);
+    data.append('gender', document.getElementById('gender').value);
+    data.append('birthDate', document.getElementById('birthDate').value);
+
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
@@ -41,19 +58,28 @@ function saveSettings() {
             alert('New passwords do not match');
             return;
         }
-        formData.append('newPassword', newPassword);
+        data.append('newPassword', newPassword);
     }
 
-    // Gửi request
+    // Log data trước khi gửi
+    console.log('Sending data:', Object.fromEntries(data));
+
+    // Gửi request với headers và body mới
     fetch('update-settings', {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: data
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
     .then(data => {
+        console.log('Response data:', data);
         if (data.success) {
             alert('Settings updated successfully!');
-            // Refresh trang để cập nhật thông tin mới
             location.reload();
         } else {
             alert(data.message || 'Error updating settings');
