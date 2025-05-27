@@ -89,7 +89,7 @@
                                 <h5 class="nav-section-title">Settings</h5>
                                 <ul class="nav-list">
                                     <li class="nav-item">
-                                        <a href="#settings" class="nav-link">
+                                        <a href="javascript:void(0)" class="nav-link" id="settingsLink">
                                             <i class="fas fa-cog"></i>
                                             <span>Settings</span>
                                         </a>
@@ -435,9 +435,78 @@
                     </div>
                 </div>
 
+                <!-- Settings Modal -->
+                <div class="modal fade" id="settingsModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">User Settings</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="settingsForm" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="fullName" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="fullName" name="fullName"
+                                               value="${sessionScope.user.fullName}" required>
+                                        <div class="invalid-feedback">Please enter your full name</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               value="${sessionScope.user.email}" required>
+                                        <div class="invalid-feedback">Please enter a valid email</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="phone" name="phone"
+                                               value="${sessionScope.user.phone}" required>
+                                        <div class="invalid-feedback">Please enter your phone number</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="gender" class="form-label">Gender</label>
+                                        <select class="form-select" id="gender" name="gender" required>
+                                            <option value="MALE" ${sessionScope.user.gender == 'MALE' ? 'selected' : ''}>Male</option>
+                                            <option value="FEMALE" ${sessionScope.user.gender == 'FEMALE' ? 'selected' : ''}>Female</option>
+                                            <option value="OTHER" ${sessionScope.user.gender == 'OTHER' ? 'selected' : ''}>Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="birthDate" class="form-label">Birth Date</label>
+                                        <input type="date" class="form-control" id="birthDate" name="birthDate"
+                                               value="${sessionScope.user.birthDate}" required>
+                                        <div class="invalid-feedback">Please enter your birth date</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">New Password (leave blank to keep current)</label>
+                                        <input type="password" class="form-control" id="newPassword" name="newPassword">
+                                        <div class="invalid-feedback">Password must be at least 6 characters</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                                        <div class="invalid-feedback">Passwords do not match</div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
                 <script src="js/dashboard.js"></script>
+                <script src="js/settings.js"></script>
             </body>
 
             </html>
