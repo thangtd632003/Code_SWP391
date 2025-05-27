@@ -170,36 +170,36 @@
 
                                 <div class="stat-card">
                                     <div class="stat-card-content">
-                                        <h3>Total Bookings</h3>
-                                        <div class="stat-value">845</div>
+                                        <h3>Total Guide</h3>
+                                        <div class="stat-value">${totalGuides}</div>
                                         <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 8.2%
+                                            <i class="fas fa-user-tie"></i> Active Guides
                                         </div>
                                     </div>
                                     <div class="stat-icon">
-                                        <i class="fas fa-calendar-check"></i>
+                                        <i class="fas fa-user-tie"></i>
                                     </div>
                                 </div>
 
                                 <div class="stat-card">
                                     <div class="stat-card-content">
-                                        <h3>Active Tours</h3>
-                                        <div class="stat-value">124</div>
-                                        <div class="stat-change negative">
-                                            <i class="fas fa-arrow-down"></i> 3.1%
+                                        <h3>Total Traveler</h3>
+                                        <div class="stat-value">${totalTravelers}</div>
+                                        <div class="stat-change positive">
+                                            <i class="fas fa-users"></i> Active Travelers
                                         </div>
                                     </div>
                                     <div class="stat-icon">
-                                        <i class="fas fa-route"></i>
+                                        <i class="fas fa-users"></i>
                                     </div>
                                 </div>
 
                                 <div class="stat-card">
                                     <div class="stat-card-content">
                                         <h3>Customer Rating</h3>
-                                        <div class="stat-value">4.8</div>
+                                        <div class="stat-value">${averageRating}</div>
                                         <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 0.3
+                                            <i class="fas fa-star"></i> Average Rating
                                         </div>
                                     </div>
                                     <div class="stat-icon">

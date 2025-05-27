@@ -60,6 +60,37 @@ public class UserDAO_Long {
         }
     }
 
+    private Connection getConnection() throws Exception {
+        return new DBContext_Long().getConnection();
+    }
+
+    public static int countGuides() {
+        String sql = "SELECT COUNT(*) FROM users WHERE role = 'GUIDE'";  // Sửa theo enum Role
+        try (Connection conn = new DBContext_Long().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int countTravelers() {
+        String sql = "SELECT COUNT(*) FROM users WHERE role = 'TRAVELER'";  // Sửa theo enum Role
+        try (Connection conn = new DBContext_Long().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     public static void main(String[] args) {
         UserDAO_Long dao = new UserDAO_Long();
         // Thử đăng nhập với email và password mẫu

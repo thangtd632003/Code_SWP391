@@ -2,6 +2,7 @@ package dal;
 
 import context.DBContext_Long;
 import entity.Review;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,11 +77,11 @@ public class ReviewDAO_Long {
             stmt.setInt(3, review.getRating());
             stmt.setString(4, review.getComment());
             stmt.setInt(5, review.getId());
-            
+
             // Add debug logging
             System.out.println("Executing update for review ID: " + review.getId());
             System.out.println("SQL: " + sql);
-            
+
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             System.err.println("Error updating review: " + e.getMessage());
@@ -159,10 +160,10 @@ public class ReviewDAO_Long {
             if (rs.next()) {
                 System.out.println("Kết nối thành công! Có dữ liệu review:");
                 System.out.println("ID: " + rs.getInt("id") +
-                                   ", BookingID: " + rs.getInt("booking_id") +
-                                   ", GuideID: " + rs.getInt("guide_id") +
-                                   ", Rating: " + rs.getInt("rating") +
-                                   ", Comment: " + rs.getString("comment"));
+                        ", BookingID: " + rs.getInt("booking_id") +
+                        ", GuideID: " + rs.getInt("guide_id") +
+                        ", Rating: " + rs.getInt("rating") +
+                        ", Comment: " + rs.getString("comment"));
             } else {
                 System.out.println("Kết nối thành công! Nhưng bảng reviews không có dữ liệu.");
             }
@@ -170,6 +171,20 @@ public class ReviewDAO_Long {
             System.out.println("Kết nối hoặc truy vấn thất bại!");
             e.printStackTrace();
         }
+    }
+
+    public double getAverageRating() {
+        String sql = "SELECT AVG(rating) as avg_rating FROM Reviews";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("avg_rating");
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting average rating: " + e.getMessage());
+        }
+        return 0.0;
     }
 
     public static void main(String[] args) {
