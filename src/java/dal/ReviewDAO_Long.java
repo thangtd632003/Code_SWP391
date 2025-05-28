@@ -187,6 +187,22 @@ public class ReviewDAO_Long {
         return 0.0;
     }
 
+    public double getAverageRatingByGuideId(int guideId) {
+        String sql = "SELECT AVG(rating) as avg_rating FROM reviews WHERE guide_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                double avgRating = rs.getDouble("avg_rating");
+                return avgRating != 0 ? Math.round(avgRating * 10.0) / 10.0 : 0;
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting average rating for guide " + guideId + ": " + e.getMessage());
+        }
+        return 0.0;
+    }
+
     public static void main(String[] args) {
         ReviewDAO_Long dao = new ReviewDAO_Long();
         List<Review> reviews = dao.getAllReviews();

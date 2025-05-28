@@ -486,3 +486,270 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+// Xử lý hiển thị modal tour guides
+document.querySelector('a[href="#guides"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    loadGuides();
+    new bootstrap.Modal(document.getElementById('guidesModal')).show();
+});
+
+// Hàm load danh sách guide
+function loadGuides() {
+    fetch('GetGuidesList')
+        .then(response => response.json())
+        .then(guides => {
+            const tbody = document.getElementById('guidesTableBody');
+            tbody.innerHTML = '';
+            
+            guides.forEach(guide => {
+                const row = `
+                    <tr>
+                        <td>${guide.id}</td>
+                        <td>${guide.fullName}</td>
+                        <td>${guide.email}</td>
+                        <td>${guide.phone}</td>
+                        <td>
+                            <div class="rating">
+                                ${getStarRating(guide.rating)}
+                                <span>(${guide.rating})</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge ${guide.status === 'ACTIVE' ? 'bg-success' : 'bg-danger'}">
+                                ${guide.status}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm ${guide.status === 'ACTIVE' ? 'btn-danger' : 'btn-success'}"
+                                    onclick="toggleGuideStatus(${guide.id}, '${guide.status}')">
+                                ${guide.status === 'ACTIVE' ? 'Lock' : 'Unlock'}
+                            </button>
+                            <button class="btn btn-sm btn-info" onclick="viewGuideDetails(${guide.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error loading guides:', error));
+}
+
+// Hàm tạo hiển thị rating bằng sao
+function getStarRating(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        stars += `<i class="fas fa-star ${i <= rating ? 'text-warning' : 'text-muted'}"></i>`;
+    }
+    return stars;
+}
+
+// Hàm toggle status của guide
+function toggleGuideStatus(guideId, currentStatus) {
+    const newStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+    
+    fetch('UpdateGuideStatus', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            guideId: guideId,
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            loadGuides(); // Reload danh sách
+        } else {
+            alert('Failed to update guide status');
+        }
+    })
+    .catch(error => console.error('Error updating guide status:', error));
+}
+function openGuidesModal() {
+    // Load data cho bảng guides nếu cần
+    loadGuidesData();
+    
+    // Mở modal sử dụng Bootstrap 
+    const guidesModal = new bootstrap.Modal(document.getElementById('guidesModal'));
+    guidesModal.show();
+}
+
+function displayRating(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    let starsHtml = '<div class="rating-stars">';
+    
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsHtml += '<i class="fas fa-star text-warning"></i>';
+    }
+    
+    // Add half star if needed
+    if (hasHalfStar) {
+        starsHtml += '<i class="fas fa-star-half-alt text-warning"></i>';
+    }
+    
+    // Add empty stars
+    const emptyStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < emptyStars; i++) {
+        starsHtml += '<i class="far fa-star text-warning"></i>';
+    }
+    
+    starsHtml += `<span class="rating-value">(${rating.toFixed(1)})</span></div>`;
+    
+    return starsHtml;
+}
+
+function loadGuidesData() {
+    fetch('api/guides')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(guides => {
+        const tbody = document.getElementById('guidesTableBody');
+        tbody.innerHTML = '';
+        
+        guides.forEach(guide => {
+            const rating = parseFloat(guide.rating) || 0;
+            tbody.innerHTML += `
+                <tr>
+                    <td>${guide.id}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-circle me-2"></i>
+                            ${guide.fullName || 'N/A'}
+                        </div>
+                    </td>
+                    <td>${guide.email || 'N/A'}</td>
+                    <td>${guide.phone || 'N/A'}</td>
+                    <td class="rating-cell">${displayRating(rating)}</td>
+                    <td>
+                        <span class="badge ${guide.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary'}">
+                            ${guide.status || 'N/A'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="viewGuideDetails(${guide.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning mx-1" onclick="editGuide(${guide.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteGuide(${guide.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        const tbody = document.getElementById('guidesTableBody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-danger">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    Failed to load guide data. Please try again later.
+                    <br>
+                    <small class="text-muted">${error.message}</small>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function viewGuideDetails(guideId) {
+    // Đóng modal guides trước
+    const guidesModal = bootstrap.Modal.getInstance(document.getElementById('guidesModal'));
+    if (guidesModal) {
+        guidesModal.hide();
+    }
+
+    fetch(`api/guides/${guideId}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Guide not found');
+        }
+        return response.json();
+    })
+    .then(guide => {
+        const guideDetailsModal = document.getElementById('guideDetailsModal');
+        if (!guideDetailsModal) {
+            console.error('Modal element not found');
+            return;
+        }
+
+        const modalContent = document.getElementById('guideDetailsContent');
+        if (modalContent) {
+            modalContent.innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-user-circle fa-5x mb-3"></i>
+                        <h4>${guide.fullName || 'N/A'}</h4>
+                        <span class="badge ${guide.status === 'ACTIVE' ? 'bg-success' : 'bg-secondary'}">
+                            ${guide.status || 'N/A'}
+                        </span>
+                        <div class="mt-3">
+                            ${displayRating(guide.rating || 0)}
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="fw-bold">Email:</label>
+                            <p>${guide.email || 'N/A'}</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Phone:</label>
+                            <p>${guide.phone || 'N/A'}</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Gender:</label>
+                            <p>${guide.gender || 'N/A'}</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="fw-bold">Birth Date:</label>
+                            <p>${guide.birthDate ? new Date(guide.birthDate).toLocaleDateString() : 'N/A'}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Thêm nút "Back to Guides" vào modal footer
+        const modalFooter = guideDetailsModal.querySelector('.modal-footer');
+        if (modalFooter) {
+            modalFooter.innerHTML = `
+                <button type="button" class="btn btn-primary" onclick="backToGuides()">Back to Guides</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            `;
+        }
+
+        const modal = new bootstrap.Modal(guideDetailsModal);
+        modal.show();
+    })
+    .catch(error => {
+        console.error('Error loading guide details:', error);
+        alert('Failed to load guide details. Please try again later.');
+    });
+}
+
+// Thêm hàm để quay lại modal guides
+function backToGuides() {
+    // Đóng modal chi tiết
+    const detailsModal = bootstrap.Modal.getInstance(document.getElementById('guideDetailsModal'));
+    if (detailsModal) {
+        detailsModal.hide();
+    }
+
+    // Mở lại modal guides
+    const guidesModal = new bootstrap.Modal(document.getElementById('guidesModal'));
+    guidesModal.show();
+}

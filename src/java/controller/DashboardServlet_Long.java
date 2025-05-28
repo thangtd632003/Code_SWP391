@@ -27,7 +27,7 @@ public class DashboardServlet_Long extends HttpServlet {
 
         // Refresh user data from database
         UserDAO_Long userDAO = new UserDAO_Long();
-        User refreshedUser = UserDAO_Long.getUserById(user.getId());
+        User refreshedUser = userDAO.getUserById(user.getId()); 
         if (refreshedUser != null) {
             session.setAttribute("user", refreshedUser);
         }
@@ -35,7 +35,6 @@ public class DashboardServlet_Long extends HttpServlet {
         double averageRating = reviewDAO.getAverageRating();
         int totalGuides = UserDAO_Long.countGuides();
         int totalTravelers = UserDAO_Long.countTravelers();
-
 
         request.setAttribute("averageRating", String.format("%.1f", averageRating));
         request.setAttribute("totalGuides", totalGuides);

@@ -62,7 +62,7 @@
                 <h5 class="nav-section-title">Management</h5>
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a href="#guides" class="nav-link">
+                        <a href="#guides" class="nav-link" onclick="openGuidesModal()">
                             <i class="fas fa-user-tie"></i>
                             <span>Tour Guides</span>
                         </a>
@@ -405,7 +405,7 @@
                                     <tr>
                                         <td>${review.bookingId}</td>
                                         <td>${review.guideId}</td>
-                                        <td>
+                                        <td class="rating-cell">
                                             <c:forEach begin="1" end="${review.rating}">
                                                 <i class="fas fa-star text-warning"></i>
                                             </c:forEach>
@@ -480,9 +480,9 @@
 </div>
 
 <!-- Settings Modal -->
-<div class="modal fade" 
-     id="settingsModal" 
-     tabindex="-1" 
+<div class="modal fade"
+     id="settingsModal"
+     tabindex="-1"
      role="dialog"
      aria-labelledby="settingsModalLabel"
      aria-modal="true">
@@ -490,9 +490,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="settingsModalLabel">User Settings</h5>
-                <button type="button" 
-                        class="btn-close" 
-                        data-bs-dismiss="modal" 
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
             </div>
@@ -551,17 +551,70 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" 
-                        class="btn btn-secondary" 
-                        data-bs-dismiss="modal">Cancel</button>
-                <button type="button" 
-                        class="btn btn-primary" 
-                        onclick="saveSettings()">Save Changes</button>
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cancel
+                </button>
+                <button type="button"
+                        class="btn btn-primary"
+                        onclick="saveSettings()">Save Changes
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Tour Guides Modal -->
+<div class="modal fade" id="guidesModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tour Guides Management</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guidesTableBody">
+                            <!-- Data will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Guide Details Modal -->
+<div class="modal fade" id="guideDetailsModal" tabindex="-1" aria-labelledby="guideDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="guideDetailsModalLabel">Guide Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="guideDetailsContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/dashboard.js"></script>
