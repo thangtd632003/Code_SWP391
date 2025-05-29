@@ -2,6 +2,7 @@ package dal;
 
 import dal.DBContext;
 import entity.Review;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,20 +52,78 @@ public class ReviewDAO_Long {
     }
 
     // Thêm review mới
-    public boolean addReview(Review r) {
-        String sql = "INSERT INTO reviews (booking_id, guide_id, rating, comment, created_at) VALUES (?, ?, ?, ?, ?)";
+    public boolean addReview(Review review) {
+        String sql = "INSERT INTO reviews (booking_id, guide_id, rating, comment) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, r.getBookingId());
-            ps.setInt(2, r.getGuideId());
-            ps.setInt(3, r.getRating());
-            ps.setString(4, r.getComment());
-            ps.setTimestamp(5, r.getCreatedAt());
-            return ps.executeUpdate() > 0;
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, review.getBookingId());
+            stmt.setInt(2, review.getGuideId());
+            stmt.setInt(3, review.getRating());
+            stmt.setString(4, review.getComment());
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Cập nhật review
+    public boolean updateReview(Review review) {
+        String sql = "UPDATE reviews SET booking_id=?, guide_id=?, rating=?, comment=? WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, review.getBookingId());
+            stmt.setInt(2, review.getGuideId());
+            stmt.setInt(3, review.getRating());
+            stmt.setString(4, review.getComment());
+            stmt.setInt(5, review.getId());
+
+            // Add debug logging
+            System.out.println("Executing update for review ID: " + review.getId());
+            System.out.println("SQL: " + sql);
+
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.err.println("Error updating review: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Xóa review
+    public boolean deleteReview(int reviewId) {
+        String sql = "DELETE FROM reviews WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, reviewId);
+            return stmt.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // Lấy review theo ID
+    public Review getReviewById(int reviewId) {
+        String sql = "SELECT * FROM reviews WHERE id=?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, reviewId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Review review = new Review();
+                review.setId(rs.getInt("id"));
+                review.setBookingId(rs.getInt("booking_id"));
+                review.setGuideId(rs.getInt("guide_id"));
+                review.setRating(rs.getInt("rating"));
+                review.setComment(rs.getString("comment"));
+                review.setCreatedAt(rs.getTimestamp("created_at"));
+                return review;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     // Lấy các review gần đây
@@ -101,10 +160,10 @@ public class ReviewDAO_Long {
             if (rs.next()) {
                 System.out.println("Kết nối thành công! Có dữ liệu review:");
                 System.out.println("ID: " + rs.getInt("id") +
-                                   ", BookingID: " + rs.getInt("booking_id") +
-                                   ", GuideID: " + rs.getInt("guide_id") +
-                                   ", Rating: " + rs.getInt("rating") +
-                                   ", Comment: " + rs.getString("comment"));
+                        ", BookingID: " + rs.getInt("booking_id") +
+                        ", GuideID: " + rs.getInt("guide_id") +
+                        ", Rating: " + rs.getInt("rating") +
+                        ", Comment: " + rs.getString("comment"));
             } else {
                 System.out.println("Kết nối thành công! Nhưng bảng reviews không có dữ liệu.");
             }
@@ -112,6 +171,36 @@ public class ReviewDAO_Long {
             System.out.println("Kết nối hoặc truy vấn thất bại!");
             e.printStackTrace();
         }
+    }
+
+    public double getAverageRating() {
+        String sql = "SELECT AVG(rating) as avg_rating FROM Reviews";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("avg_rating");
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting average rating: " + e.getMessage());
+        }
+        return 0.0;
+    }
+
+    public double getAverageRatingByGuideId(int guideId) {
+        String sql = "SELECT AVG(rating) as avg_rating FROM reviews WHERE guide_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                double avgRating = rs.getDouble("avg_rating");
+                return avgRating != 0 ? Math.round(avgRating * 10.0) / 10.0 : 0;
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting average rating for guide " + guideId + ": " + e.getMessage());
+        }
+        return 0.0;
     }
 
     public static void main(String[] args) {

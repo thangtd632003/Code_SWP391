@@ -150,7 +150,7 @@
                                             <i class="fas fa-cog"></i> Settings
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a href="logout" class="dropdown-item text-danger">
+                                        <a href="/Code_SWP391/logout" class="dropdown-item text-danger">
                                             <i class="fas fa-sign-out-alt"></i> Logout
                                         </a>
                                     </div>

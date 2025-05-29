@@ -10,7 +10,7 @@
     --white: #fff;
     --gray: #b0bec5;
     --font-main: 'Segoe UI', Arial, sans-serif;
-    --transition: 0.2s all cubic-bezier(.4,0,.2,1);
+    --transition: 0.2s all cubic-bezier(.4, 0, .2, 1);
 }
 
 *,
@@ -52,7 +52,7 @@ body.dashboard-body {
     display: flex;
     align-items: center;
     padding: 1.5rem 1rem 1rem 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     position: relative;
 }
 
@@ -109,6 +109,20 @@ body.dashboard-body {
 
 .nav-item {
     margin-bottom: 0.3rem;
+}
+
+.nav-item.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.nav-item.active .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+}
+
+.nav-item.active i {
+    color: #fff !important;
 }
 
 .nav-link {
@@ -270,7 +284,7 @@ body.dashboard-body {
     right: 0;
     top: 110%;
     background: var(--white);
-    box-shadow: 0 4px 16px rgba(30,136,229,0.08);
+    box-shadow: 0 4px 16px rgba(30, 136, 229, 0.08);
     border-radius: 8px;
     min-width: 180px;
     z-index: 100;
@@ -325,7 +339,7 @@ body.dashboard-body {
 .stat-card {
     background: var(--white);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(30,136,229,0.06);
+    box-shadow: 0 2px 8px rgba(30, 136, 229, 0.06);
     display: flex;
     align-items: center;
     padding: 1.5rem 1.2rem;
@@ -334,7 +348,7 @@ body.dashboard-body {
 }
 
 .stat-card:hover {
-    box-shadow: 0 6px 24px rgba(30,136,229,0.10);
+    box-shadow: 0 6px 24px rgba(30, 136, 229, 0.10);
 }
 
 .stat-card-content {
@@ -388,7 +402,7 @@ body.dashboard-body {
 .chart-card {
     background: var(--white);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(30,136,229,0.06);
+    box-shadow: 0 2px 8px rgba(30, 136, 229, 0.06);
     padding: 1.5rem 1.2rem;
     display: flex;
     flex-direction: column;
@@ -462,7 +476,7 @@ body.dashboard-body {
 .card {
     background: var(--white);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(30,136,229,0.06);
+    box-shadow: 0 2px 8px rgba(30, 136, 229, 0.06);
     padding: 1.5rem 1.2rem;
     display: flex;
     flex-direction: column;
@@ -539,7 +553,7 @@ body.dashboard-body {
     width: 350px;
     height: 100vh;
     background: var(--white);
-    box-shadow: -2px 0 16px rgba(30,136,229,0.08);
+    box-shadow: -2px 0 16px rgba(30, 136, 229, 0.08);
     z-index: 200;
     transition: right 0.3s;
     overflow-y: auto;
@@ -556,6 +570,7 @@ body.dashboard-body {
     .dashboard-content {
         padding: 1.2rem 0.7rem;
     }
+
     .charts-grid,
     .activity-grid {
         grid-template-columns: 1fr;
@@ -571,18 +586,23 @@ body.dashboard-body {
         z-index: 300;
         transition: left 0.3s;
     }
+
     .sidebar.active {
         left: 0;
     }
+
     .sidebar-close {
         display: block;
     }
+
     .sidebar-toggle {
         display: block;
     }
+
     .dashboard-container {
         flex-direction: column;
     }
+
     .main-content {
         margin-left: 0;
     }
@@ -592,21 +612,25 @@ body.dashboard-body {
     .dashboard-content {
         padding: 0.7rem 0.2rem;
     }
+
     .stat-card {
         flex-direction: column;
         align-items: flex-start;
         padding: 1rem 0.7rem;
     }
+
     .stat-icon {
         margin-left: 0;
         margin-top: 0.7rem;
     }
+
     .top-nav {
         flex-direction: column;
         align-items: stretch;
         gap: 0.7rem;
         padding: 0.7rem 0.5rem;
     }
+
     .search-box {
         max-width: 100%;
     }
@@ -631,7 +655,123 @@ img {
     width: 8px;
     background: #f1f5fb;
 }
+
 ::-webkit-scrollbar-thumb {
     background: #e3e6f0;
     border-radius: 4px;
+}
+
+/* User Information Styles */
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.rounded-circle {
+    border: 3px solid #e3e6f0;
+}
+
+.fw-bold {
+    font-weight: 600;
+    color: #4e73df;
+    margin-bottom: 0.25rem;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+}
+
+/* User Profile Section Styles */
+#userProfileSection {
+    transition: all 0.3s ease;
+}
+
+#userProfileSection .card-header {
+    background-color: #f8f9fc;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+#userProfileSection .rounded-circle {
+    border: 3px solid #e3e6f0;
+    transition: transform 0.3s ease;
+}
+
+#userProfileSection .rounded-circle:hover {
+    transform: scale(1.05);
+}
+
+#userProfileSection .fw-bold {
+    color: #4e73df;
+    margin-bottom: 0.25rem;
+}
+
+#userProfileSection .card-body p {
+    margin-bottom: 0.5rem;
+}
+
+#userProfileSection .btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    transition: all 0.3s ease;
+}
+
+#userProfileSection .btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+    transform: translateY(-2px);
+}
+
+.table td.rating-cell {
+    text-align: center;
+    min-width: 150px;
+}
+
+.rating-stars {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.rating-value {
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+/* Rating cell alignment */
+.rating-cell {
+    white-space: nowrap;
+    width: 1%;  /* This makes the cell as narrow as possible */
+    text-align: center;
+}
+
+/* Star icons in table */
+.table .fa-star {
+    font-size: 14px;
+    margin: 0 1px;
+}
+
+/* Fix table cell padding */
+.table td {
+    vertical-align: middle;
+    padding: 0.75rem;
+}
+
+/* Make sure the table cells don't wrap unnecessarily */
+.table td, .table th {
+    white-space: nowrap;
 }
