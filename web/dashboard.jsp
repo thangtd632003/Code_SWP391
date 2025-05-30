@@ -88,14 +88,9 @@
             <div class="nav-section">
                 <h5 class="nav-section-title">Settings</h5>
                 <ul class="nav-list">
+                  
                     <li class="nav-item">
-                        <a href="javascript:void(0)" class="nav-link" id="settingsLink">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#profile" class="nav-link">
+                        <a href="/Code_SWP391/profileTraveler_thang" class="nav-link">
                             <i class="fas fa-user-circle"></i>
                             <span>Profile</span>
                         </a>
@@ -104,25 +99,7 @@
             </div>
         </nav>
     </aside>
-                            <div class="nav-section">
-                                <h5 class="nav-section-title">Settings</h5>
-                                <ul class="nav-list">
-                                    <li class="nav-item">
-                                        <a href="#settings" class="nav-link">
-                                            <i class="fas fa-cog"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/Code_SWP391/ProfileTravler_thang" class="nav-link">
-                                            <i class="fas fa-user-circle"></i>
-                                            <span>Profile</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </aside>
+                         
 
     <!-- Main Content -->
     <main class="main-content">
@@ -138,20 +115,10 @@
             </div>
 
             <div class="nav-actions">
-                <button class="nav-action-btn" id="notificationsBtn">
-                    <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
-                </button>
-                <button class="nav-action-btn" id="messagesBtn">
-                    <i class="fas fa-envelope"></i>
-                    <span class="badge">5</span>
-                </button>
+               
                 <div class="user-menu">
                     <button class="user-menu-btn">
-                        <img src="img/logi.jpg" alt="User Avatar" class="user-avatar">
-                        <span class="user-name">
-                                            <c:out value="${sessionScope.user.fullName}"/>
-                            <div class="nav-actions">
+                       
                                 <button class="nav-action-btn" id="notificationsBtn">
                                     <i class="fas fa-bell"></i>
                                     <span class="badge">3</span>
@@ -183,23 +150,7 @@
                                 </div>
                             </div>
                         </nav>
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
-                    <div class="dropdown-menu">
-                        <a href="#profile" class="dropdown-item">
-                            <i class="fas fa-user"></i> Profile
-                        </a>
-                        <a href="#settings" class="dropdown-item">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="logout" class="dropdown-item text-danger">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+                    
 
         <!-- Dashboard Content -->
         <div class="dashboard-content">
