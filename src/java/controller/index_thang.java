@@ -59,7 +59,7 @@ public class index_thang extends HttpServlet {
        
 if (session != null) {
 User usersession = (User) session.getAttribute("user");
-       if ( usersession.getEmail() != null) {
+       if ( usersession != null&&usersession.getEmail() != null) {
             response.sendRedirect(request.getContextPath() + "/ProfileTravler_thang");
             return;
         } }

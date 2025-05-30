@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="register-link" id="register-text">
-                        Chưa có tài khoản? <a href="register.jsp">Đăng ký</a>
+                        Chưa có tài khoản? <a href="/Code_SWP391/register_duy.jsp">Đăng ký</a>
                     </div>
                 </form>
             </div>

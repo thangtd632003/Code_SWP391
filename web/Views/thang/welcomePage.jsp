@@ -33,7 +33,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <div class="container">
             <div class="auth-buttons">
                 <a href="login.jsp" class="btn">Login</a>
-                <a href="register.jsp" class="btn btn-primary">Register</a>
+                <a href="register_duy.jsp" class="btn btn-primary">Register</a>
             </div>
         </div>
     </div>
