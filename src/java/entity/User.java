@@ -11,7 +11,7 @@ import java.util.List;
 public class User {
     private int id;
     private String email;
-    private String passwordHash;
+    private String hashedPassword; // Renamed for clarity
     private String fullName;
     private String phone;
     private Role role;
@@ -33,8 +33,8 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getHashedPassword() { return hashedPassword; } // Updated getter
+    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; } // Updated setter
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
