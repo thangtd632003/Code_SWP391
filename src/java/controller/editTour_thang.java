@@ -85,6 +85,10 @@ public class editTour_thang extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Tour not found.");
                 return;
             }
+            if(tour.getGuideId()!=user.getId()){
+                response.sendRedirect(request.getContextPath() + "/tourList_thang");
+            return;
+            }
             request.setAttribute("tour", tour);
             // truyền trạng thái update (nếu có)
             String upd = request.getParameter("update");

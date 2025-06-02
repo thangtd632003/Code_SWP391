@@ -165,4 +165,32 @@ public boolean toggleTourStatus(int tourId) throws SQLException {
         }
         return null;
     }
+    public List<Tour> getAllTours() throws SQLException {
+    List<Tour> tours = new ArrayList<>();
+    String sql = "SELECT * FROM tours";
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            Tour t = new Tour();
+            t.setId(rs.getInt("id"));
+            t.setGuideId(rs.getInt("guide_id"));
+            t.setName(rs.getString("name"));
+            t.setDescription(rs.getString("description"));
+            t.setItinerary(rs.getString("itinerary"));
+            t.setPrice(rs.getBigDecimal("price"));
+            t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+            t.setLanguage(rs.getString("language"));
+            t.setStatus(entity.Status.valueOf(rs.getString("status").toUpperCase()));
+            t.setCreatedAt(rs.getTimestamp("created_at"));
+            t.setUpdatedAt(rs.getTimestamp("updated_at"));
+
+            tours.add(t);
+        }
+    }
+
+    return tours;
+}
+
 }

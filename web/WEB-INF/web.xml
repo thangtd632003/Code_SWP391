@@ -24,6 +24,14 @@
         <servlet-name>editTour_thang</servlet-name>
         <servlet-class>controller.editTour_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>listTourAdmin_thang</servlet-name>
+        <servlet-class>controller.listTourAdmin_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>tourDetail_thang</servlet-name>
+        <servlet-class>controller.tourDetailAdmin_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -63,5 +71,13 @@
     <servlet-mapping>
         <servlet-name>editTour_thang</servlet-name>
         <url-pattern>/editTour_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>listTourAdmin_thang</servlet-name>
+        <url-pattern>/listTourAdmin_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>tourDetail_thang</servlet-name>
+        <url-pattern>/tourDetail_thang</url-pattern>
     </servlet-mapping>
 </web-app>
