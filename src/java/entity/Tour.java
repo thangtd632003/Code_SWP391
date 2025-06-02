@@ -26,37 +26,48 @@ public class Tour {
 private int days; // số ngày của tour
     private String language; // ngôn ngữ hướng dẫn
     private Status status; // 'active' hoặc 'locked'
+// 'active' hoặc 'deactive'
     private List<Booking> bookings = new ArrayList<>();
 
 
-    public Tour() {}
+    public Tour() {
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public int getGuideId() { return guideId; }
-    public void setGuideId(int guideId) { this.guideId = guideId; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public int getGuideId() {
+        return guideId;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setGuideId(int guideId) {
+        this.guideId = guideId;
+    }
 
-    public String getItinerary() { return itinerary; }
-    public void setItinerary(String itinerary) { this.itinerary = itinerary; }
+    public String getName() {
+        return name;
+    }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getMaxPeoplePerBooking() { return maxPeoplePerBooking; }
-    public void setMaxPeoplePerBooking(int maxPeoplePerBooking) { this.maxPeoplePerBooking = maxPeoplePerBooking; }
+    public String getDescription() {
+        return description;
+    }
 
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public String getItinerary() {
+        return itinerary;
+    }
 
     public List<Booking> getBookings() {
         return bookings;
@@ -64,6 +75,42 @@ private int days; // số ngày của tour
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public int getMaxPeoplePerBooking() {
+        return maxPeoplePerBooking;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setItinerary(String itinerary) {
+        this.itinerary = itinerary;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setMaxPeoplePerBooking(int maxPeoplePerBooking) {
+        this.maxPeoplePerBooking = maxPeoplePerBooking;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public int getDays() {
@@ -90,5 +137,5 @@ private int days; // số ngày của tour
         this.status = status;
     }
 
-  
-}
+    
+    }

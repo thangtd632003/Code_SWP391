@@ -1,9 +1,9 @@
-package dal;
+package context;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DBContext {
+public class DBContext_Long {
     /*USE BELOW METHOD FOR YOUR DATABASE CONNECTION FOR BOTH SINGLE AND MULTILPE SQL SERVER INSTANCE(s)*/
     /*DO NOT EDIT THE BELOW METHOD, YOU MUST USE ONLY THIS ONE FOR YOUR DATABASE CONNECTION*/
     public Connection getConnection() throws Exception {
@@ -22,7 +22,7 @@ public class DBContext {
     private final String password = "123456"; // Thay đổi password cho phù hợp
     public static void main(String[] args) {
         try {
-            Connection conn = new DBContext().getConnection();
+            Connection conn = new DBContext_Long().getConnection();
             if (conn != null && !conn.isClosed()) {
                 System.out.println("Kết nối CSDL thành công!");
             } else {

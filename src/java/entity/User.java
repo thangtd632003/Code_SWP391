@@ -11,7 +11,9 @@ public class User {
     private String passwordHash;
     private String fullName;
     private String phone;
-    private Gender gender;           // ✅ Dùng enum thay vì String
+
+    private Gender gender;           
+
     private Date birthDate;
     private Role role;
     private Status status;
@@ -25,7 +27,7 @@ public class User {
 
     public User() {}
 
-    // Getters and Setters
+    // Getters and Setter
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -41,8 +43,10 @@ public class User {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public Gender getGender() { return gender; }              // ✅ Enum Getter
-    public void setGender(Gender gender) { this.gender = gender; } // ✅ Enum Setter
+
+    public Gender getGender() { return gender; }            
+    public void setGender(Gender gender) { this.gender = gender; } 
+
 
     public Date getBirthDate() { return birthDate; }
     public void setBirthDate(Date birthDate) { this.birthDate = birthDate; }

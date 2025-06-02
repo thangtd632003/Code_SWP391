@@ -5,18 +5,20 @@
 
 package controller;
 
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
  * @author thang
  */
-public class NewServlet extends HttpServlet {
+public class index_thang extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,10 +35,10 @@ public class NewServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewServlet</title>");  
+            out.println("<title>Servlet index_thang</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet index_thang at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -53,7 +55,17 @@ public class NewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+         HttpSession session = request.getSession(false); 
+       
+if (session != null) {
+User usersession = (User) session.getAttribute("user");
+       if ( usersession != null&&usersession.getEmail() != null) {
+            response.sendRedirect(request.getContextPath() + "/ProfileTravler_thang");
+            return;
+        } }
+            // Chưa đăng nhập → chuyển hướng đến welcomePage.jsp
+            request.getRequestDispatcher("/Views/thang/welcomePage.jsp").forward(request, response);
+
     } 
 
     /** 
