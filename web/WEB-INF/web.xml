@@ -32,6 +32,30 @@
         <servlet-name>tourDetail_thang</servlet-name>
         <servlet-class>controller.tourDetailAdmin_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ForgotPassword_thang</servlet-name>
+        <servlet-class>controller.ForgotPassword_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePassword_thang</servlet-name>
+        <servlet-class>controller.ChangePassword_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListBookingGuide_thang</servlet-name>
+        <servlet-class>controller.ListBookingGuide_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailBookingGuide_thang</servlet-name>
+        <servlet-class>controller.DetailBookingGuide_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListBookingTraveler_thang</servlet-name>
+        <servlet-class>controller.ListBookingTraveler_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailBookingTraveler_thang</servlet-name>
+        <servlet-class>controller.DetailBookingTraveler_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -79,5 +103,29 @@
     <servlet-mapping>
         <servlet-name>tourDetail_thang</servlet-name>
         <url-pattern>/tourDetail_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ForgotPassword_thang</servlet-name>
+        <url-pattern>/ForgotPassword_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePassword_thang</servlet-name>
+        <url-pattern>/ChangePassword_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListBookingGuide_thang</servlet-name>
+        <url-pattern>/ListBookingGuide_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailBookingGuide_thang</servlet-name>
+        <url-pattern>/DetailBookingGuide_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListBookingTraveler_thang</servlet-name>
+        <url-pattern>/ListBookingTraveler_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailBookingTraveler_thang</servlet-name>
+        <url-pattern>/DetailBookingTraveler_thang</url-pattern>
     </servlet-mapping>
 </web-app>

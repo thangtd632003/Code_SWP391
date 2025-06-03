@@ -105,7 +105,7 @@
         </select>
 
         <div class="form-footer">
-            <a href="#">Forgot Password?</a>
+            <a href="ForgotPassword_thang">Forgot Password?</a>
         </div>
 
         <button type="submit">Sign Up</button>

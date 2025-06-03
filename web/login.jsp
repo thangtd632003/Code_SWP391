@@ -59,7 +59,7 @@
                             <input type="checkbox" name="remember" id="remember">
                             <span id="remember-text">Ghi nhớ đăng nhập</span>
                         </label>
-                        <a href="#" class="forgot-password" id="forgot-text">Quên mật khẩu?</a>
+                        <a href="ForgotPassword_thang" class="forgot-password" id="forgot-text">Quên mật khẩu?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="login-btn">
@@ -81,10 +81,11 @@
                         </div>
                     </div>
 
-                    <div class="register-link" id="register-text">
-                        Chưa có tài khoản? <a href="/Code_SWP391/register_duy.jsp">Đăng ký</a>
-                    </div>
+                   
                 </form>
+                 <div class="register-link" id="register-text">
+                        Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register_duy.jsp">Đăng ký</a>
+                    </div>
             </div>
         </div>
     </div>

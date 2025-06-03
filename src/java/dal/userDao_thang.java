@@ -83,5 +83,29 @@ public class userDao_thang{
         return rowsAffected > 0;
     }
 }
+    
+      public boolean updatePasswordByEmail(String email, String newPasswordHash) throws SQLException {
+        String sql = "UPDATE users SET password_hash = ?, updated_at = NOW() WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPasswordHash);
+            stmt.setString(2, email);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+      
+       public boolean emailExists(String email) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        }
+        return false;
+    }
 }
 
