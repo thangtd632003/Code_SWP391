@@ -4,37 +4,34 @@
  */
 package controller;
 
-import dal.DBContext;  // import class kết nối của bạn
+import dal.DBContext;
 import entity.Booking;
 import entity.BookingStatus;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
+
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@WebServlet("/bookings")
-public class BookingListServlet extends HttpServlet {
-
+@WebServlet("/bookingList")
+public class BookingListServlet_manh extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         List<Booking> bookings = new ArrayList<>();
+        String query = "SELECT * FROM bookings WHERE status IN ('pending', 'approved', 'cancelled')";
 
-        String sql = "SELECT b.id, b.traveler_id, b.tour_id, b.departure_date, b.num_people, b.status, b.contact_info, " +
-                     "b.created_at, b.updated_at " +
-                     "FROM bookings b " +
-                     "WHERE b.status IN ('pending', 'approved', 'cancelled')";
-
-        try (Connection conn = new DBContext().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection connection = new DBContext().getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet rs = statement.executeQuery()) {
 
             while (rs.next()) {
                 Booking booking = new Booking();
@@ -43,22 +40,18 @@ public class BookingListServlet extends HttpServlet {
                 booking.setTourId(rs.getInt("tour_id"));
                 booking.setDepartureDate(rs.getDate("departure_date"));
                 booking.setNumPeople(rs.getInt("num_people"));
-                booking.setStatus(BookingStatus.valueOf(rs.getString("status")));
                 booking.setContactInfo(rs.getString("contact_info"));
-                booking.setCreatedAt(rs.getTimestamp("created_at"));
-                booking.setUpdatedAt(rs.getTimestamp("updated_at"));
+                booking.setStatus(BookingStatus.valueOf(rs.getString("status").toUpperCase()));
                 bookings.add(booking);
             }
 
-        } catch (Exception e) {
-            throw new ServletException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(BookingListServlet_manh.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // Đưa dữ liệu lên request để JSP dùng hiển thị
         request.setAttribute("bookings", bookings);
-
-        // Chuyển tiếp đến trang JSP hiển thị danh sách
-        RequestDispatcher dispatcher = request.getRequestDispatcher("booking_list.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("bookingList.jsp").forward(request, response);
     }
 }
