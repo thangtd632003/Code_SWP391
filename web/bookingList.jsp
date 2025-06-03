@@ -1,52 +1,60 @@
 <%@ page import="entity.Booking" %>
-<%@ page import="entity.BookingStatus" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookings List</title>
+    <title>Manage Bookings</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans antialiased">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 class="text-3xl font-bold text-center text-blue-600 mb-6">List of Bookings</h2>
+<body class="bg-gray-100 p-6">
+<div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Booking Management</h1>
 
-        <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
-            <thead class="bg-blue-500 text-white">
-                <tr>
-                    <th class="px-4 py-2 text-left">ID</th>
-                    <th class="px-4 py-2 text-left">Traveler ID</th>
-                    <th class="px-4 py-2 text-left">Tour ID</th>
-                    <th class="px-4 py-2 text-left">Departure Date</th>
-                    <th class="px-4 py-2 text-left">Number of People</th>
-                    <th class="px-4 py-2 text-left">Status</th>
-                    <th class="px-4 py-2 text-left">Action</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                <c:forEach var="booking" items="${bookings}">
-                    <tr class="hover:bg-gray-100 border-b">
-                        <td class="px-4 py-2">${booking.id}</td>
-                        <td class="px-4 py-2">${booking.travelerId}</td>
-                        <td class="px-4 py-2">${booking.tourId}</td>
-                        <td class="px-4 py-2">${booking.departureDate}</td>
-                        <td class="px-4 py-2">${booking.numPeople}</td>
-                        <td class="px-4 py-2">
-                            <span class="px-3 py-1 rounded-full 
-                                ${booking.status == 'pending' ? 'bg-yellow-300 text-black' : 
-                                 booking.status == 'approved' ? 'bg-green-300 text-black' : 
-                                 booking.status == 'cancelled' ? 'bg-red-300 text-black' : ''}">
-                                ${booking.status}
-                            </span>
-                        </td>
-                        <td class="px-4 py-2">
-                            <a href="bookingDetail?id=${booking.id}" class="text-blue-500 hover:underline">View Details</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+    <div class="mb-4 text-right">
+        <a href="bookingManager?action=new"
+           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add New Booking</a>
     </div>
+
+    <table class="min-w-full bg-white rounded shadow">
+        <thead class="bg-blue-600 text-white">
+        <tr>
+            <th class="py-2 px-4 text-left">ID</th>
+            <th class="py-2 px-4 text-left">Traveler ID</th>
+            <th class="py-2 px-4 text-left">Tour ID</th>
+            <th class="py-2 px-4 text-left">Departure Date</th>
+            <th class="py-2 px-4 text-left">People</th>
+            <th class="py-2 px-4 text-left">Status</th>
+            <th class="py-2 px-4 text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="booking" items="${bookings}">
+            <tr class="border-b hover:bg-gray-100">
+                <td class="py-2 px-4">${booking.id}</td>
+                <td class="py-2 px-4">${booking.travelerId}</td>
+                <td class="py-2 px-4">${booking.tourId}</td>
+                <td class="py-2 px-4">${booking.departureDate}</td>
+                <td class="py-2 px-4">${booking.numPeople}</td>
+                <td class="py-2 px-4">
+                    <span class="px-2 py-1 rounded-full
+                        ${booking.status == 'pending' ? 'bg-yellow-300 text-black' :
+                        booking.status == 'approved' ? 'bg-green-300 text-black' :
+                        booking.status == 'cancelled' ? 'bg-red-300 text-black' : ''}">
+                        ${booking.status}
+                    </span>
+                </td>
+                <td class="py-2 px-4 text-center space-x-2">
+                    <a href="bookingManager?action=detail&id=${booking.id}"
+                       class="text-blue-600 hover:underline">View</a>
+                    <a href="bookingManager?action=edit&id=${booking.id}"
+                       class="text-yellow-600 hover:underline">Edit</a>
+                    <a href="bookingManager?action=delete&id=${booking.id}"
+                       onclick="return confirm('Are you sure you want to delete this booking?');"
+                       class="text-red-600 hover:underline">Delete</a>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
