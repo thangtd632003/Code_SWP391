@@ -3,12 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Code_git/Code_SWP391/src/java/controller/BookingDetailServlet_manh.java</file>
-            <file>file:/E:/Code_git/Code_SWP391/src/java/entity/Booking.java</file>
             <file>file:/E:/Code_git/Code_SWP391/web/bookingList.jsp</file>
-            <file>file:/E:/Code_git/Code_SWP391/src/java/controller/BookingListServlet_manh.java</file>
-            <file>file:/E:/Code_git/Code_SWP391/src/java/dal/BookingDAO.java</file>
-            <file>file:/E:/Code_git/Code_SWP391/src/java/dal/DBContext.java</file>
+            <file>file:/E:/Code_git/Code_SWP391/web/bookingDetail.jsp</file>
         </group>
     </open-files>
 </project-private>
