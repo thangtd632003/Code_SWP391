@@ -91,7 +91,8 @@ public class ListBookingTraveler_thang extends HttpServlet {
         int travelerId = user.getId();
         try {
             List<Booking> bookings = bookingDao.getBookingsByTravelerId(travelerId);
-            request.setAttribute("bookingList", bookings);
+            request.setAttribute("bookings", bookings);
+            request.setAttribute("BookingStatus", BookingStatus.class);
             // 4. Forward đến JSP listBookingTraveler_thang.jsp
             request.getRequestDispatcher("/Views/thang/listBookingTraveler_thang.jsp")
                    .forward(request, response);
@@ -134,7 +135,7 @@ public class ListBookingTraveler_thang extends HttpServlet {
             case "changeStatus":
                 // Cho phép traveler đổi trạng thái (vd: hủy booking)
                 try {
-                    int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+                    int bookingId = Integer.parseInt(request.getParameter("id"));
                     String statusStr = request.getParameter("newStatus");
                     BookingStatus newStatus = BookingStatus.valueOf(statusStr);
                     bookingDao.updateBookingStatus(bookingId, newStatus);
@@ -147,7 +148,7 @@ public class ListBookingTraveler_thang extends HttpServlet {
 
             case "detail":
                 // Chuyển đến servlet detail với bookingId
-                int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+                int bookingId = Integer.parseInt(request.getParameter("id"));
                 response.sendRedirect(request.getContextPath()
                         + "/DetailBookingTraveler_thang?bookingId=" + bookingId);
                 break;

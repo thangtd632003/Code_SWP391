@@ -94,10 +94,10 @@
   <textarea id="itinerary" name="itinerary" rows="4"></textarea>
 
   <label for="price">Price:</label>
-  <input type="number" id="price" name="price" step="0.01" required />
+  <input type="number" id="price" name="price" step="0.01" min="0" required />
 
   <label for="maxPeople">Max People Per Booking:</label>
-  <input type="number" id="maxPeople" name="maxPeople" required />
+  <input type="number" id="maxPeople" name="maxPeople" min="1" required />
 
   <label for="days">Days:</label>
   <input type="number" id="days" name="days" min="1" required />

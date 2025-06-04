@@ -7,6 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="entity.Booking" %>
+<%@ page import="entity.BookingStatus" %>
 <%@ page import="java.util.List" %>
 <%
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
@@ -79,17 +80,17 @@
                 <td>${b.status}</td>
                 <td>${b.departureDate}</td>
                 <td>
-                    <form method="post" action="${pageContext.request.contextPath}/listBookingGuide_thang">
+                    <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
                         <input type="hidden" name="action" value="detail"/>
                         <input type="hidden" name="id" value="${b.id}"/>
                         <button class="action-btn" type="submit">Detail</button>
                     </form>
                 
   <c:choose>
-    <c:when test="${booking.status eq 'PENDING'}">
-      <form method="post" action="${pageContext.request.contextPath}/listBookingGuide_thang">
+<c:when test="${b.status.name() == 'PENDING'}">
+      <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
         <input type="hidden" name="action" value="changeStatus" />
-        <input type="hidden" name="id" value="${booking.id}" />
+        <input type="hidden" name="id" value="${b.id}" />
         <select name="newStatus">
           <option value="APPROVED">Approve</option>
           <option value="REJECTED">Reject</option>

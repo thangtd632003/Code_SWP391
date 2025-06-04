@@ -107,5 +107,36 @@ public class userDao_thang{
         }
         return false;
     }
+       public User getUserById(int userId) throws SQLException {
+    String sql = "SELECT * FROM users WHERE id = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, userId);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setPasswordHash(rs.getString("password_hash"));
+                user.setFullName(rs.getString("full_name"));
+                user.setPhone(rs.getString("phone"));
+
+                // Gender có thể null nên kiểm tra
+                String genderStr = rs.getString("gender");
+                if (genderStr != null) {
+                    user.setGender(Gender.valueOf(genderStr.toUpperCase()));
+                }
+
+                user.setBirthDate(rs.getDate("birth_date"));
+                user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+                user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                user.setCreatedAt(rs.getTimestamp("created_at"));
+                user.setUpdatedAt(rs.getTimestamp("updated_at"));
+                return user;
+            }
+        }
+    }
+    return null;
+}
+
 }
 

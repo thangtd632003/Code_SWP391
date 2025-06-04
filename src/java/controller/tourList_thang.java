@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,33 +65,80 @@ public class tourList_thang extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-            HttpSession session = request.getSession(false);
-Integer userId = null;
-String userRole = null;
+       HttpSession session = request.getSession(false);
+        Integer userId = null;
+        String userRole = null;
 
-if (session != null) {
-    User user = (User) session.getAttribute("user");
-    if (user != null) {
-        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
-        userRole = user.getRole().toString();   // hoặc user.getUserRole()
-    }
-}
+        if (session != null) {
+            User user = (User) session.getAttribute("user");
+            if (user != null) {
+                userId = user.getId();
+                userRole = user.getRole().toString();
+            }
+        }
         if (userId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
+        // 2. Đọc tham số GET: keyword, sortField, sortDir
+        String keyword = request.getParameter("keyword");       // vd: "asia"
+        String sortField = request.getParameter("sortField");   // vd: "price", "days", ...
+        String sortDir = request.getParameter("sortDir");       // "asc" hoặc "desc"
+        boolean sortAsc = !"desc".equalsIgnoreCase(sortDir);
+
+        // 3. Xác định xem có truyền keyword hay sortField lên hay không
+        boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
+        boolean hasSort = (sortField != null && !sortField.trim().isEmpty());
+
         try (Connection conn = new DBContext().getConnection()) {
             tourDao_thang dao = new tourDao_thang(conn);
-            List<Tour> tours = dao.getToursByGuideId(userId);
-            request.setAttribute("tours", tours);
-            request.getRequestDispatcher("/Views/thang/tourList.jsp").forward(request, response);
+            List<Tour> tours;
+
+            if (!hasKeyword && !hasSort) {
+                // Trường hợp: CHƯA NHẬP GÌ → lấy tất cả tour của guide
+                tours = dao.getToursByGuideId(userId);
+
+            } else if (hasKeyword && !hasSort) {
+                // Chỉ Search (có keyword, chưa Sort)
+                tours = dao.searchToursByGuideId(userId, keyword.trim());
+
+            } else if (!hasKeyword && hasSort) {
+                // Chỉ Sort (chưa Search)
+                tours = dao.sortToursByGuideId(userId, sortField.trim(), sortAsc);
+
+            } else {
+                // Có cả Search + Sort
+                // Nếu bạn đã định nghĩa `searchAndSortToursByGuideId(...)` thì gọi:
+                tours = dao.searchAndSortToursByGuideId(userId, keyword.trim(), sortField.trim(), sortAsc);
+
+                // Nếu chưa có hàm gộp, bạn có thể fallback:
+                // List<Tour> tmp = dao.searchToursByGuideId(userId, keyword.trim());
+                // tours = sortInMemory(tmp, sortField.trim(), sortAsc);
+            }
+
+            // 4. Đẩy về JSP
+         request.setAttribute("tours", tours);
+request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
+
+// Ép sortField về lowercase trước khi set
+if (hasSort) {
+    String fieldLower = sortField.trim().toLowerCase();
+    request.setAttribute("sortField", fieldLower);
+    request.setAttribute("sortDir",   sortAsc ? "asc" : "desc");
+} else {
+    request.setAttribute("sortField", "");
+    request.setAttribute("sortDir",   "");
+}
+
+            request.getRequestDispatcher("/Views/thang/tourList.jsp")
+                   .forward(request, response);
+
         } catch (SQLException ex) {
             Logger.getLogger(tourList_thang.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             Logger.getLogger(tourList_thang.class.getName()).log(Level.SEVERE, null, ex);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     } 
 
@@ -153,5 +202,5 @@ if (session != null) {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+  
 }

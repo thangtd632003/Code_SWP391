@@ -7,6 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="entity.Booking" %>
+<%@ page import="entity.BookingStatus" %>
 <%@ page import="java.util.List" %>
 <%
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
@@ -79,25 +80,28 @@
                 <td>${b.status}</td>
                 <td>${b.departureDate}</td>
                 <td>
-                    <form method="post" action="${pageContext.request.contextPath}/listBookingGuide_thang">
+                    <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
                         <input type="hidden" name="action" value="detail"/>
                         <input type="hidden" name="id" value="${b.id}"/>
                         <button class="action-btn" type="submit">Detail</button>
                     </form>
-             
+           
   <c:choose>
-    <c:when test="${booking.status eq 'PENDING'}">
-      <form method="post" action="${pageContext.request.contextPath}/listBookingTraveler_thang">
+<c:when test="${b.status.name() == 'PENDING'}">
+
+      <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_thang">
         <input type="hidden" name="action" value="changeStatus" />
-        <input type="hidden" name="id" value="${booking.id}" />
+        <input type="hidden" name="id" value="${b.id}" />
         <input type="hidden" name="newStatus" value="CANCELLED" />
         <button type="submit" class="action-btn">Cancel</button>
       </form>
+   
     </c:when>
     <c:otherwise>
       <span>-</span>
     </c:otherwise>
   </c:choose>
+     
  <form method="post" action="${pageContext.request.contextPath}/listBookingGuide_thang">
                         <input type="hidden" name="action" value="update"/>
                         <input type="hidden" name="id" value="${b.id}"/>

@@ -67,30 +67,45 @@ public class listTourAdmin_thang extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
-
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-
-        if (!user.getRole().name().toString().equalsIgnoreCase("admin")) {
+        if (!"ADMIN".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTravler_thang");
             return;
         }
 
+        // 2. Đọc param search + sort + page (nếu cần phân trang)
+        String keyword   = request.getParameter("keyword");     // có thể null hoặc rỗng
+        String sortField = request.getParameter("sortField");   // id, name, price, ...
+        String sortDir   = request.getParameter("sortDir");     // asc hoặc desc
+        boolean sortAsc  = !"desc".equalsIgnoreCase(sortDir);   // nếu sortDir=desc thì false, ngược lại true
+
+        // 3. Gọi DAO để lấy danh sách search + sort
+        List<Tour> tours = null;
         try (Connection conn = new DBContext().getConnection()) {
             tourDao_thang dao = new tourDao_thang(conn);
-            List<Tour> allTours = dao.getAllTours(); 
-            request.setAttribute("tours", allTours);
-            request.getRequestDispatcher("/Views/thang/listTourAdmin.jsp").forward(request, response);
+            tours = dao.searchAndSortTours(keyword, sortField, sortAsc);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(listTourAdmin_thang.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
         } catch (Exception ex) {
             Logger.getLogger(listTourAdmin_thang.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // 4. Set lại attribute để JSP biết đang search/sort gì
+        request.setAttribute("tours", tours);
+        request.setAttribute("keyword",   (keyword == null) ? "" : keyword.trim());
+        request.setAttribute("sortField", (sortField == null) ? "" : sortField.trim().toLowerCase());
+        request.setAttribute("sortDir",   sortAsc ? "asc" : "desc");
+
+        // 5. Forward về JSP
+        request.getRequestDispatcher("/Views/thang/listTourAdmin.jsp")
+               .forward(request, response);
     } 
 
     /** 

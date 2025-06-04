@@ -8,6 +8,7 @@ package controller;
 import dal.BookingDao_thang;
 import dal.DBContext;
 import dal.tourDao_thang;
+import dal.userDao_thang;
 import entity.Booking;
 import entity.Tour;
 import entity.BookingStatus;
@@ -28,6 +29,8 @@ import java.io.PrintWriter;
 public class DetailBookingTraveler_thang extends HttpServlet {
    private BookingDao_thang bookingDao;
     private tourDao_thang tourDao;
+        private userDao_thang userDao;
+
 @Override
     public void init() throws ServletException {
         super.init();
@@ -35,6 +38,8 @@ public class DetailBookingTraveler_thang extends HttpServlet {
             Connection conn = new DBContext().getConnection();
             bookingDao = new BookingDao_thang(conn);
            tourDao= new tourDao_thang(conn);
+                      userDao = new userDao_thang(conn);
+
         } catch (Exception e) {
             throw new ServletException("Cannot initialize DAOs in DetailBookingGuideServlet", e);
         }}
@@ -81,7 +86,7 @@ public class DetailBookingTraveler_thang extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         // 2. Kiểm tra role: chỉ cho traveler truy cập
-        if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
+        if (!user.getRole().name().equalsIgnoreCase("traveler")) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_thang");
             return;
         }
@@ -102,9 +107,10 @@ public class DetailBookingTraveler_thang extends HttpServlet {
             }
             // 4. Lấy thông tin Tour kèm theo
             Tour tour = tourDao.getTourById(booking.getTourId());
-
+           User userGuideInfor = userDao.getUserById(tour.getGuideId());
             request.setAttribute("booking", booking);
             request.setAttribute("tour", tour);
+            request.setAttribute("guideName", userGuideInfor.getFullName());
             request.getRequestDispatcher("/Views/thang/bookingDetailTraveler.jsp")
                    .forward(request, response);
         } catch (Exception ex) {

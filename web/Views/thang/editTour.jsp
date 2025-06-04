@@ -129,12 +129,12 @@
 
       <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" step="0.01" value="${tour.price}" required />
+        <input type="number" id="price" name="price" step="0.01" min="0" value="${tour.price}" required />
       </div>
 
       <div class="form-group">
         <label for="maxPeople">Max People Per Booking:</label>
-        <input type="number" id="maxPeople" name="maxPeople" value="${tour.maxPeoplePerBooking}" required />
+        <input type="number" id="maxPeople" name="maxPeople" min="1" value="${tour.maxPeoplePerBooking}" required />
       </div>
 
       <div class="form-group">

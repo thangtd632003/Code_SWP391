@@ -12,9 +12,8 @@ public class tourDao_thang {
         this.conn = conn;
     }
 
-    /**
-     * Tạo mới tour
-     */
+    
+
   public boolean createTour(Tour tour) throws SQLException {
     String sql = "INSERT INTO tours (guide_id, name, description, itinerary, price, max_people_per_booking, days, language, status) " +
                  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -192,5 +191,338 @@ public boolean toggleTourStatus(int tourId) throws SQLException {
 
     return tours;
 }
+    
+    /**
+     * Tìm (theo guideId và keyword) và sắp xếp theo sortBy/ sortAsc.
+     *
+     * @param guideId   ID của guide (để lấy tours chỉ của guide đó)
+     * @param keyword   từ khóa tìm kiếm (tìm trong cột name); nếu null hoặc empty thì coi như không filter
+     * @param sortBy    tên trường dùng để sort (ví dụ: "id", "name", "price", "max_people_per_booking", "days", "language", "status", "updated_at")
+     * @param sortAsc   true = ASC, false = DESC
+     * @return List<Tour> đã tìm và sắp xếp xong
+     * @throws SQLException
+     */
+public List<Tour> searchTours(String keyword) {
+    List<Tour> tours = new ArrayList<>();
+    String sql = "SELECT * FROM Tour WHERE name LIKE ?";
+    
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, "%" + keyword + "%");
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                // ... thêm các trường khác nếu có
+                tours.add(t);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return tours;
+}
+public List<Tour> sortTours(String sortBy, boolean sortAsc) {
+    List<Tour> tours = new ArrayList<>();
 
+    // Validation / mapping sortBy từ input Java sang cột trong CSDL
+    String column;
+    switch (sortBy.toLowerCase()) {
+        case "days":
+            column = "days";
+            break;
+        case "maxpeopleperbooking":
+            column = "max_people_per_booking";
+            break;
+        case "price":
+            column = "price";
+            break;
+        case "language":
+            column = "language";
+            break;
+        case "status":
+            column = "status";
+            break;
+        default:
+            // Nếu không khớp bất kỳ case nào, mặc định sắp xếp theo updated_at
+            column = "updated_at";
+    }
+
+    String sql = "SELECT * FROM Tour ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                // ... thêm các trường khác nếu có
+                tours.add(t);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return tours;
+}
+public List<Tour> searchToursByGuideId(int guideId, String keyword) throws SQLException {
+    List<Tour> tours = new ArrayList<>();
+    String sql = "SELECT * FROM tours "
+               + "WHERE guide_id = ? "
+               + "  AND name LIKE ? "
+               + "ORDER BY created_at DESC";  // Hoặc bạn có thể đổi sang ORDER BY updated_at tuỳ ý
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, guideId);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            ps.setString(2, "%");
+        } else {
+            ps.setString(2, "%" + keyword.trim() + "%");
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                tours.add(t);
+            }
+        }
+    }
+    return tours;
+}
+public List<Tour> sortToursByGuideId(int guideId, String sortBy, boolean sortAsc) throws SQLException {
+    List<Tour> tours = new ArrayList<>();
+
+    // 1. Map sortBy sang tên cột trong DB
+    String column;
+    if (sortBy == null) {
+        column = "created_at";
+    } else {
+        switch (sortBy.toLowerCase()) {
+            case "id":
+                column = "id";
+                break;
+            case "name":
+                column = "name";
+                break;
+            case "price":
+                column = "price";
+                break;
+            case "maxpeopleperbooking":
+            case "max_people_per_booking":
+                column = "max_people_per_booking";
+                break;
+            case "days":
+                column = "days";
+                break;
+            case "language":
+                column = "language";
+                break;
+            case "status":
+                column = "status";
+                break;
+            case "updated_at":
+                column = "updated_at";
+                break;
+            default:
+                column = "created_at";
+        }
+    }
+
+    String sql = "SELECT * FROM tours "
+               + "WHERE guide_id = ? "
+               + "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, guideId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                tours.add(t);
+            }
+        }
+    }
+    return tours;
+}
+public List<Tour> searchAndSortToursByGuideId(int guideId, String keyword, String sortBy, boolean sortAsc) throws SQLException {
+    List<Tour> tours = new ArrayList<>();
+
+    // 1. Map sortBy sang tên cột
+    String column;
+    if (sortBy == null) {
+        column = "created_at";
+    } else {
+        switch (sortBy.toLowerCase()) {
+            case "id":
+                column = "id";
+                break;
+            case "name":
+                column = "name";
+                break;
+            case "price":
+                column = "price";
+                break;
+            case "maxpeopleperbooking":
+            case "max_people_per_booking":
+                column = "max_people_per_booking";
+                break;
+            case "days":
+                column = "days";
+                break;
+            case "language":
+                column = "language";
+                break;
+            case "status":
+                column = "status";
+                break;
+            case "updated_at":
+                column = "updated_at";
+                break;
+            default:
+                column = "created_at";
+        }
+    }
+
+    String sql = "SELECT * FROM tours "
+               + "WHERE guide_id = ? "
+               + "  AND name LIKE ? "
+               + "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, guideId);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            ps.setString(2, "%");
+        } else {
+            ps.setString(2, "%" + keyword.trim() + "%");
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                tours.add(t);
+            }
+        }
+    }
+    return tours;
+}
+  public List<Tour> searchAndSortTours(String keyword, String sortBy, boolean sortAsc) throws SQLException {
+        List<Tour> tours = new ArrayList<>();
+
+        // 1. Chuẩn hóa keyword
+        String kw = (keyword == null) ? "" : keyword.trim();
+
+        // 2. Mapping sortBy sang tên cột trong DB (đảm bảo lowercase)
+        String column;
+        if (sortBy == null || sortBy.trim().isEmpty()) {
+            column = "updated_at";  // default
+        } else {
+            switch (sortBy.trim().toLowerCase()) {
+                case "id":
+                    column = "id";
+                    break;
+                case "name":
+                    column = "name";
+                    break;
+                case "price":
+                    column = "price";
+                    break;
+                case "max_people_per_booking":
+                    column = "max_people_per_booking";
+                    break;
+                case "days":
+                    column = "days";
+                    break;
+                case "language":
+                    column = "language";
+                    break;
+                case "status":
+                    column = "status";
+                    break;
+                default:
+                    column = "updated_at";
+            }
+        }
+
+        // 3. Xây dựng SQL
+        String sql = "SELECT * FROM tours WHERE name LIKE ? ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + kw + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                tours.add(t);
+                }
+            }
+        }
+
+        return tours;
+    }
 }

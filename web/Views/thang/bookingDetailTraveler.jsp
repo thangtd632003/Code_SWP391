@@ -62,8 +62,9 @@
 
     <c:if test="${booking != null}">
       <p><strong>ID:</strong> ${booking.id}</p>
-      <p><strong>Traveler Name:</strong> ${booking.travelerName}</p>
-      <p><strong>Tour:</strong> ${booking.tour.name}</p>
+             <p><strong>Guide Name:</strong> ${guideName}</p>
+
+      <p><strong>Tour:</strong> ${tour.name}</p>
       <p><strong>Date:</strong> ${booking.date}</p>
       <p><strong>People:</strong> ${booking.numPeople}</p>
       <p><strong>Status:</strong> ${booking.status}</p>

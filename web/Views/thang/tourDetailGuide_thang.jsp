@@ -1,6 +1,6 @@
 <%-- 
-    Document   : bookingDetailGuide
-    Created on : Jun 3, 2025, 8:27:56 PM
+    Document   : tourDetailGuide_thang
+    Created on : Jun 4, 2025, 1:21:36 PM
     Author     : thang
 --%>
 
@@ -9,7 +9,7 @@
 
 <html>
 <head>
-  <title>Booking Detail (Guide)</title>
+  <title>Tour Detail</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
       margin-bottom: 20px;
     }
 
-    .booking-detail {
+    .tour-detail {
       background-color: #fff;
       padding: 20px;
       border-radius: 10px;
@@ -32,12 +32,12 @@
       margin: auto;
     }
 
-    .booking-detail p {
+    .tour-detail p {
       margin: 10px 0;
       line-height: 1.6;
     }
 
-    .booking-detail strong {
+    .tour-detail strong {
       display: inline-block;
       width: 150px;
       color: #555;
@@ -57,22 +57,24 @@
   </style>
 </head>
 <body>
-  <div class="booking-detail">
-    <h2>Booking Detail (Guide)</h2>
+  <div class="tour-detail">
+    <h2>Tour Detail</h2>
 
-    <c:if test="${booking != null}">
-      <p><strong>ID:</strong> ${booking.id}</p>
-       <p><strong>Traveler Name:</strong> ${travelerName}</p>
-      <p><strong>Tour:</strong> ${tour.name}</p>
-      <p><strong>Date:</strong> ${booking.departureDate}</p>
-      <p><strong>People:</strong> ${booking.numPeople}</p>
-      <p><strong>Status:</strong> ${booking.status}</p>
-      <p><strong>Created At:</strong> ${booking.createdAt}</p>
-      <p><strong>Updated At:</strong> ${booking.updatedAt}</p>
+    <c:if test="${tour != null}">
+      <p><strong>ID:</strong> ${tour.id}</p>
+      <p><strong>Name:</strong> ${tour.name}</p>
+      <p><strong>Description:</strong> ${tour.description}</p>
+      <p><strong>Itinerary:</strong> ${tour.itinerary}</p>
+      <p><strong>Price:</strong> ${tour.price}</p>
+      <p><strong>Max People:</strong> ${tour.maxPeoplePerBooking}</p>
+      <p><strong>Days:</strong> ${tour.days}</p>
+      <p><strong>Language:</strong> ${tour.language}</p>
+      <p><strong>Status:</strong> ${tour.status}</p>
+      <p><strong>Created At:</strong> ${tour.createdAt}</p>
+      <p><strong>Updated At:</strong> ${tour.updatedAt}</p>
     </c:if>
 
-    <a href="/Code_SWP391/ListBookingGuide_thang">← Back to List</a>
+    <a href="tourList_thang">← Back to List</a>
   </div>
 </body>
 </html>
-

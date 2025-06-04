@@ -9,6 +9,7 @@ package controller;
 import dal.BookingDao_thang;
 import dal.DBContext;
 import dal.tourDao_thang;
+import dal.userDao_thang;
 import entity.Booking;
 import entity.BookingStatus;
 import entity.Tour;
@@ -29,6 +30,7 @@ import jakarta.servlet.http.HttpSession;
 public class DetailBookingGuide_thang extends HttpServlet {
     private BookingDao_thang bookingDao;
     private tourDao_thang tourDao;
+    private userDao_thang userDao;
     @Override
     public void init() throws ServletException {
         super.init();
@@ -36,6 +38,7 @@ public class DetailBookingGuide_thang extends HttpServlet {
             Connection conn = new DBContext().getConnection();
             bookingDao = new BookingDao_thang(conn);
            tourDao= new tourDao_thang(conn);
+           userDao = new userDao_thang(conn);
         } catch (Exception e) {
             throw new ServletException("Cannot initialize DAOs in DetailBookingGuideServlet", e);
         }}
@@ -104,9 +107,10 @@ public class DetailBookingGuide_thang extends HttpServlet {
             }
             // Lấy thông tin Tour kèm theo
             Tour tour = tourDao.getTourById(booking.getTourId());
-
+         User userTravelerInfo= userDao.getUserById(booking.getTravelerId());
             request.setAttribute("booking", booking);
             request.setAttribute("tour", tour);
+            request.setAttribute("travelerName", userTravelerInfo.getFullName());
             request.getRequestDispatcher("/Views/thang/bookingDetailGuide.jsp")
                    .forward(request, response);
         } catch (Exception ex) {
