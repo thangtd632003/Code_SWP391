@@ -76,7 +76,7 @@ public boolean updateBooking(Booking booking) {
             num_people = ?, 
             contact_info = ?, 
             status = ?, 
-            departure_date = ?, 
+            departure_date = ?
             
         WHERE id = ?
     """;

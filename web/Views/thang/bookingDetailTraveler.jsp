@@ -65,14 +65,14 @@
              <p><strong>Guide Name:</strong> ${guideName}</p>
 
       <p><strong>Tour:</strong> ${tour.name}</p>
-      <p><strong>Date:</strong> ${booking.date}</p>
+      <p><strong>Date:</strong> ${booking.departureDate}</p>
       <p><strong>People:</strong> ${booking.numPeople}</p>
       <p><strong>Status:</strong> ${booking.status}</p>
       <p><strong>Created At:</strong> ${booking.createdAt}</p>
       <p><strong>Updated At:</strong> ${booking.updatedAt}</p>
     </c:if>
 
-    <a href="listBookingTraveler_thang">← Back to List</a>
+    <a href="ListBookingTraveler_thang">← Back to List</a>
   </div>
 </body>
 </html>

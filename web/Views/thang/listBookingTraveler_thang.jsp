@@ -80,7 +80,7 @@
                 <td>${b.status}</td>
                 <td>${b.departureDate}</td>
                 <td>
-                    <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
+                    <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_thang">
                         <input type="hidden" name="action" value="detail"/>
                         <input type="hidden" name="id" value="${b.id}"/>
                         <button class="action-btn" type="submit">Detail</button>
@@ -101,12 +101,18 @@
       <span>-</span>
     </c:otherwise>
   </c:choose>
-     
- <form method="post" action="${pageContext.request.contextPath}/listBookingGuide_thang">
+       <c:choose>
+<c:when test="${b.status.name() == 'PENDING'}">
+ <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_thang">
                         <input type="hidden" name="action" value="update"/>
                         <input type="hidden" name="id" value="${b.id}"/>
                         <button class="action-btn" type="submit">Update</button>
                     </form>
+                          </c:when>
+    <c:otherwise>
+      <span>-</span>
+    </c:otherwise>
+  </c:choose>
                 </td>
             </tr>
         </c:forEach>

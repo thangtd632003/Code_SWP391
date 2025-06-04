@@ -204,7 +204,7 @@ public boolean toggleTourStatus(int tourId) throws SQLException {
      */
 public List<Tour> searchTours(String keyword) {
     List<Tour> tours = new ArrayList<>();
-    String sql = "SELECT * FROM Tour WHERE name LIKE ?";
+    String sql = "SELECT * FROM tours WHERE name LIKE ?";
     
     try (PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, "%" + keyword + "%");
@@ -258,7 +258,7 @@ public List<Tour> sortTours(String sortBy, boolean sortAsc) {
             column = "updated_at";
     }
 
-    String sql = "SELECT * FROM Tour ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+    String sql = "SELECT * FROM tours ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
 
     try (PreparedStatement ps = conn.prepareStatement(sql)) {
         try (ResultSet rs = ps.executeQuery()) {

@@ -73,7 +73,7 @@
 </head>
 <body>
   <div class="top-bar">
-    <a href="${pageContext.request.contextPath}/adminDashboard">← Admin Dashboard</a>
+    <a href="${pageContext.request.contextPath}/dashboard">← Admin Dashboard</a>
   </div>
 
   <div style="margin-top:60px;">

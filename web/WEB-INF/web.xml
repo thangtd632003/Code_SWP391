@@ -60,6 +60,10 @@
         <servlet-name>detailTourGuide_thang</servlet-name>
         <servlet-class>controller.detailTourGuide_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UpdateBookingTraveler_thang</servlet-name>
+        <servlet-class>controller.UpdateBookingTraveler_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -135,5 +139,9 @@
     <servlet-mapping>
         <servlet-name>detailTourGuide_thang</servlet-name>
         <url-pattern>/detailTourGuide_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateBookingTraveler_thang</servlet-name>
+        <url-pattern>/UpdateBookingTraveler_thang</url-pattern>
     </servlet-mapping>
 </web-app>

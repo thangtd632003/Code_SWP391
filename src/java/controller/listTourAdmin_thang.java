@@ -83,12 +83,49 @@ public class listTourAdmin_thang extends HttpServlet {
         String sortField = request.getParameter("sortField");   // id, name, price, ...
         String sortDir   = request.getParameter("sortDir");     // asc hoặc desc
         boolean sortAsc  = !"desc".equalsIgnoreCase(sortDir);   // nếu sortDir=desc thì false, ngược lại true
-
+boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
+        boolean hasSort = (sortField != null && !sortField.trim().isEmpty());
         // 3. Gọi DAO để lấy danh sách search + sort
         List<Tour> tours = null;
         try (Connection conn = new DBContext().getConnection()) {
             tourDao_thang dao = new tourDao_thang(conn);
-            tours = dao.searchAndSortTours(keyword, sortField, sortAsc);
+            if (!hasKeyword && !hasSort) {
+                // Trường hợp: CHƯA NHẬP GÌ → lấy tất cả tour của guide
+                tours = dao.getAllTours();
+
+            } else if (hasKeyword && !hasSort) {
+                // Chỉ Search (có keyword, chưa Sort)
+                tours = dao.searchTours(keyword);
+
+            } else if (!hasKeyword && hasSort) {
+                // Chỉ Sort (chưa Search)
+                tours = dao.sortTours(sortField, sortAsc);
+
+            } else {
+                // Có cả Search + Sort
+                // Nếu bạn đã định nghĩa `searchAndSortToursByGuideId(...)` thì gọi:
+                tours = dao.searchAndSortTours(keyword, sortDir, sortAsc);
+
+                // Nếu chưa có hàm gộp, bạn có thể fallback:
+                // List<Tour> tmp = dao.searchToursByGuideId(userId, keyword.trim());
+                // tours = sortInMemory(tmp, sortField.trim(), sortAsc);
+            }
+              request.setAttribute("tours", tours);
+request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
+
+// Ép sortField về lowercase trước khi set
+if (hasSort) {
+    String fieldLower = sortField.trim().toLowerCase();
+    request.setAttribute("sortField", fieldLower);
+    request.setAttribute("sortDir",   sortAsc ? "asc" : "desc");
+} else {
+    request.setAttribute("sortField", "");
+    request.setAttribute("sortDir",   "");
+}
+
+            request.getRequestDispatcher("/Views/thang/listTourAdmin.jsp")
+                   .forward(request, response);
+
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(listTourAdmin_thang.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -98,14 +135,7 @@ public class listTourAdmin_thang extends HttpServlet {
         }
 
         // 4. Set lại attribute để JSP biết đang search/sort gì
-        request.setAttribute("tours", tours);
-        request.setAttribute("keyword",   (keyword == null) ? "" : keyword.trim());
-        request.setAttribute("sortField", (sortField == null) ? "" : sortField.trim().toLowerCase());
-        request.setAttribute("sortDir",   sortAsc ? "asc" : "desc");
-
-        // 5. Forward về JSP
-        request.getRequestDispatcher("/Views/thang/listTourAdmin.jsp")
-               .forward(request, response);
+    
     } 
 
     /** 
