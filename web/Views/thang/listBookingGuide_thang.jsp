@@ -1,17 +1,20 @@
-<%-- 
-    Document   : listBookingGuide_thang.jsp
-    Created on : Jun 3, 2025, 8:12:23 PM
-    Author     : thang
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="entity.Booking" %>
 <%@ page import="entity.BookingStatus" %>
 <%@ page import="java.util.List" %>
+
 <%
+    // Các attribute do servlet thiết lập:
+    //   "bookings"  : List<Booking> (đã được search và sort ở servlet)
+    //   "keyword"   : String (tìm theo contact)
+    //   "sortField" : String (tên trường sort)
+    //   "sortDir"   : String ("asc" hoặc "desc")
     List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
+    
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,12 +27,26 @@
         .controls button { padding: 6px 12px; }
         table { width: 100%; border-collapse: collapse; background: #fff; }
         th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
-        th { cursor: pointer; background: #f0f0f0; }
-        th.sort-asc::after  { content: " ▲"; }
-        th.sort-desc::after { content: " ▼"; }
+        th a { color: inherit; text-decoration: none; display: block; }
+        th.sorted-asc::after  { content: " ▲"; }
+        th.sorted-desc::after { content: " ▼"; }
         .pagination { margin-top: 10px; text-align: center; }
-        .pagination span { margin: 0 5px; cursor: pointer; }
-        .pagination .active { font-weight: bold; }
+        .pagination span {
+            margin: 0 5px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pagination span.active {
+            font-weight: bold;
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+        .pagination span:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
         .action-btn { margin-right: 5px; padding: 4px 8px; font-size: 12px; }
         .top-bar {
             position: fixed; top: 0; left: 0; width: 100%;
@@ -37,162 +54,290 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 1000;
         }
         .top-bar a {
-            text-decoration: none; color: #007bff;
-            font-weight: bold; font-size: 16px;
+            text-decoration: none; color: #007bff; font-weight: bold; font-size: 16px;
         }
         .top-bar a:hover { color: #0056b3; }
+        .search-btn { margin-left: 8px; }
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <a href="${pageContext.request.contextPath}/dashboard">← Back to Dashboard</a>
-</div>
-
-<div style="margin-top:60px;">
-    <div class="controls">
-        <div>
-            <input type="text" id="searchInput" placeholder="Search by contact..." onkeyup="applyFilter()" />
-            <button onclick="clearFilter()">Clear</button>
-        </div>
+    <div class="top-bar">
+        <a href="${pageContext.request.contextPath}/dashboard">← Back to Dashboard</a>
     </div>
 
-    <table id="bookingTable">
-        <thead>
-        <tr>
-            <th data-field="id" onclick="sortTable('id')">ID</th>
-            <th data-field="tourId" onclick="sortTable('tourId')">Tour ID</th>
-            <th data-field="travelerId" onclick="sortTable('travelerId')">Traveler ID</th>
-            <th data-field="numPeople" onclick="sortTable('numPeople')">People</th>
-            <th data-field="contact" onclick="sortTable('contact')">Contact</th>
-            <th data-field="status" onclick="sortTable('status')">Status</th>
-            <th data-field="departure" onclick="sortTable('departure')">Departure</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="b" items="${bookings}">
-            <tr>
-                <td>${b.id}</td>
-                <td>${b.tourId}</td>
-                <td>${b.travelerId}</td>
-                <td>${b.numPeople}</td>
-                <td>${b.contactInfo}</td>
-                <td>${b.status}</td>
-                <td>${b.departureDate}</td>
-                <td>
-                    <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
-                        <input type="hidden" name="action" value="detail"/>
-                        <input type="hidden" name="id" value="${b.id}"/>
-                        <button class="action-btn" type="submit">Detail</button>
-                    </form>
-                
-  <c:choose>
-<c:when test="${b.status.name() == 'PENDING'}">
-      <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
-        <input type="hidden" name="action" value="changeStatus" />
-        <input type="hidden" name="id" value="${b.id}" />
-        <select name="newStatus">
-          <option value="APPROVED">Approve</option>
-          <option value="REJECTED">Reject</option>
-        </select>
-        <button type="submit" class="action-btn">Change Status</button>
-      </form>
-    </c:when>
-    <c:otherwise>
-      <span>-</span>
-    </c:otherwise>
-  </c:choose>
+    <div style="margin-top:60px;">
+        <!-- Form tìm kiếm theo contact -->
+        <div class="controls">
+            <form method="get" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
+                <input type="text"
+                       name="keyword"
+                       placeholder="Search by contact..."
+                       value="${fn:escapeXml(keyword)}" />
+                <button type="submit" class="search-btn">Search</button>
+                <!-- Giữ lại sortField, sortDir, page=1 -->
+                <input type="hidden" name="sortField" value="${sortField}" />
+                <input type="hidden" name="sortDir" value="${sortDir}" />
+                <input type="hidden" name="page" value="1" />
+            </form>
+        </div>
 
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-    <div class="pagination" id="pagination"></div>
-</div>
+        <!-- Bảng hiển thị Booking (đã được search & sort ở servlet) -->
+        <table id="bookingTable">
+            <thead>
+                <tr>
+                    <!-- Cột ID -->
+                    <th
+                      <c:if test="${sortField eq 'id'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='id'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'id' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        ID
+                      </a>
+                    </th>
 
-<script>
-    const rowsPerPage = 10;
-    let currentPage = 1;
-    let sortField = null;
-    let sortAsc = true;
+                    <!-- Cột Tour ID -->
+                    <th
+                      <c:if test="${sortField eq 'tour_id'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='tour_id'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'tour_id' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        Tour ID
+                      </a>
+                    </th>
 
-    const originalRows = Array.from(document.querySelectorAll('#bookingTable tbody tr'));
+                    <!-- Cột Traveler ID -->
+                    <th
+                      <c:if test="${sortField eq 'traveler_id'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='traveler_id'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'traveler_id' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        Traveler ID
+                      </a>
+                    </th>
 
-    function applyFilter() {
-        currentPage = 1;
-        renderTable();
-    }
+                    <!-- Cột People -->
+                    <th
+                      <c:if test="${sortField eq 'num_people'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='num_people'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'num_people' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        People
+                      </a>
+                    </th>
 
-    function clearFilter() {
-        document.getElementById('searchInput').value = '';
-        currentPage = 1;
-        sortField = null;
-        sortAsc = true;
-        updateSortIcons();
-        renderTable();
-    }
+                    <!-- Cột Contact -->
+                    <th
+                      <c:if test="${sortField eq 'contact_info'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='contact_info'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'contact_info' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        Contact
+                      </a>
+                    </th>
 
-    function sortTable(field) {
-        if (sortField === field) sortAsc = !sortAsc;
-        else { sortField = field; sortAsc = true; }
-        renderTable();
-        updateSortIcons();
-    }
+                    <!-- Cột Status -->
+                    <th
+                      <c:if test="${sortField eq 'status'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='status'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'status' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        Status
+                      </a>
+                    </th>
 
-    function updateSortIcons() {
-        document.querySelectorAll('th').forEach(th => {
-            th.classList.remove('sort-asc','sort-desc');
-            if (th.dataset.field === sortField) {
-                th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+                    <!-- Cột Departure -->
+                    <th
+                      <c:if test="${sortField eq 'departure_date'}">
+                        class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+                      </c:if>
+                    >
+                      <a href="<c:url value='/ListBookingGuide_thang'>
+                                 <c:param name='keyword'   value='${keyword}'/>
+                                 <c:param name='sortField' value='departure_date'/>
+                                 <c:choose>
+                                     <c:when test="${sortField eq 'departure_date' && sortDir eq 'asc'}">
+                                        <c:param name='sortDir' value='desc'/>
+                                     </c:when>
+                                     <c:otherwise>
+                                        <c:param name='sortDir' value='asc'/>
+                                     </c:otherwise>
+                                 </c:choose>
+                                 <c:param name='page' value='1'/>
+                              </c:url>">
+                        Departure
+                      </a>
+                    </th>
+
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="b" items="${bookings}">
+                    <tr>
+                        <td><c:out value="${b.id}" /></td>
+                        <td><c:out value="${b.tourId}" /></td>
+                        <td><c:out value="${b.travelerId}" /></td>
+                        <td><c:out value="${b.numPeople}" /></td>
+                        <td><c:out value="${b.contactInfo}" /></td>
+                        <td><c:out value="${b.status}" /></td>
+                        <td><c:out value="${b.departureDate}" /></td>
+                        <td>
+                            <!-- Nút Detail -->
+                            <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
+                                <input type="hidden" name="action" value="detail"/>
+                                <input type="hidden" name="id" value="${b.id}"/>
+                                <button class="action-btn" type="submit">Detail</button>
+                            </form>
+
+                            <!-- Nếu status = PENDING: hiển thị select thay đổi trạng thái -->
+                            <c:choose>
+                                <c:when test="${b.status.name() == 'PENDING'}">
+                                  <form method="post" action="${pageContext.request.contextPath}/ListBookingGuide_thang">
+                                      <input type="hidden" name="action" value="changeStatus"/>
+                                      <input type="hidden" name="id" value="${b.id}"/>
+                                      <select name="newStatus">
+                                        <option value="APPROVED">Approve</option>
+                                        <option value="REJECTED">Reject</option>
+                                      </select>
+                                      <button type="submit" class="action-btn">Change Status</button>
+                                  </form>
+                                </c:when>
+                                <c:otherwise>
+                                  <span>-</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+
+        <c:if test="${fn:length(bookings) == 0}">
+            <p>No bookings found.</p>
+        </c:if>
+
+        <!-- PHẦN PHÂN TRANG CLIENT -->
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <script>
+        const rowsPerPage = 10;                 // số dòng hiển thị mỗi trang
+        let currentPage = 1;                    // trang hiện tại
+
+        // Lấy mảng tất cả row (tr) trong tbody
+        const allRows = Array.from(document.querySelectorAll('#bookingTable tbody tr'));
+
+        function renderTable() {
+            // Tính tổng pages
+            const totalRows = allRows.length;
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            // Tính index đầu và cuối cho trang hiện tại
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            // Xóa hết tbody, rồi thêm lại hàng thuộc trang hiện tại
+            const tbody = document.querySelector('#bookingTable tbody');
+            tbody.innerHTML = '';
+            const pageRows = allRows.slice(start, end);
+            pageRows.forEach(row => tbody.appendChild(row));
+
+            // Xây phần pagination
+            const paginationDiv = document.getElementById('pagination');
+            paginationDiv.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const span = document.createElement('span');
+                span.innerText = i;
+                span.className = (i === currentPage ? 'active' : '');
+                span.onclick = () => {
+                    currentPage = i;
+                    renderTable();
+                };
+                paginationDiv.appendChild(span);
             }
-        });
-    }
-
-    function renderTable() {
-        let allRows = originalRows.slice();
-        const filter = document.getElementById('searchInput').value.toLowerCase();
-
-        if (filter) {
-            allRows = allRows.filter(row => row.cells[4].innerText.toLowerCase().includes(filter));
         }
 
-        if (sortField) {
-            const idxMap = {id:0, tourId:1, travelerId:2, numPeople:3, contact:4, status:5, departure:6};
-            const idx = idxMap[sortField];
-            allRows.sort((a, b) => {
-                let va = a.cells[idx].innerText, vb = b.cells[idx].innerText;
-                if (['id', 'tourId', 'travelerId', 'numPeople'].includes(sortField)) {
-                    va = parseFloat(va); vb = parseFloat(vb);
-                }
-                return sortAsc ? (va > vb ? 1 : va < vb ? -1 : 0) : (va < vb ? 1 : va > vb ? -1 : 0);
-            });
-        }
-
-        const total = allRows.length;
-        const pages = Math.ceil(total / rowsPerPage);
-        if (currentPage > pages) currentPage = pages || 1;
-        const start = (currentPage - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        const pageRows = allRows.slice(start, end);
-
-        const tbody = document.querySelector('#bookingTable tbody');
-        tbody.innerHTML = '';
-        pageRows.forEach(r => tbody.appendChild(r));
-
-        const pg = document.getElementById('pagination'); pg.innerHTML = '';
-        for (let i = 1; i <= pages; i++) {
-            const span = document.createElement('span');
-            span.innerText = i;
-            span.className = (i === currentPage ? 'active' : '');
-            span.onclick = () => { currentPage = i; renderTable(); };
-            pg.appendChild(span);
-        }
-    }
-
-    updateSortIcons();
-    renderTable();
-</script>
+        // Khi load trang lần đầu, hiển thị bảng và pagination
+        renderTable();
+    </script>
 </body>
 </html>
-

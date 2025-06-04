@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
    import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author thang
@@ -75,21 +77,55 @@ public class ListBookingGuide_thang extends HttpServlet {
             return;
         }
         User user = (User) session.getAttribute("user");
-        // Kiểm tra role: chỉ cho guide truy cập
         if (!"guide".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
             return;
         }
-
-        // Đến đây chắc chắn là guide, lấy danh sách booking theo guideId
         int guideId = user.getId();
-        try {
-            List<Booking> bookings = bookingDao.getBookingsByGuideId(guideId);
-            request.setAttribute("bookings", bookings);
-            request.setAttribute("BookingStatus", BookingStatus.class);
+
+        // 2. Đọc tham số tìm kiếm & sắp xếp (nếu có)
+        String keyword   = request.getParameter("keyword");    // tìm kiếm theo contact_info
+        String sortDir   = request.getParameter("sortDir");  // "asc" hoặc "desc" 
+                String sortField = request.getParameter("sortField");
+
+        boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
+        boolean hasSort    = (sortDir != null && (sortDir.equalsIgnoreCase("asc") || sortDir.equalsIgnoreCase("desc")));
+        boolean sortAsc    = !"desc".equalsIgnoreCase(sortDir);
+
+        try (Connection conn = new DBContext().getConnection()) {
+            BookingDao_thang bookingDao = new BookingDao_thang(conn);
+            List<Booking> bookings;
+
+            if (!hasKeyword && !hasSort) {
+                // Trường hợp: chưa search, chưa sort → lấy tất cả
+                bookings = bookingDao.getBookingsByGuideId(guideId);
+
+            } else if (hasKeyword && !hasSort) {
+                // Chỉ search (theo keyword)
+                bookings = bookingDao.searchBookingsByTravelerId(guideId, keyword);
+
+            } else if (!hasKeyword && hasSort) {
+                // Chỉ sort (theo updated_at)
+                bookings = bookingDao.sortBookingsByGuideId(guideId, sortField, sortAsc);
+
+            } else {
+                // Có cả search + sort
+                bookings = bookingDao.searchAndSortBookingsByGuideId(guideId, keyword, sortField, sortAsc);
+            }
+
+            // 3. Đẩy dữ liệu về JSP
+            request.setAttribute("bookings",       bookings);
+            request.setAttribute("BookingStatus",   BookingStatus.class);
+                        request.setAttribute("sortField", sortField);
+
+            request.setAttribute("keyword",         hasKeyword ? keyword.trim() : "");
+            request.setAttribute("sortDir",         hasSort ? (sortAsc ? "asc" : "desc") : "");
             request.getRequestDispatcher("/Views/thang/listBookingGuide_thang.jsp")
                    .forward(request, response);
+
         } catch (Exception ex) {
+            Logger.getLogger(ListBookingGuide_thang.class.getName())
+                  .log(Level.SEVERE, "Error when retrieving bookings for guideId=" + guideId, ex);
             throw new ServletException("Error when retrieving bookings for guideId=" + guideId, ex);
         }
     } 

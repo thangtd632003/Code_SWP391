@@ -35,7 +35,7 @@
 </head>
 <body>
   <div class="top-bar">
-    <a href="${pageContext.request.contextPath}/ListBookingTraveler_thang">← Back to Profile</a>
+    <a href="${pageContext.request.contextPath}/ListBookingTraveler_thang">← Back to List Booking</a>
   </div>
 
   <div class="container">

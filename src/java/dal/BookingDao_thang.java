@@ -158,6 +158,332 @@ public List<Booking> searchBookings(String keyword) {
     }
     return bookings;
 }
+
+    // ===== 5. Sort bookings của traveler với column truyền vào =====
+    public List<Booking> sortBookingsByTravelerId(
+            int travelerId,
+            String sortBy,
+            boolean sortAsc
+    ) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+
+        // 1. Map sortBy sang tên cột trong DB
+        String column;
+        if (sortBy == null) {
+            column = "updated_at";
+        } else {
+            switch (sortBy.toLowerCase()) {
+                case "id":
+                    column = "id";
+                    break;
+                case "tourid":
+                case "tour_id":
+                    column = "tour_id";
+                    break;
+                case "travelerid":
+                case "traveler_id":
+                    column = "traveler_id";
+                    break;
+                case "numpeople":
+                case "num_people":
+                    column = "num_people";
+                    break;
+                case "contact":
+                case "contact_info":
+                    column = "contact_info";
+                    break;
+                case "status":
+                    column = "status";
+                    break;
+                case "departure":
+                case "departure_date":
+                    column = "departure_date";
+                    break;
+                case "created_at":
+                    column = "created_at";
+                    break;
+                case "updated_at":
+                    column = "updated_at";
+                    break;
+                default:
+                    column = "updated_at";
+            }
+        }
+
+        // 2. Xây dựng SQL với ORDER BY động
+        String sql = "SELECT * FROM bookings " +
+                     "WHERE traveler_id = ? " +
+                     "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, travelerId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+
+        return bookings;
+    }
+
+    // ===== 6. Sort bookings của guide với column truyền vào =====
+    public List<Booking> sortBookingsByGuideId(
+            int guideId,
+            String sortBy,
+            boolean sortAsc
+    ) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+
+        // 1. Map sortBy sang tên cột trong DB (giống hệt bên trên)
+        String column;
+        if (sortBy == null) {
+            column = "updated_at";
+        } else {
+            switch (sortBy.toLowerCase()) {
+                case "id":
+                    column = "id";
+                    break;
+                case "tourid":
+                case "tour_id":
+                    column = "tour_id";
+                    break;
+                case "travelerid":
+                case "traveler_id":
+                    column = "traveler_id";
+                    break;
+                case "numpeople":
+                case "num_people":
+                    column = "num_people";
+                    break;
+                case "contact":
+                case "contact_info":
+                    column = "contact_info";
+                    break;
+                case "status":
+                    column = "status";
+                    break;
+                case "departure":
+                case "departure_date":
+                    column = "departure_date";
+                    break;
+                case "created_at":
+                    column = "created_at";
+                    break;
+                case "updated_at":
+                    column = "updated_at";
+                    break;
+                default:
+                    column = "updated_at";
+            }
+        }
+
+        // 2. Xây dựng SQL với JOIN sang tours để lọc theo guide_id, kèm ORDER BY
+        String sql = """
+            SELECT b.* 
+            FROM bookings b
+            JOIN tours t ON b.tour_id = t.id
+            WHERE t.guide_id = ?
+            ORDER BY b.""" + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+
+        return bookings;
+    }
+
+    // ===== 7. Vừa search vừa sort cho traveler với column truyền vào =====
+    public List<Booking> searchAndSortBookingsByTravelerId(
+            int travelerId,
+            String keyword,
+            String sortBy,
+            boolean sortAsc
+    ) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+
+        // 1. Map sortBy sang tên cột trong DB
+        String column;
+        if (sortBy == null) {
+            column = "updated_at";
+        } else {
+            switch (sortBy.toLowerCase()) {
+                case "id":
+                    column = "id";
+                    break;
+                case "tourid":
+                case "tour_id":
+                    column = "tour_id";
+                    break;
+                case "travelerid":
+                case "traveler_id":
+                    column = "traveler_id";
+                    break;
+                case "numpeople":
+                case "num_people":
+                    column = "num_people";
+                    break;
+                case "contact":
+                case "contact_info":
+                    column = "contact_info";
+                    break;
+                case "status":
+                    column = "status";
+                    break;
+                case "departure":
+                case "departure_date":
+                    column = "departure_date";
+                    break;
+                case "created_at":
+                    column = "created_at";
+                    break;
+                case "updated_at":
+                    column = "updated_at";
+                    break;
+                default:
+                    column = "updated_at";
+            }
+        }
+
+        // 2. Xây dựng SQL với search và ORDER BY
+        String sql = "SELECT * FROM bookings " +
+                     "WHERE traveler_id = ? AND contact_info LIKE ? " +
+                     "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, travelerId);
+            ps.setString(2, "%" + keyword.trim() + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+
+        return bookings;
+    }
+
+    // ===== 8. Vừa search vừa sort cho guide với column truyền vào =====
+    public List<Booking> searchAndSortBookingsByGuideId(
+            int guideId,
+            String keyword,
+            String sortBy,
+            boolean sortAsc
+    ) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+
+        // 1. Map sortBy sang tên cột trong DB
+        String column;
+        if (sortBy == null) {
+            column = "updated_at";
+        } else {
+            switch (sortBy.toLowerCase()) {
+                case "id":
+                    column = "id";
+                    break;
+                case "tourid":
+                case "tour_id":
+                    column = "tour_id";
+                    break;
+                case "travelerid":
+                case "traveler_id":
+                    column = "traveler_id";
+                    break;
+                case "numpeople":
+                case "num_people":
+                    column = "num_people";
+                    break;
+                case "contact":
+                case "contact_info":
+                    column = "contact_info";
+                    break;
+                case "status":
+                    column = "status";
+                    break;
+                case "departure":
+                case "departure_date":
+                    column = "departure_date";
+                    break;
+                case "created_at":
+                    column = "created_at";
+                    break;
+                case "updated_at":
+                    column = "updated_at";
+                    break;
+                default:
+                    column = "updated_at";
+            }
+        }
+
+        // 2. Xây dựng SQL với JOIN sang tours, search và ORDER BY
+        String sql = """
+            SELECT b.* 
+            FROM bookings b
+            JOIN tours t ON b.tour_id = t.id
+            WHERE t.guide_id = ? AND b.contact_info LIKE ?
+            ORDER BY b.""" + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ps.setString(2, "%" + keyword.trim() + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+
+        return bookings;
+    }
+
+    public List<Booking> searchBookingsByTravelerId(int travelerId, String keyword) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings WHERE traveler_id = ? AND contact_info LIKE ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, travelerId);
+            ps.setString(2, "%" + keyword.trim() + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+        return bookings;
+    }
+
+    public List<Booking> searchBookingsByGuideId(int guideId, String keyword) throws SQLException {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = """
+            SELECT b.*
+              FROM bookings b
+              JOIN tours t ON b.tour_id = t.id
+             WHERE t.guide_id = ? AND b.contact_info LIKE ?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ps.setString(2, "%" + keyword.trim() + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+        return bookings;
+    }
+
 public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
     List<Booking> bookings = new ArrayList<>();
 
