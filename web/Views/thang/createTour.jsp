@@ -93,7 +93,7 @@
   <label for="itinerary">Itinerary:</label>
   <textarea id="itinerary" name="itinerary" rows="4"></textarea>
 
-  <label for="price">Price:</label>
+  <label for="price">Price(USD):</label>
   <input type="number" id="price" name="price" step="0.01" min="0" required />
 
   <label for="maxPeople">Max People Per Booking:</label>

@@ -162,7 +162,7 @@
                        </c:choose>
                        <c:param name='page' value='1'/>
                      </c:url>">
-              Price
+              Price(USD)
             </a>
           </th>
           <!-- Cột Max People -->

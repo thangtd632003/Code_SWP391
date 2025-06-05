@@ -64,6 +64,7 @@
       <p><strong>ID:</strong> ${booking.id}</p>
        <p><strong>Traveler Name:</strong> ${travelerName}</p>
       <p><strong>Tour:</strong> ${tour.name}</p>
+      <p><strong>Price(USD):</strong>${tour.price}</p>
       <p><strong>Date:</strong> ${booking.departureDate}</p>
       <p><strong>People:</strong> ${booking.numPeople}</p>
       <p><strong>Status:</strong> ${booking.status}</p>

@@ -65,7 +65,7 @@
       <p><strong>Name:</strong> ${tour.name}</p>
       <p><strong>Description:</strong> ${tour.description}</p>
       <p><strong>Itinerary:</strong> ${tour.itinerary}</p>
-      <p><strong>Price:</strong> ${tour.price}</p>
+      <p><strong>Price(USD):</strong> ${tour.price}</p>
       <p><strong>Max People:</strong> ${tour.maxPeoplePerBooking}</p>
       <p><strong>Days:</strong> ${tour.days}</p>
       <p><strong>Language:</strong> ${tour.language}</p>

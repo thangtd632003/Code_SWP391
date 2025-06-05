@@ -525,4 +525,73 @@ public List<Tour> searchAndSortToursByGuideId(int guideId, String keyword, Strin
 
         return tours;
     }
+     
+    public List<Tour> getTop10ByBookings() throws SQLException {
+        String sql = 
+            "SELECT t.*, COUNT(b.id) AS booking_count " +
+            "FROM tours t " +
+            "JOIN bookings b ON t.id = b.tour_id " +
+            "GROUP BY t.id " +
+            "ORDER BY booking_count DESC " +
+            "LIMIT 10";
+        List<Tour> list = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Tour t = mapResultSetToTour(rs);
+                // (booking_count có thể dùng nếu cần hiển thị số booking)
+                list.add(t);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Lấy danh sách Tour mà user (traveler) đã booking.
+     */
+    public List<Tour> getToursBookedByUser(int travelerId) throws SQLException {
+        String sql = 
+             "SELECT t.* " +
+            "FROM tours t " +
+            "JOIN bookings b ON t.id = b.tour_id " +
+            "WHERE b.traveler_id = ? " +
+            "GROUP BY t.id " +
+            "ORDER BY MAX(b.created_at) DESC";
+        List<Tour> list = new ArrayList<>();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, travelerId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToTour(rs));
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Search Tour theo tên (keyword). 
+     * Tìm tất cả tour có tên chứa keyword (không phân biệt hoa thường).
+     */
+   
+
+    // Helper: map một row trong ResultSet sang entity.Tour
+    private Tour mapResultSetToTour(ResultSet rs) throws SQLException {
+        Tour t = new Tour();
+        t.setId(rs.getInt("id"));
+        t.setGuideId(rs.getInt("guide_id"));
+        t.setName(rs.getString("name"));
+        t.setDescription(rs.getString("description"));
+        t.setItinerary(rs.getString("itinerary"));
+        t.setPrice(rs.getBigDecimal("price"));
+        t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+        t.setDays(rs.getInt("days"));
+        t.setLanguage(rs.getString("language"));
+        t.setStatus(entity.Status.valueOf(rs.getString("status").toUpperCase()));
+        t.setCreatedAt(rs.getTimestamp("created_at"));
+        t.setUpdatedAt(rs.getTimestamp("updated_at"));
+        // Giả sử bảng tours có cột `image_url` để hiển thị ảnh; nếu không có thì có thể set 1 đường dẫn mặc định
+      
+        return t;
+    }
 }

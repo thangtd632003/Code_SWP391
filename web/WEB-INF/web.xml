@@ -72,6 +72,10 @@
         <servlet-name>userDetail_thang</servlet-name>
         <servlet-class>controller.userDetail_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>listTourUser_thang</servlet-name>
+        <servlet-class>controller.listTourUser_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -159,5 +163,9 @@
     <servlet-mapping>
         <servlet-name>userDetail_thang</servlet-name>
         <url-pattern>/userDetail_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>listTourUser_thang</servlet-name>
+        <url-pattern>/listTourUser_thang</url-pattern>
     </servlet-mapping>
 </web-app>

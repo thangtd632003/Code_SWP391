@@ -154,7 +154,7 @@
                          </c:otherwise>
                        </c:choose>
                      </c:url>">
-              Price
+              Price(USD)
             </a>
           </th>
 

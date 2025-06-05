@@ -128,7 +128,7 @@
       </div>
 
       <div class="form-group">
-        <label for="price">Price:</label>
+        <label for="price">Price(USD):</label>
         <input type="number" id="price" name="price" step="0.01" min="0" value="${tour.price}" required />
       </div>
 

@@ -66,6 +66,7 @@
 
       <p><strong>Tour:</strong> ${tour.name}</p>
       <p><strong>Date:</strong> ${booking.departureDate}</p>
+      <p><strong>Price(USD):</strong>${tour.price}</p>
       <p><strong>People:</strong> ${booking.numPeople}</p>
       <p><strong>Status:</strong> ${booking.status}</p>
       <p><strong>Created At:</strong> ${booking.createdAt}</p>
