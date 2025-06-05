@@ -64,6 +64,14 @@
         <servlet-name>UpdateBookingTraveler_thang</servlet-name>
         <servlet-class>controller.UpdateBookingTraveler_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>userList_thang</servlet-name>
+        <servlet-class>controller.userList_thang</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>userDetail_thang</servlet-name>
+        <servlet-class>controller.userDetail_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -143,5 +151,13 @@
     <servlet-mapping>
         <servlet-name>UpdateBookingTraveler_thang</servlet-name>
         <url-pattern>/UpdateBookingTraveler_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>userList_thang</servlet-name>
+        <url-pattern>/userList_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>userDetail_thang</servlet-name>
+        <url-pattern>/userDetail_thang</url-pattern>
     </servlet-mapping>
 </web-app>

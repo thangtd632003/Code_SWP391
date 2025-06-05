@@ -137,6 +137,115 @@ public class userDao_thang{
     }
     return null;
 }
+ public List<User> searchUsers(String keyword) throws SQLException {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT * FROM users " +
+                     "WHERE LOWER(full_name) LIKE ? OR LOWER(email) LIKE ? " +
+                     "ORDER BY updated_at DESC";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String pattern = "%" + keyword.toLowerCase() + "%";
+            stmt.setString(1, pattern);
+            stmt.setString(2, pattern);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    result.add(mapResultSetToUser(rs));
+                }
+            }
+        }
+        return result;
+    }
 
+    /**
+     * 2. Lấy tất cả User, sắp xếp theo updated_at (asc hoặc desc).
+     *    Nếu asc = true => ASC, ngược lại => DESC.
+     */
+    public List<User> sortUsersByUpdatedAt(boolean asc) throws SQLException {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT * FROM users ORDER BY updated_at " + (asc ? "ASC" : "DESC");
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                result.add(mapResultSetToUser(rs));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 3. Kết hợp search + sort:
+     *    Tìm (full_name hoặc email) LIKE %keyword% và sắp xếp theo updated_at.
+     */
+    public List<User> searchAndSortUsers(String keyword, boolean asc) throws SQLException {
+        List<User> result = new ArrayList<>();
+        String sql = "SELECT * FROM users " +
+                     "WHERE LOWER(full_name) LIKE ? OR LOWER(email) LIKE ? " +
+                     "ORDER BY updated_at " + (asc ? "ASC" : "DESC");
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            String pattern = "%" + keyword.toLowerCase() + "%";
+            stmt.setString(1, pattern);
+            stmt.setString(2, pattern);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    result.add(mapResultSetToUser(rs));
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 4. Đổi mật khẩu (password_hash) theo id.
+     */
+    public boolean changePasswordById(int userId, String newPasswordHash) throws SQLException {
+        String sql = "UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newPasswordHash);
+            stmt.setInt(2, userId);
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        }
+    }
+
+    /**
+     * 5. Đổi trạng thái (status) theo id.
+     */
+    public boolean changeStatusById(int userId, Status newStatus) throws SQLException {
+        String sql = "UPDATE users SET status = ?, updated_at = NOW() WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newStatus.name());
+            stmt.setInt(2, userId);
+            int affected = stmt.executeUpdate();
+            return affected > 0;
+        }
+    }
+
+    /**
+     * Hàm hỗ trợ mapping ResultSet => User entity.
+     */
+    private User mapResultSetToUser(ResultSet rs) throws SQLException {
+        User user = new User();
+        user.setId(rs.getInt("id"));
+        user.setEmail(rs.getString("email"));
+        user.setPasswordHash(rs.getString("password_hash"));
+        user.setFullName(rs.getString("full_name"));
+        user.setPhone(rs.getString("phone"));
+
+        String genderStr = rs.getString("gender");
+        if (genderStr != null) {
+            user.setGender(Gender.valueOf(genderStr.toUpperCase()));
+        }
+
+        java.sql.Date bd = rs.getDate("birth_date");
+
+        if (bd != null) {
+            user.setBirthDate(bd);
+        }
+
+        user.setRole(Role.valueOf(rs.getString("role").toUpperCase()));
+        user.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+        user.setCreatedAt(rs.getTimestamp("created_at"));
+        user.setUpdatedAt(rs.getTimestamp("updated_at"));
+        return user;
+    }
 }
 
