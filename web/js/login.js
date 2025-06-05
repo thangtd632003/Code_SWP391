@@ -282,6 +282,24 @@ async function handleLogin(e) {
     }
 }
 
+// Thêm vào phần khởi tạo
+function setupSocialLogin() {
+    // Google login
+    document.querySelector('.btn-social.google').addEventListener('click', () => {
+        window.location.href = 'oauth/google';
+    });
+
+    // Facebook login  
+    document.querySelector('.btn-social.facebook').addEventListener('click', () => {
+        window.location.href = 'oauth/facebook';
+    });
+
+    // GitHub login
+    document.querySelector('.btn-social.github').addEventListener('click', () => {
+        window.location.href = 'oauth/github';
+    });
+}
+
 // Trong phần khởi tạo
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -324,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSlideshow();
     showWelcomeNotice();
     setupFormValidation();
+    setupSocialLogin();
     // ... other initialization code ...
 
     // Set up form submission

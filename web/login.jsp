@@ -69,13 +69,13 @@
                     <div class="social-login">
                         <p class="social-login-text" id="social-text">Hoặc tiếp tục với</p>
                         <div class="social-buttons">
-                            <button type="button" class="btn btn-social">
+                            <button type="button" class="btn btn-social google">
                                 <i class="fab fa-google"></i>
                             </button>
-                            <button type="button" class="btn btn-social">
+                            <button type="button" class="btn btn-social facebook">
                                 <i class="fab fa-facebook"></i>
                             </button>
-                            <button type="button" class="btn btn-social">
+                            <button type="button" class="btn btn-social github">
                                 <i class="fab fa-github"></i>
                             </button>
                         </div>

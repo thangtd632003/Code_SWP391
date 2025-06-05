@@ -13,11 +13,9 @@ public class UserDAO_Long {
 
     public User login(String email, String password) {
         String query = "SELECT * FROM users WHERE email = ? AND password_hash = ? AND status = 'active'";
-        
-      
 
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+                PreparedStatement ps = conn.prepareStatement(query)) {
 
             ps.setString(1, email);
             ps.setString(2, password); // Trong thực tế nên hash password
@@ -56,7 +54,7 @@ public class UserDAO_Long {
     public void updateLastLogin(int userId) {
         String query = "UPDATE users SET updated_at = CURRENT_TIMESTAMP WHERE id = ?";
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+                PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -69,10 +67,10 @@ public class UserDAO_Long {
     }
 
     public static int countGuides() {
-        String sql = "SELECT COUNT(*) FROM users WHERE role = 'GUIDE'";  // Sửa theo enum Role
+        String sql = "SELECT COUNT(*) FROM users WHERE role = 'GUIDE'"; // Sửa theo enum Role
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -83,10 +81,10 @@ public class UserDAO_Long {
     }
 
     public static int countTravelers() {
-        String sql = "SELECT COUNT(*) FROM users WHERE role = 'TRAVELER'";  // Sửa theo enum Role
+        String sql = "SELECT COUNT(*) FROM users WHERE role = 'TRAVELER'"; // Sửa theo enum Role
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -101,7 +99,7 @@ public class UserDAO_Long {
         if (newPassword != null && !newPassword.isEmpty()) {
             String verifySQL = "SELECT id FROM users WHERE id = ? AND password_hash = ?";
             try (Connection conn = getConnection();
-                 PreparedStatement ps = conn.prepareStatement(verifySQL)) {
+                    PreparedStatement ps = conn.prepareStatement(verifySQL)) {
                 ps.setInt(1, user.getId());
                 ps.setString(2, currentPassword);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -121,7 +119,7 @@ public class UserDAO_Long {
                 " WHERE id=?";
 
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             int paramIndex = 1;
             ps.setString(paramIndex++, user.getFullName());
             ps.setString(paramIndex++, user.getEmail());
@@ -142,41 +140,41 @@ public class UserDAO_Long {
 
     public User getUserById(int userId) {
         String query = "SELECT * FROM users WHERE id = ?";
-        
+
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
+                PreparedStatement ps = conn.prepareStatement(query)) {
+
             ps.setInt(1, userId);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     User user = new User();
                     user.setId(rs.getInt("id"));
                     user.setEmail(rs.getString("email"));
                     user.setPasswordHash(rs.getString("password_hash"));
-                    user.setFullName(rs.getString("full_name")); 
+                    user.setFullName(rs.getString("full_name"));
                     user.setPhone(rs.getString("phone"));
-                    
+
                     String genderStr = rs.getString("gender");
                     if (genderStr != null && !genderStr.isEmpty()) {
                         user.setGender(Gender.valueOf(genderStr.toUpperCase()));
                     }
-                    
+
                     user.setBirthDate(rs.getDate("birth_date"));
-                    
+
                     String roleStr = rs.getString("role");
                     if (roleStr != null && !roleStr.isEmpty()) {
                         user.setRole(Role.valueOf(roleStr.toUpperCase()));
                     }
-                    
-                    String statusStr = rs.getString("status"); 
+
+                    String statusStr = rs.getString("status");
                     if (statusStr != null && !statusStr.isEmpty()) {
                         user.setStatus(Status.valueOf(statusStr.toUpperCase()));
                     }
-                    
+
                     user.setCreatedAt(rs.getTimestamp("created_at"));
                     user.setUpdatedAt(rs.getTimestamp("updated_at"));
-                    
+
                     return user;
                 }
             }
@@ -187,13 +185,95 @@ public class UserDAO_Long {
         return null;
     }
 
+    public User getUserByEmail(String email) {
+        String query = "SELECT * FROM users WHERE email = ?";
+
+        try (Connection conn = new DBContext().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, email);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPasswordHash(rs.getString("password_hash"));
+                    user.setFullName(rs.getString("full_name"));
+                    user.setPhone(rs.getString("phone"));
+
+                    String genderStr = rs.getString("gender");
+                    if (genderStr != null && !genderStr.isEmpty()) {
+                        user.setGender(Gender.valueOf(genderStr.toUpperCase()));
+                    }
+
+                    user.setBirthDate(rs.getDate("birth_date"));
+
+                    String roleStr = rs.getString("role");
+                    if (roleStr != null && !roleStr.isEmpty()) {
+                        user.setRole(Role.valueOf(roleStr.toUpperCase()));
+                    }
+
+                    String statusStr = rs.getString("status");
+                    if (statusStr != null && !statusStr.isEmpty()) {
+                        user.setStatus(Status.valueOf(statusStr.toUpperCase()));
+                    }
+
+                    user.setCreatedAt(rs.getTimestamp("created_at"));
+                    user.setUpdatedAt(rs.getTimestamp("updated_at"));
+
+                    return user;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting user by email: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean createUser(User user) {
+        String query = "INSERT INTO users (email, password_hash, full_name, role, status, created_at, updated_at) " +
+                "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+
+        try (Connection conn = new DBContext().getConnection();
+                PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getPasswordHash());
+            ps.setString(3, user.getFullName());
+            ps.setString(4, user.getRole().name());
+            ps.setString(5, Status.ACTIVE.name());
+
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows == 0) {
+                return false;
+            }
+
+            // Get the generated ID
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getInt(1));
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            System.out.println("Error creating user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<User> getAllGuides() {
         List<User> guides = new ArrayList<>();
         String query = "SELECT * FROM users WHERE role = 'GUIDE'";
 
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 User guide = new User();
@@ -234,8 +314,8 @@ public class UserDAO_Long {
                 "WHERE u.role = 'GUIDE'";
 
         try (Connection conn = new DBContext().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(query);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Map<String, Object> guide = new HashMap<>();
@@ -271,6 +351,5 @@ public class UserDAO_Long {
             System.out.println("Đăng nhập thất bại hoặc không tìm thấy user.");
         }
     }
-
 
 }
