@@ -135,7 +135,7 @@ public class listTourUser_thang extends HttpServlet {
 
         if ("detail".equalsIgnoreCase(action)) {
             // Chuyển hướng sang trang chi tiết tour
-            response.sendRedirect(request.getContextPath() + "/tourDetail_thang?id=" + tourId);
+            response.sendRedirect(request.getContextPath() + "/detailTourUser_thang?tourId=" + tourId);
         }
         else if ("book".equalsIgnoreCase(action)) {
             // Chuyển hướng sang trang tạo Booking (giả sử gọi servlet CreateBooking_thang)
