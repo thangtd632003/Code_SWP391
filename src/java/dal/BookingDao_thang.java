@@ -530,4 +530,140 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
     return bookings;
 }
 
+ /**
+     * 1. Kiểm tra xem user này đã có 1 booking trùng hoàn toàn cùng ngày departure_date hay chưa.
+     *    Trả về true nếu có xung đột (tức đã tồn tại booking khác của user với cùng ngày).
+     */
+    public boolean isSameDateConflictForUser(int travelerId, java.util.Date departureDate) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM bookings " +
+                     "WHERE traveler_id = ? AND departure_date = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, travelerId);
+            // Chuyển java.util.Date sang java.sql.Date
+            ps.setDate(2, new java.sql.Date(departureDate.getTime()));
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 2. Kiểm tra xung đột khoảng thời gian giữa booking mới và booking cũ của cùng user.
+     *    Khoảng thời gian của booking được tính là:
+     *      [departure_date, departure_date + days_of_tour]
+     *    Hai khoảng thời gian (newStart, newEnd) và (existStart, existEnd) xung đột nếu:
+     *      newStart < existEnd AND existStart < newEnd
+     *
+     *    newEnd = DATE_ADD(newStart, INTERVAL newDays DAY)
+     *    existEnd = DATE_ADD(b.departure_date, INTERVAL t.days DAY)
+     *
+     *    Trả về true nếu có booking cũ nào của travelerId overlap khoảng newStart..newEnd.
+     *
+     * @param travelerId   ID của traveler
+     * @param newDeparture Ngày mới (java.util.Date) muốn book
+     * @param newDays      Số ngày của tour mới
+     * @return true nếu có xung đột, false nếu không
+     */
+    public boolean isPeriodConflictForUser(int travelerId, java.util.Date newDeparture, int newDays) throws SQLException {
+        String sql = ""
+            + "SELECT COUNT(*) "
+            + "FROM bookings b "
+            + "  JOIN tours t ON b.tour_id = t.id "
+            + "WHERE b.traveler_id = ? "
+            + "  AND NOT ( "
+            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "      OR  b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
+            + "      )";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            // 1: travelerId
+            ps.setInt(1, travelerId);
+            // 2: newDeparture (áp dụng cho existEnd <= newStart)
+            ps.setDate(2, new java.sql.Date(newDeparture.getTime()));
+            // 3: newDeparture (áp dụng cho existStart >= newEnd)
+            ps.setDate(3, new java.sql.Date(newDeparture.getTime()));
+            // 4: newDays
+            ps.setInt(4, newDays);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 3. Kiểm tra xung đột khoảng thời gian booking mới với các booking đã "APPROVED" của guide,
+     *    dù booking đó là của bất kỳ user nào.
+     *
+     *    Giả sử "APPROVED" mapping sang giá trị BookingStatus.APPROVED.name().
+     *    Logic điều kiện xung đột tương tự trên, nhưng chỉ lấy những booking
+     *    mà tour thuộc về guideId và status = 'APPROVED'.
+     *
+     * @param guideId      ID của guide
+     * @param newDeparture Ngày mới (java.util.Date) muốn book
+     * @param newDays      Số ngày của tour mới
+     * @return true nếu có xung đột với booking APPROVED của guide, false nếu không
+     */
+    public boolean isPeriodConflictForGuide(int guideId, java.util.Date newDeparture, int newDays) throws SQLException {
+        String sql = ""
+            + "SELECT COUNT(*) "
+            + "FROM bookings b "
+            + "  JOIN tours t ON b.tour_id = t.id "
+            + "WHERE t.guide_id = ? "
+            + "  AND b.status = ? "
+            + "  AND NOT ( "
+            + "        DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "     OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
+            + "      )";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            // 1: guideId
+            ps.setInt(1, guideId);
+            // 2: status "APPROVED"
+            ps.setString(2, BookingStatus.APPROVED.name());
+            // 3: newDeparture (áp dụng cho existEnd <= newStart)
+            ps.setDate(3, new java.sql.Date(newDeparture.getTime()));
+            // 4: newDeparture (áp dụng cho existStart >= newEnd)
+            ps.setDate(4, new java.sql.Date(newDeparture.getTime()));
+            // 5: newDays
+            ps.setInt(5, newDays);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+ public boolean addBooking(Booking booking) throws SQLException {
+        String sql = "INSERT INTO bookings "
+                   + "(traveler_id, tour_id, num_people, contact_info, status, departure_date, created_at, updated_at) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+        try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, booking.getTravelerId());
+            ps.setInt(2, booking.getTourId());
+            ps.setInt(3, booking.getNumPeople());
+            ps.setString(4, booking.getContactInfo());
+            ps.setString(5, booking.getStatus().name());
+            // Chuyển java.util.Date sang java.sql.Date
+            ps.setDate(6, new java.sql.Date(booking.getDepartureDate().getTime()));
+
+            int affected = ps.executeUpdate();
+            if (affected > 0) {
+                // Nếu muốn lấy ID của booking vừa tạo, có thể:
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        booking.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+    }
 }

@@ -76,6 +76,10 @@
         <servlet-name>listTourUser_thang</servlet-name>
         <servlet-class>controller.listTourUser_thang</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>createBooking_thang</servlet-name>
+        <servlet-class>controller.createBooking_thang</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_thang</servlet-name>
         <url-pattern>/tourList_thang</url-pattern>
@@ -167,5 +171,9 @@
     <servlet-mapping>
         <servlet-name>listTourUser_thang</servlet-name>
         <url-pattern>/listTourUser_thang</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>createBooking_thang</servlet-name>
+        <url-pattern>/createBooking_thang</url-pattern>
     </servlet-mapping>
 </web-app>
