@@ -20,19 +20,22 @@ import jakarta.servlet.http.HttpSession;
    import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import dal.tourDao_thang;
+import entity.Tour;
 /**
  *
  * @author thang
  */
 public class ListBookingGuide_thang extends HttpServlet {
        private BookingDao_thang bookingDao;
+       private tourDao_thang tourDao;
  @Override
     public void init() throws ServletException {
         super.init();
         try {
             Connection conn = new DBContext().getConnection();
             bookingDao = new BookingDao_thang(conn);
-           
+           tourDao = new tourDao_thang(conn);
         } catch (Exception e) {
             throw new ServletException("Cannot initialize DAOs in DetailBookingGuideServlet", e);
         }}
@@ -117,6 +120,7 @@ public class ListBookingGuide_thang extends HttpServlet {
             request.setAttribute("bookings",       bookings);
             request.setAttribute("BookingStatus",   BookingStatus.class);
                         request.setAttribute("sortField", sortField);
+request.setAttribute("message", request.getAttribute("message")); // Giữ message nếu có
 
             request.setAttribute("keyword",         hasKeyword ? keyword.trim() : "");
             request.setAttribute("sortDir",         hasSort ? (sortAsc ? "asc" : "desc") : "");
@@ -161,19 +165,77 @@ public class ListBookingGuide_thang extends HttpServlet {
         }
 
         switch (action) {
-            case "changeStatus":
-                // Thay đổi trạng thái booking
+          case "changeStatus":
                 try {
                     int bookingId = Integer.parseInt(request.getParameter("id"));
                     String statusStr = request.getParameter("newStatus");
                     BookingStatus newStatus = BookingStatus.valueOf(statusStr);
+
+                    // 1) If we're approving, we need to run our conflict checks
+                    if (newStatus == BookingStatus.APPROVED) {
+                        // a) Is departure date already in the past?
+                        boolean past = bookingDao.isDepartureInPast(bookingId);
+
+                        if (past) {
+                            request.setAttribute("message",
+                                "❌ Cannot approve a booking whose departure date has already passed.");
+                            // call doGet to re‐display with the message
+                            doGet(request, response);
+                            return;
+                        }
+
+                        // b) Load the booking’s departure_date and tour days:
+                        Booking booking = bookingDao.getBookingById(bookingId);
+                        java.util.Date departureDate = booking.getDepartureDate();
+                        // You need a method in DAO to fetch tour.days for this booking:
+                        Tour t = tourDao.getTourById(bookingId);
+                     Integer   tourDays = t.getDays();
+
+                        // c) Check conflict with other APPROVED bookings of the same guide
+                        boolean conflictApproved = bookingDao.hasApprovedConflict(
+                                bookingId, departureDate, tourDays);
+
+                        if (conflictApproved) {
+                            request.setAttribute("message",
+                                " This booking conflicts with another already‐approved booking on your schedule.");
+                            doGet(request, response);
+                            return;
+                        }
+
+                        // d) Check conflict with other PENDING bookings (so you can warn the guide)
+                        List<Booking> overlappingPending =
+                            bookingDao.getOverlappingPendingForGuide(bookingId, departureDate, tourDays);
+
+                        if (!overlappingPending.isEmpty()) {
+                            request.setAttribute("message",
+                                "️ This booking overlaps with other pending bookings. Please review them before approving.");
+                            doGet(request, response);
+                            return;
+                        }
+
+                        // e) No conflicts → safe to mark as APPROVED
+                        bookingDao.updateBookingStatus(bookingId, newStatus);
+                        request.setAttribute("message",
+                            " Booking has been approved successfully.");
+                        doGet(request, response);
+                        return;
+                    }
+
+                    // 2) If newStatus is REJECTED or CANCELLED, just update directly
                     bookingDao.updateBookingStatus(bookingId, newStatus);
+                    request.setAttribute("message",
+                        "✅ Booking status updated successfully.");
+                    doGet(request, response);
+                    return;
+
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    request.setAttribute("message", "❌ An error occurred: " + ex.getMessage());
+                    doGet(request, response);
+                    return;
                 }
-                // Sau khi đổi xong, tải lại trang danh sách
-                response.sendRedirect(request.getContextPath() + "/ListBookingGuide_thang");
-                break;
+             
+
 
             case "detail":
                 // Chuyển đến servlet detail với bookingId

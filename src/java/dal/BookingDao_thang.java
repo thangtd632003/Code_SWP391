@@ -666,4 +666,104 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
             return false;
         }
     }
+   public boolean isDepartureInPast(int bookingId) throws SQLException {
+        String sql = "SELECT departure_date FROM bookings WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    java.sql.Date dep = rs.getDate("departure_date");
+                    // So sánh với ngày hôm nay (loại bỏ phần giờ)
+                    java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+                    return dep.before(today);
+                }
+            }
+        }
+        return true; // Nếu không tìm thấy booking, coi như "không thể approve"
+    }
+
+    /**
+     * 2. Kiểm tra xung đột với các booking đã được "APPROVED" khác của cùng guide.
+     *    Trả về true nếu có ít nhất một booking APPROVED khác overlap khoảng thời gian.
+     *
+     *    bookingId: ID của booking hiện tại (đang muốn approve) → để loại trừ chính nó
+     *    newDeparture, newDays: khoảng thời gian của booking này
+     */
+    public boolean hasApprovedConflict(int bookingId, java.util.Date newDeparture, int newDays) throws SQLException {
+        String sql = ""
+            + "SELECT COUNT(*) "
+            + "FROM bookings b "
+            + "  JOIN tours t ON b.tour_id = t.id "
+            + "WHERE b.id <> ? "
+            + "  AND t.guide_id = ( "
+            + "       SELECT t2.guide_id "
+            + "       FROM bookings b2 "
+            + "         JOIN tours t2 ON b2.tour_id = t2.id "
+            + "       WHERE b2.id = ? "
+            + "    ) "
+            + "  AND b.status = ? "
+            + "  AND NOT ( "
+            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "      OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
+            + "      )";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ps.setInt(2, bookingId);
+            ps.setString(3, BookingStatus.APPROVED.name());
+            ps.setDate(4, new java.sql.Date(newDeparture.getTime()));
+            ps.setDate(5, new java.sql.Date(newDeparture.getTime()));
+            ps.setInt(6, newDays);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 3. Lấy danh sách các booking có trạng thái CHƯA APPROVED (PENDING) của cùng guide,
+     *    mà khoảng thời gian (departure_date + days) overlap với booking mới.
+     *    Dùng để thông báo guide: "Những booking chưa duyệt khác cũng trùng thời gian".
+     */
+    public List<Booking> getOverlappingPendingForGuide(int bookingId, java.util.Date  newDeparture, int newDays) throws SQLException {
+        List<Booking> result = new ArrayList<>();
+
+        String sql = ""
+            + "SELECT b.* "
+            + "FROM bookings b "
+            + "  JOIN tours t ON b.tour_id = t.id "
+            + "WHERE b.id <> ? "
+            + "  AND t.guide_id = ( "
+            + "       SELECT t2.guide_id "
+            + "       FROM bookings b2 "
+            + "         JOIN tours t2 ON b2.tour_id = t2.id "
+            + "       WHERE b2.id = ? "
+            + "    ) "
+            + "  AND b.status = ? "
+            + "  AND NOT ( "
+            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "      OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
+            + "      )";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ps.setInt(2, bookingId);
+            ps.setString(3, BookingStatus.PENDING.name());
+            ps.setDate(4, new java.sql.Date(newDeparture.getTime()));
+            ps.setDate(5, new java.sql.Date(newDeparture.getTime()));
+            ps.setInt(6, newDays);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    result.add(mapResultSetToBooking(rs));
+                }
+            }
+        }
+        return result;
+    }
+
 }

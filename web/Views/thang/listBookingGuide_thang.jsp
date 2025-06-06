@@ -80,6 +80,9 @@
                 <input type="hidden" name="page" value="1" />
             </form>
         </div>
+<c:if test="${not empty message}">
+    <div class="alert alert-info">${message}</div>
+</c:if>
 
         <!-- Bảng hiển thị Booking (đã được search & sort ở servlet) -->
         <table id="bookingTable">
