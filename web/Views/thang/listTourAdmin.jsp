@@ -1,24 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="entity.Tour" %>
-<%@ page import="java.util.List" %>
 
-<%
-    // Lấy lại từ servlet:
-    //   "tours"     : List<Tour> (đã search và sort ở servlet)
-    //   "keyword"   : String
-    //   "sortField" : String
-    //   "sortDir"   : String ("asc" hoặc "desc")
-    List<Tour> tours = (List<Tour>) request.getAttribute("tours");
-    String currentKeyword   = (String) request.getAttribute("keyword");
-    String currentSortField = (String) request.getAttribute("sortField");
-    String currentSortDir   = (String) request.getAttribute("sortDir");
-
-    if (currentKeyword == null)   currentKeyword = "";
-    if (currentSortField == null) currentSortField = "";
-    if (currentSortDir == null)   currentSortDir = "";
-%>
 
 <!DOCTYPE html>
 <html lang="en">

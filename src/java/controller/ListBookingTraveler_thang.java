@@ -187,10 +187,9 @@ public class ListBookingTraveler_thang extends HttpServlet {
                   case "update":
                 // Chuyển đến servlet detail với bookingId
               int bId = Integer.parseInt(request.getParameter("id"));
-request.setAttribute("bookingId", bId);
-
-request.getRequestDispatcher("/UpdateBookingTraveler_thang")
-       .forward(request, response);
+String url = request.getContextPath()
+             + "/UpdateBookingTraveler_thang?bookingId=" + bId;
+response.sendRedirect(url);
 break;
             default:
                 response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_thang");

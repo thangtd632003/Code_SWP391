@@ -9,8 +9,7 @@
 <%@ page import="entity.Booking, entity.Tour" %>
 
 <%
-    Booking booking = (Booking) request.getAttribute("booking");
-    Tour tour       = (Tour) request.getAttribute("tour");
+
     String errorMsg = (String) request.getAttribute("error");
 %>
 <!DOCTYPE html>
@@ -40,10 +39,9 @@
 
   <div class="container">
     <h2>Update Booking #<c:out value="${booking.id}"/></h2>
-
-    <c:if test="${not empty errorMsg}">
-      <div class="error">${errorMsg}</div>
-    </c:if>
+<c:if test="${not empty errorMSG}">
+  <div class="error">${errorMSG}</div>
+</c:if>
 
     <form method="post" action="${pageContext.request.contextPath}/UpdateBookingTraveler_thang">
       <!-- Giấu bookingId -->

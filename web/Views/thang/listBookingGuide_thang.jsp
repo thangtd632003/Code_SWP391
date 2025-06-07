@@ -1,19 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="entity.Booking" %>
-<%@ page import="entity.BookingStatus" %>
-<%@ page import="java.util.List" %>
 
-<%
-    // Các attribute do servlet thiết lập:
-    //   "bookings"  : List<Booking> (đã được search và sort ở servlet)
-    //   "keyword"   : String (tìm theo contact)
-    //   "sortField" : String (tên trường sort)
-    //   "sortDir"   : String ("asc" hoặc "desc")
-    List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-    
-%>
 
 <!DOCTYPE html>
 <html lang="en">

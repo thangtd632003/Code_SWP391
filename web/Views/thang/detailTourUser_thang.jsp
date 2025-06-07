@@ -6,15 +6,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.Tour, entity.User, entity.GuideProfile" %>
 
-<%
-    Tour tour              = (Tour) request.getAttribute("tour");
-    User guideUser         = (User) request.getAttribute("guideUser");
-    GuideProfile guideProfile = (GuideProfile) request.getAttribute("guideProfile");
-   System.out.println(">>> guideProfile = " + guideProfile);
 
-%>
 
 <!DOCTYPE html>
 <html>

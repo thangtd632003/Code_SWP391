@@ -11,11 +11,7 @@
 <%@ page import="java.util.Date" %>
 
 <%
-    // Lấy thông tin tour từ servlet
-    Tour tour = (Tour) request.getAttribute("tour");
-    // Lấy thông báo lỗi hoặc thành công (nếu có) từ servlet
-    String errorMessage   = (String) request.getAttribute("errorMessage");
-    String successMessage = (String) request.getAttribute("successMessage");
+  
     
     // Định dạng ngày hiện tại để giới hạn ngày đặt
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -176,7 +172,7 @@
              id="departureDate"
              name="departureDate"
              required
-             min="${todayStr}" />
+             min="<%= todayStr %>" />
 
       <!-- Số khách -->
       <label for="numPeople">Number people of tour:</label>

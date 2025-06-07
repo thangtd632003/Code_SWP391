@@ -5,21 +5,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.Tour" %>
-<%@ page import="java.util.List" %>
 
-<%
-    // Lấy ba danh sách từ servlet:
-    List<Tour> allTours         = (List<Tour>) request.getAttribute("allTours");
-    List<Tour> topTours         = (List<Tour>) request.getAttribute("topTours");
-    List<Tour> userBookedTours  = (List<Tour>) request.getAttribute("userBookedTours");
-    String   keyword            = (String) request.getAttribute("keyword");
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Danh sách Tour</title>
+  <title>List Tour</title>
   <style>
     /* Toàn trang */
     body {

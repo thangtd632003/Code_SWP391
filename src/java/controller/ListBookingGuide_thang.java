@@ -105,7 +105,7 @@ public class ListBookingGuide_thang extends HttpServlet {
 
             } else if (hasKeyword && !hasSort) {
                 // Chỉ search (theo keyword)
-                bookings = bookingDao.searchBookingsByTravelerId(guideId, keyword);
+                bookings = bookingDao.searchBookingsByGuideId(guideId, keyword);
 
             } else if (!hasKeyword && hasSort) {
                 // Chỉ sort (theo updated_at)

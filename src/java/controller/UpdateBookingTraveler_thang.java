@@ -57,14 +57,14 @@ public class UpdateBookingTraveler_thang extends HttpServlet {
             return;
         }
         // 3. Lấy bookingId từ request parameter (form trước có truyền ?bookingId=…)
-        Integer bookingIdParam =  (Integer) request.getAttribute("bookingId");
+        String bookingIdParam = (String ) request.getParameter("bookingId");
         if (bookingIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
             return;
         }
         int bookingId;
         try {
-            bookingId = bookingIdParam;
+            bookingId = Integer.parseInt(bookingIdParam);
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
             return;
@@ -79,11 +79,16 @@ public class UpdateBookingTraveler_thang extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
                 return;
             }
-            // Chỉ owner (traveler) của booking mới được sửa
-            if (booking.getTravelerId() != user.getId()) {
-                response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
+            if(booking.getTravelerId()!=user.getId()){
+                 response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
                 return;
             }
+            // Chỉ owner (traveler) của booking mới được sửa
+            if (!Integer.valueOf(booking.getTravelerId()).equals(user.getId())){
+      
+                response.sendRedirect(request.getContextPath() + "/ProfileTraveler_thang");
+                return;
+              }
             tourDao_thang tdao = new tourDao_thang(conn);
             tour = tdao.getTourById(booking.getTourId());
         } catch (SQLException | ClassNotFoundException ex) {
@@ -94,6 +99,8 @@ public class UpdateBookingTraveler_thang extends HttpServlet {
             Logger.getLogger(UpdateBookingTraveler_thang.class.getName()).log(Level.SEVERE, null, ex);
         }
         // 5. Đưa data vào request và forward sang JSP form
+        String error = (String) request.getAttribute("error");
+        request.setAttribute("errorMSG", error);
         request.setAttribute("booking", booking);
         request.setAttribute("tour", tour);
         request.getRequestDispatcher("/Views/thang/UpdateBooking.jsp")
@@ -186,8 +193,9 @@ public class UpdateBookingTraveler_thang extends HttpServlet {
         }
         // 8. Nếu thành công, chuyển lại doGet (reload form) hoặc redirect nơi khác
         // … sau khi update thành công
-request.setAttribute("bookingId", bookingId);
-doGet(request, response);
+String redirectUrl = request.getContextPath()
+    + "/UpdateBookingTraveler_thang?bookingId=" + bookingId;
+response.sendRedirect(redirectUrl);
 
     }
 
