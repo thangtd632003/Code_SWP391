@@ -90,7 +90,7 @@
                 <ul class="nav-list">
                   
                     <li class="nav-item">
-                        <a href="/Code_SWP391/profileTraveler_thang" class="nav-link">
+                        <a href="/Code_SWP391/profileTraveler_servlet" class="nav-link">
                             <i class="fas fa-user-circle"></i>
                             <span>Profile</span>
                         </a>
@@ -136,7 +136,7 @@
                                         <i class="fas fa-chevron-down"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a href="/Code_SWP391/ProfileTravler_thang" class="dropdown-item">
+                                        <a href="/Code_SWP391/ProfileTravler_servlet" class="dropdown-item">
                                             <i class="fas fa-user"></i> Profile
                                         </a>
                                         <a href="#settings" class="dropdown-item">

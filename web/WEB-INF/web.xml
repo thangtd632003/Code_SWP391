@@ -5,104 +5,104 @@
         <servlet-class>controller.NewServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ProfileTravler_thang</servlet-name>
-        <servlet-class>controller.ProfileTravler_thang</servlet-class>
+        <servlet-name>ProfileTravler_servlet</servlet-name>
+        <servlet-class>controller.ProfileTravler_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>tourList_thang</servlet-name>
-        <servlet-class>controller.tourList_thang</servlet-class>
+        <servlet-name>tourList_servlet</servlet-name>
+        <servlet-class>controller.tourList_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>index_thang</servlet-name>
-        <servlet-class>controller.index_thang</servlet-class>
+        <servlet-name>index_servlet</servlet-name>
+        <servlet-class>controller.index_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>createTour_thang</servlet-name>
-        <servlet-class>controller.createTour_thang</servlet-class>
+        <servlet-name>createTour_servlet</servlet-name>
+        <servlet-class>controller.createTour_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>editTour_thang</servlet-name>
-        <servlet-class>controller.editTour_thang</servlet-class>
+        <servlet-name>editTour_servlet</servlet-name>
+        <servlet-class>controller.editTour_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>listTourAdmin_thang</servlet-name>
-        <servlet-class>controller.listTourAdmin_thang</servlet-class>
+        <servlet-name>listTourAdmin_servlet</servlet-name>
+        <servlet-class>controller.listTourAdmin_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>tourDetail_thang</servlet-name>
-        <servlet-class>controller.tourDetailAdmin_thang</servlet-class>
+        <servlet-name>tourDetail_servlet</servlet-name>
+        <servlet-class>controller.tourDetailAdmin_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ForgotPassword_thang</servlet-name>
-        <servlet-class>controller.ForgotPassword_thang</servlet-class>
+        <servlet-name>ForgotPassword_servlet</servlet-name>
+        <servlet-class>controller.ForgotPassword_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ChangePassword_thang</servlet-name>
-        <servlet-class>controller.ChangePassword_thang</servlet-class>
+        <servlet-name>ChangePassword_servlet</servlet-name>
+        <servlet-class>controller.ChangePassword_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ListBookingGuide_thang</servlet-name>
-        <servlet-class>controller.ListBookingGuide_thang</servlet-class>
+        <servlet-name>ListBookingGuide_servlet</servlet-name>
+        <servlet-class>controller.ListBookingGuide_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DetailBookingGuide_thang</servlet-name>
-        <servlet-class>controller.DetailBookingGuide_thang</servlet-class>
+        <servlet-name>DetailBookingGuide_servlet</servlet-name>
+        <servlet-class>controller.DetailBookingGuide_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ListBookingTraveler_thang</servlet-name>
-        <servlet-class>controller.ListBookingTraveler_thang</servlet-class>
+        <servlet-name>ListBookingTraveler_servlet</servlet-name>
+        <servlet-class>controller.ListBookingTraveler_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>DetailBookingTraveler_thang</servlet-name>
-        <servlet-class>controller.DetailBookingTraveler_thang</servlet-class>
+        <servlet-name>DetailBookingTraveler_servlet</servlet-name>
+        <servlet-class>controller.DetailBookingTraveler_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>detailTourGuide_thang</servlet-name>
-        <servlet-class>controller.detailTourGuide_thang</servlet-class>
+        <servlet-name>detailTourGuide_servlet</servlet-name>
+        <servlet-class>controller.detailTourGuide_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UpdateBookingTraveler_thang</servlet-name>
-        <servlet-class>controller.UpdateBookingTraveler_thang</servlet-class>
+        <servlet-name>UpdateBookingTraveler_servlet</servlet-name>
+        <servlet-class>controller.UpdateBookingTraveler_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>userList_thang</servlet-name>
-        <servlet-class>controller.userList_thang</servlet-class>
+        <servlet-name>userList_servlet</servlet-name>
+        <servlet-class>controller.userList_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>userDetail_thang</servlet-name>
-        <servlet-class>controller.userDetail_thang</servlet-class>
+        <servlet-name>userDetail_servlet</servlet-name>
+        <servlet-class>controller.userDetail_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>listTourUser_thang</servlet-name>
-        <servlet-class>controller.listTourUser_thang</servlet-class>
+        <servlet-name>listTourUser_servlet</servlet-name>
+        <servlet-class>controller.listTourUser_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>createBooking_thang</servlet-name>
-        <servlet-class>controller.createBooking_thang</servlet-class>
+        <servlet-name>createBooking_servlet</servlet-name>
+        <servlet-class>controller.createBooking_servlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>detailTourUser_thang</servlet-name>
-        <servlet-class>controller.detailTourUser_thang</servlet-class>
+        <servlet-name>detailTourUser_servlet</servlet-name>
+        <servlet-class>controller.detailTourUser_servlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>tourList_thang</servlet-name>
-        <url-pattern>/tourList_thang</url-pattern>
+        <servlet-name>tourList_servlet</servlet-name>
+        <url-pattern>/tourList_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ProfileTravler_thang</servlet-name>
-        <url-pattern>/ProfileTravler_thang</url-pattern>
+        <servlet-name>ProfileTravler_servlet</servlet-name>
+        <url-pattern>/ProfileTravler_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>index_thang</servlet-name>
+        <servlet-name>index_servlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>createTour_thang</servlet-name>
-        <url-pattern>/createTour_thang</url-pattern>
+        <servlet-name>createTour_servlet</servlet-name>
+        <url-pattern>/createTour_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
@@ -121,67 +121,67 @@
         <url-pattern>/images/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>editTour_thang</servlet-name>
-        <url-pattern>/editTour_thang</url-pattern>
+        <servlet-name>editTour_servlet</servlet-name>
+        <url-pattern>/editTour_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>listTourAdmin_thang</servlet-name>
-        <url-pattern>/listTourAdmin_thang</url-pattern>
+        <servlet-name>listTourAdmin_servlet</servlet-name>
+        <url-pattern>/listTourAdmin_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>tourDetail_thang</servlet-name>
-        <url-pattern>/tourDetail_thang</url-pattern>
+        <servlet-name>tourDetail_servlet</servlet-name>
+        <url-pattern>/tourDetail_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ForgotPassword_thang</servlet-name>
-        <url-pattern>/ForgotPassword_thang</url-pattern>
+        <servlet-name>ForgotPassword_servlet</servlet-name>
+        <url-pattern>/ForgotPassword_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ChangePassword_thang</servlet-name>
-        <url-pattern>/ChangePassword_thang</url-pattern>
+        <servlet-name>ChangePassword_servlet</servlet-name>
+        <url-pattern>/ChangePassword_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ListBookingGuide_thang</servlet-name>
-        <url-pattern>/ListBookingGuide_thang</url-pattern>
+        <servlet-name>ListBookingGuide_servlet</servlet-name>
+        <url-pattern>/ListBookingGuide_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DetailBookingGuide_thang</servlet-name>
-        <url-pattern>/DetailBookingGuide_thang</url-pattern>
+        <servlet-name>DetailBookingGuide_servlet</servlet-name>
+        <url-pattern>/DetailBookingGuide_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ListBookingTraveler_thang</servlet-name>
-        <url-pattern>/ListBookingTraveler_thang</url-pattern>
+        <servlet-name>ListBookingTraveler_servlet</servlet-name>
+        <url-pattern>/ListBookingTraveler_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>DetailBookingTraveler_thang</servlet-name>
-        <url-pattern>/DetailBookingTraveler_thang</url-pattern>
+        <servlet-name>DetailBookingTraveler_servlet</servlet-name>
+        <url-pattern>/DetailBookingTraveler_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>detailTourGuide_thang</servlet-name>
-        <url-pattern>/detailTourGuide_thang</url-pattern>
+        <servlet-name>detailTourGuide_servlet</servlet-name>
+        <url-pattern>/detailTourGuide_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>UpdateBookingTraveler_thang</servlet-name>
-        <url-pattern>/UpdateBookingTraveler_thang</url-pattern>
+        <servlet-name>UpdateBookingTraveler_servlet</servlet-name>
+        <url-pattern>/UpdateBookingTraveler_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>userList_thang</servlet-name>
-        <url-pattern>/userList_thang</url-pattern>
+        <servlet-name>userList_servlet</servlet-name>
+        <url-pattern>/userList_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>userDetail_thang</servlet-name>
-        <url-pattern>/userDetail_thang</url-pattern>
+        <servlet-name>userDetail_servlet</servlet-name>
+        <url-pattern>/userDetail_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>listTourUser_thang</servlet-name>
-        <url-pattern>/listTourUser_thang</url-pattern>
+        <servlet-name>listTourUser_servlet</servlet-name>
+        <url-pattern>/listTourUser_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>createBooking_thang</servlet-name>
-        <url-pattern>/createBooking_thang</url-pattern>
+        <servlet-name>createBooking_servlet</servlet-name>
+        <url-pattern>/createBooking_servlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>detailTourUser_thang</servlet-name>
-        <url-pattern>/detailTourUser_thang</url-pattern>
+        <servlet-name>detailTourUser_servlet</servlet-name>
+        <url-pattern>/detailTourUser_servlet</url-pattern>
     </servlet-mapping>
 </web-app>
