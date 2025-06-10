@@ -61,6 +61,7 @@
       <div class="form-group">
         <label>Departure Date:</label>
         <input type="date" name="departureDate"
+               readonly class="readonly"
                value="<fmt:formatDate value='${booking.departureDate}' pattern='yyyy-MM-dd'/>"
                required />
       </div>
