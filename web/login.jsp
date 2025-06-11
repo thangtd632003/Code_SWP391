@@ -59,7 +59,7 @@
                             <input type="checkbox" name="remember" id="remember">
                             <span id="remember-text">Ghi nhớ đăng nhập</span>
                         </label>
-                        <a href="ForgotPassword_thang" class="forgot-password" id="forgot-text">Quên mật khẩu?</a>
+                        <a href="ForgotPassword_servlet" class="forgot-password" id="forgot-text">Quên mật khẩu?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="login-btn">
