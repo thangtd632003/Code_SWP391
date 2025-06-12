@@ -109,7 +109,6 @@ public class ChangePassword_servlet extends HttpServlet {
             return;
         }
 
-        // Hash mật khẩu mới (ví dụ dùng BCrypt)
       
 
         // Cập nhật lại password trong DB

@@ -120,7 +120,6 @@ public class ForgotPassword_servlet extends HttpServlet {
             // Nếu email tồn tại -> tạo mã OTP ngẫu nhiên (6 chữ số)
             String otp = generateOTP(6);
 
-            // Lưu otp + email vào session (hoặc có thể lưu vào DB tạm, ở đây dùng session để đơn giản)
             session.setAttribute("resetEmail", email);
             session.setAttribute("resetOTP", otp);
 
