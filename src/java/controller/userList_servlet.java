@@ -95,11 +95,11 @@ public class userList_servlet extends HttpServlet {
             }
             else if (!hasKeyword && hasSort) {
                 // Vì chỉ hỗ trợ sort theo updated_at, ta bỏ qua sortField khác
-                users = dao.sortUsersByUpdatedAt(sortAsc);
+                users = dao.sortUsersByField(sortField, sortAsc);
             }
             else {
                 // Có cả search + sort
-                users = dao.searchAndSortUsers(keyword.trim(), sortAsc);
+                users = dao.SearchAndSortUsers(keyword, sortField, sortAsc);
             }
 
             //  Truyền sang JSP

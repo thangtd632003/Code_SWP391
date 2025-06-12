@@ -238,10 +238,13 @@ public List<Tour> sortTours(String sortBy, boolean sortAsc) {
     // Validation / mapping sortBy từ input Java sang cột trong CSDL
     String column;
     switch (sortBy.toLowerCase()) {
+        case "id":
+            column="id";
+            break;
         case "days":
             column = "days";
             break;
-        case "maxpeopleperbooking":
+        case "max_people_per_booking":
             column = "max_people_per_booking";
             break;
         case "price":

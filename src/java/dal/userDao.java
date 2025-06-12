@@ -192,7 +192,43 @@ public class userDao{
         }
         return result;
     }
+public List<User> sortUsersByField(String sortField, boolean asc) throws SQLException {
+        // fallback to id if client passed something invalid
+       
+        String sql = "SELECT * FROM users ORDER BY " + sortField + (asc ? " ASC" : " DESC");
+        List<User> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(mapResultSetToUser(rs));
+            }
+        }
+        return list;
+    }
 
+    public List<User> SearchAndSortUsers(String keyword, String sortField, boolean asc) throws SQLException {
+        // validate sortField
+        
+        String sql = ""
+            + "SELECT * FROM users "
+            + "WHERE LOWER(full_name) LIKE ? "
+            + "   OR LOWER(email) LIKE ? "
+            + "   OR LOWER(phone) LIKE ? "
+            + "ORDER BY " + sortField + (asc ? " ASC" : " DESC");
+        List<User> list = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            String pattern = "%" + keyword.toLowerCase() + "%";
+            ps.setString(1, pattern);
+            ps.setString(2, pattern);
+            ps.setString(3, pattern);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToUser(rs));
+                }
+            }
+        }
+        return list;
+    }
     /**
      * 4. Đổi mật khẩu (password_hash) theo id.
      */
