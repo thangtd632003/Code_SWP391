@@ -101,7 +101,7 @@ public class ListBookingTraveler_servlet extends HttpServlet {
             List<Booking> bookings;
 
             if (!hasKeyword && !hasSort) {
-                // Chưa search, chưa sort → lấy toàn bộ booking
+                // Chưa search, chưa sort  lấy toàn bộ booking
                 bookings = bookingDao.getBookingsByTravelerId(travelerId);
 
             } else if (hasKeyword && !hasSort) {
@@ -150,13 +150,12 @@ public class ListBookingTraveler_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        // 2. Kiểm tra role: chỉ cho traveler truy cập
         if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             return;
         }
 
-        // 3. Lấy action
+        //  Lấy action
         String action = request.getParameter("action");
         if (action == null) {
             response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_servlet");

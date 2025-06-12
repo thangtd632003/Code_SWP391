@@ -85,13 +85,13 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        // 2. Kiểm tra role: chỉ cho traveler truy cập
+        //  Kiểm tra role: chỉ cho traveler truy cập
         if (!user.getRole().name().equalsIgnoreCase("traveler")) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             return;
         }
 
-        // 3. Lấy bookingId từ parameter
+        //  Lấy bookingId từ parameter
         String bookingIdParam = request.getParameter("bookingId");
         if (bookingIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_servlet");
@@ -105,7 +105,7 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_servlet");
                 return;
             }
-            // 4. Lấy thông tin Tour kèm theo
+            //  Lấy thông tin Tour kèm theo
             Tour tour = tourDao.getTourById(booking.getTourId());
            User userGuideInfor = userDao.getUserById(tour.getGuideId());
             request.setAttribute("booking", booking);
@@ -135,13 +135,13 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        // 2. Kiểm tra role: chỉ cho traveler truy cập
+        //  Kiểm tra role: chỉ cho traveler truy cập
         if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             return;
         }
 
-        // 3. Lấy action
+        //  Lấy action
         String action = request.getParameter("action");
         if (action == null) {
             String bookingIdParam = request.getParameter("bookingId");
@@ -151,7 +151,6 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
 
         switch (action) {
             case "changeStatus":
-                // Traveler có thể hủy booking (hoặc thay đổi trạng thái khác nếu có)
                 try {
                     int bookingId = Integer.parseInt(request.getParameter("bookingId"));
                     String statusStr = request.getParameter("newStatus");

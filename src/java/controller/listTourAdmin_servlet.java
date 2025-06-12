@@ -78,19 +78,18 @@ public class listTourAdmin_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Đọc param search + sort + page (nếu cần phân trang)
-        String keyword   = request.getParameter("keyword");     // có thể null hoặc rỗng
-        String sortField = request.getParameter("sortField");   // id, name, price, ...
-        String sortDir   = request.getParameter("sortDir");     // asc hoặc desc
-        boolean sortAsc  = !"desc".equalsIgnoreCase(sortDir);   // nếu sortDir=desc thì false, ngược lại true
+        //  Đọc param search + sort + page (nếu cần phân trang)
+        String keyword   = request.getParameter("keyword");     
+        String sortField = request.getParameter("sortField");  
+        String sortDir   = request.getParameter("sortDir");     
+        boolean sortAsc  = !"desc".equalsIgnoreCase(sortDir);   
 boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
         boolean hasSort = (sortField != null && !sortField.trim().isEmpty());
-        // 3. Gọi DAO để lấy danh sách search + sort
         List<Tour> tours = null;
         try (Connection conn = new DBContext().getConnection()) {
             tourDao dao = new tourDao(conn);
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: CHƯA NHẬP GÌ → lấy tất cả tour của guide
+                // Trường hợp: CHƯA NHẬP GÌ lấy tất cả tour của guide
                 tours = dao.getAllTours();
 
             } else if (hasKeyword && !hasSort) {
@@ -103,12 +102,10 @@ boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
 
             } else {
                 // Có cả Search + Sort
-                // Nếu bạn đã định nghĩa `searchAndSortToursByGuideId(...)` thì gọi:
+               
                 tours = dao.searchAndSortTours(keyword, sortDir, sortAsc);
 
-                // Nếu chưa có hàm gộp, bạn có thể fallback:
-                // List<Tour> tmp = dao.searchToursByGuideId(userId, keyword.trim());
-                // tours = sortInMemory(tmp, sortField.trim(), sortAsc);
+               
             }
               request.setAttribute("tours", tours);
 request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
@@ -134,9 +131,7 @@ if (hasSort) {
             Logger.getLogger(listTourAdmin_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // 4. Set lại attribute để JSP biết đang search/sort gì
-
-        // 4. Set lại attribute để JSP biết đang search/sort gì
+       
     
     } 
 
@@ -177,17 +172,14 @@ if (hasSort) {
                 }
             } catch (NumberFormatException ex) {
                 Logger.getLogger(listTourAdmin_servlet.class.getName()).log(Level.SEVERE, null, ex);
-                // Không đặt sonRedirect ngay; vẫn quay lại list để hiện lỗi (nếu có)
+               
             }
-            // Sau khi đổi status, về lại doGet để load lại
             response.sendRedirect(request.getContextPath() + "/listTourAdmin_servlet");
         }
         else if ("view".equalsIgnoreCase(action) && idParam != null) {
-            // Xem chi tiết tour, chuyển sang servlet tourDetailAdmin_servlet
             response.sendRedirect(request.getContextPath() + "/tourDetail_servlet?id=" + idParam);
         }
         else {
-            // Nếu action không hợp lệ, quay lại list
             response.sendRedirect(request.getContextPath() + "/listTourAdmin_servlet");
         }
     

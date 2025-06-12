@@ -62,7 +62,6 @@ public class userList_servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         // 1. Kiểm tra session + quyền
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -74,10 +73,10 @@ public class userList_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Đọc các tham số search / sort
-        String keyword   = request.getParameter("keyword");      // ví dụ: "alice"
-        String sortField = request.getParameter("sortField");    // chỉ hỗ trợ "updated_at"
-        String sortDir   = request.getParameter("sortDir");      // "asc" hoặc "desc"
+        //  Đọc các tham số search / sort
+        String keyword   = request.getParameter("keyword");      
+        String sortField = request.getParameter("sortField");    
+        String sortDir   = request.getParameter("sortDir");      
         boolean sortAsc  = !"desc".equalsIgnoreCase(sortDir);
 
         boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
@@ -103,12 +102,11 @@ public class userList_servlet extends HttpServlet {
                 users = dao.searchAndSortUsers(keyword.trim(), sortAsc);
             }
 
-            // 3. Truyền sang JSP
+            //  Truyền sang JSP
             request.setAttribute("users", users);
             request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
             request.setAttribute("sortField", hasSort ? sortField : "");
             request.setAttribute("sortDir", hasSort ? (sortAsc ? "asc" : "desc") : "");
-            // Truyền thêm role của current user để JSP có thể kiểm tra (nếu muốn)
             request.setAttribute("currentRole", current.getRole().name());
 
             request.getRequestDispatcher("/Views/v1/userList.jsp")
@@ -143,7 +141,7 @@ public class userList_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Lấy action
+        // Lấy action
         String action = request.getParameter("action");
         try (Connection conn = new DBContext().getConnection()) {
             userDao dao = new userDao(conn);

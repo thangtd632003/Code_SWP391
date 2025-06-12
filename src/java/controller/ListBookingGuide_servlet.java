@@ -87,8 +87,8 @@ public class ListBookingGuide_servlet extends HttpServlet {
         int guideId = user.getId();
 
         // 2. Đọc tham số tìm kiếm & sắp xếp (nếu có)
-        String keyword   = request.getParameter("keyword");    // tìm kiếm theo contact_info
-        String sortDir   = request.getParameter("sortDir");  // "asc" hoặc "desc" 
+        String keyword   = request.getParameter("keyword");    
+        String sortDir   = request.getParameter("sortDir");  
                 String sortField = request.getParameter("sortField");
 
         boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
@@ -100,7 +100,7 @@ public class ListBookingGuide_servlet extends HttpServlet {
             List<Booking> bookings;
 
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: chưa search, chưa sort → lấy tất cả
+                // Trường hợp: chưa search, chưa sort  lấy tất cả
                 bookings = bookingDao.getBookingsByGuideId(guideId);
 
             } else if (hasKeyword && !hasSort) {
@@ -171,27 +171,21 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                     String statusStr = request.getParameter("newStatus");
                     BookingStatus newStatus = BookingStatus.valueOf(statusStr);
 
-                    // 1) If we're approving, we need to run our conflict checks
                     if (newStatus == BookingStatus.APPROVED) {
-                        // a) Is departure date already in the past?
                         boolean past = bookingDao.isDepartureInPast(bookingId);
 
                         if (past) {
                             request.setAttribute("message",
                                 "❌ Cannot approve a booking whose departure date has already passed.");
-                            // call doGet to re‐display with the message
                             doGet(request, response);
                             return;
                         }
 
-                        // b) Load the booking’s departure_date and tour days:
                         Booking booking = bookingDao.getBookingById(bookingId);
                         java.util.Date departureDate = booking.getDepartureDate();
-                        // You need a method in DAO to fetch tour.days for this booking:
                         Tour t = tourDao.getTourById(bookingId);
                      Integer   tourDays = t.getDays();
 
-                        // c) Check conflict with other APPROVED bookings of the same guide
                         boolean conflictApproved = bookingDao.hasApprovedConflict(
                                 bookingId, departureDate, tourDays);
 
@@ -202,7 +196,6 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                             return;
                         }
 
-                        // d) Check conflict with other PENDING bookings (so you can warn the guide)
                         List<Booking> overlappingPending =
                             bookingDao.getOverlappingPendingForGuide(bookingId, departureDate, tourDays);
 
@@ -213,7 +206,6 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                             return;
                         }
 
-                        // e) No conflicts → safe to mark as APPROVED
                         bookingDao.updateBookingStatus(bookingId, newStatus);
                         request.setAttribute("message",
                             " Booking has been approved successfully.");
@@ -221,7 +213,6 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                         return;
                     }
 
-                    // 2) If newStatus is REJECTED or CANCELLED, just update directly
                     bookingDao.updateBookingStatus(bookingId, newStatus);
                     request.setAttribute("message",
                         "✅ Booking status updated successfully.");

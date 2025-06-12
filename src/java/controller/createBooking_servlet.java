@@ -78,7 +78,7 @@ public class createBooking_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        // 2. Lấy tourId từ query string
+        //  Lấy tourId từ query string
         String tourIdParam = request.getParameter("tourId");
         if (tourIdParam == null) {
             // Nếu không có tourId, quay về trang danh sách tour user
@@ -90,12 +90,12 @@ public class createBooking_servlet extends HttpServlet {
         try {
             tourId = Integer.parseInt(tourIdParam);
         } catch (NumberFormatException e) {
-            // tourId không hợp lệ → quay về list
+            // tourId không hợp lệ  quay về list
             response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
             return;
         }
 
-        // 3. Nạp thông tin tour để hiển thị lên form (nếu cần)
+        //  Nạp thông tin tour để hiển thị lên form (nếu cần)
         try (Connection conn = new DBContext().getConnection()) {
             tourDao tourDao = new tourDao(conn);
             Tour tour = tourDao.getTourById(tourId);
@@ -111,8 +111,7 @@ public class createBooking_servlet extends HttpServlet {
             Logger.getLogger(createBooking_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // 4. Chuyển đến JSP bookingTour.jsp để hiển thị form
-        // Nếu có parameter message (như error hoặc success), giữ lại để hiển thị
+        //  Chuyển đến JSP bookingTour.jsp để hiển thị form
         String message = request.getParameter("message");
         if (message != null) {
             request.setAttribute("message", message);
@@ -138,7 +137,7 @@ public class createBooking_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        // 2. Đọc tham số từ form
+        //  Đọc tham số từ form
         String tourIdParam      = request.getParameter("tourId");
         String departureParam   = request.getParameter("departureDate"); // định dạng "yyyy-MM-dd"
         String numPeopleParam   = request.getParameter("numPeople");
@@ -171,7 +170,7 @@ public class createBooking_servlet extends HttpServlet {
             }
             int tourDays = tour.getDays();
 
-            // 3. Kiểm tra xung đột với booking của chính user
+            //  Kiểm tra xung đột với booking của chính user
             boolean sameDateConflict = bookingDao.isSameDateConflictForUser(
                     user.getId(), departureDate);
             if (sameDateConflict) {
@@ -191,7 +190,7 @@ public class createBooking_servlet extends HttpServlet {
                 return;
             }
 
-            // 4. Kiểm tra xung đột với booking APPROVED của guide
+            //  Kiểm tra xung đột với booking APPROVED của guide
             boolean periodConflictGuide = bookingDao.isPeriodConflictForGuide(
                     tour.getGuideId(), departureDate, tourDays);
             if (periodConflictGuide) {
@@ -202,14 +201,13 @@ public class createBooking_servlet extends HttpServlet {
                 return;
             }
 
-            // 5. Thực hiện tạo booking mới (mặc định status = PENDING)
+            //  Thực hiện tạo booking mới (mặc định status = PENDING)
             Booking newBooking = new Booking();
             newBooking.setTravelerId(user.getId());
             newBooking.setTourId(tourId);
             newBooking.setNumPeople(numPeople);
             newBooking.setContactInfo(contactInfo);
             newBooking.setStatus(BookingStatus.PENDING);
-            // departureDate là java.util.Date, nhưng BookingDao sẽ dùng java.sql.Date bên trong
             newBooking.setDepartureDate(departureDate);
 
             boolean created = bookingDao.addBooking(newBooking);
@@ -226,7 +224,7 @@ public class createBooking_servlet extends HttpServlet {
             Logger.getLogger(createBooking_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // 6. Nếu thành công, chuyển về trang xác nhận hoặc danh sách booking
+        //  Nếu thành công, chuyển về trang xác nhận hoặc danh sách booking
         response.sendRedirect(request.getContextPath() + "/createBooking_servlet?tourId=" + tourId+"&message=bookingSuccess");
     }
 

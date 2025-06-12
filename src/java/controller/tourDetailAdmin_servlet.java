@@ -71,7 +71,7 @@ public class tourDetailAdmin_servlet extends HttpServlet {
         User user = (session != null) ? (User) session.getAttribute("user") : null;
 
         if (user == null) {
-            response.sendRedirect("login"); // hoặc /Code_SWP391/login
+            response.sendRedirect("login"); 
             return;
         }
 

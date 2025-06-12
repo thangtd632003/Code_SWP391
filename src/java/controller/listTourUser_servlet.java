@@ -80,25 +80,25 @@ public class listTourUser_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Đọc tham số "keyword" để search (nếu có)
+        //  Đọc tham số "keyword" để search (nếu có)
         String keyword = request.getParameter("keyword");
         boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
 
         try (Connection conn = new DBContext().getConnection()) {
             tourDao dao = new tourDao(conn);
 
-            // 2.a. Lấy danh sách tour chính (search nếu có, ngược lại lấy all)
+            //  Lấy danh sách tour chính (search nếu có, ngược lại lấy all)
             List<Tour> allTours = hasKeyword
                     ? dao.searchTours(keyword.trim())
                     : dao.getAllTours();
 
-            // 2.b. Lấy top 10 tour được booking nhiều nhất
+            //  Lấy top 10 tour được booking nhiều nhất
             List<Tour> topTours = dao.getTop10ByBookings();
 
-            // 2.c. Lấy tour mà chính user đã booking
+            //  Lấy tour mà chính user đã booking
             List<Tour> userBookedTours = dao.getToursBookedByUser(current.getId());
 
-            // 3. Đặt vào request attribute
+            //  Đặt vào request attribute
             request.setAttribute("allTours", allTours);
             request.setAttribute("topTours", topTours);
             request.setAttribute("userBookedTours", userBookedTours);

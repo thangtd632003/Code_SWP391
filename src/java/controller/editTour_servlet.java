@@ -119,7 +119,6 @@ public class editTour_servlet extends HttpServlet {
             return;
         }
 
-        // đọc tham số
         String idParam = request.getParameter("id");
         String name = request.getParameter("name");
         String description = request.getParameter("description");
@@ -128,7 +127,7 @@ public class editTour_servlet extends HttpServlet {
         String maxPeopleStr = request.getParameter("maxPeople");
         String daysStr = request.getParameter("days");
         String language = request.getParameter("language");
-        String statusParam = request.getParameter("status"); // nếu có select
+        String statusParam = request.getParameter("status"); 
 
         boolean success = false;
         try {

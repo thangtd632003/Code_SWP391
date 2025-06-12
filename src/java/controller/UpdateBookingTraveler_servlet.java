@@ -51,12 +51,12 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        // 2. Kiểm role (chỉ TRAVELER mới được cập nhật booking)
+        //  Kiểm role (chỉ TRAVELER mới được cập nhật booking)
         if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        // 3. Lấy bookingId từ request parameter (form trước có truyền ?bookingId=…)
+        //  Lấy bookingId từ request parameter (form trước có truyền ?bookingId=…)
         String bookingIdParam = (String ) request.getParameter("bookingId");
         if (bookingIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
@@ -69,7 +69,7 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        // 4. Lấy thông tin booking & tour tương ứng
+        //  Lấy thông tin booking & tour tương ứng
         Booking booking = null;
         Tour tour = null;
       try (Connection conn = new DBContext().getConnection()) {
@@ -98,7 +98,7 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(UpdateBookingTraveler_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // 5. Đưa data vào request và forward sang JSP form
+        //  Đưa data vào request và forward sang JSP form
         String error = (String) request.getAttribute("error");
         request.setAttribute("errorMSG", error);
         request.setAttribute("booking", booking);
@@ -117,24 +117,24 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-      // 1. Kiểm session + login
+      //  Kiểm session + login
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        // 2. Kiểm role
+        //  Kiểm role
         if (!"TRAVELER".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        // 3. Đọc form data
+        //  Đọc form data
         String idParam            = request.getParameter("id");
         String numPeopleParam     = request.getParameter("numPeople");
         String contactInfo        = request.getParameter("contactInfo");
         String departureDateParam = request.getParameter("departureDate");
-        // 4. Chuyển về kiểu dữ liệu, kiểm tra dữ liệu hợp lệ
+        //  Chuyển về kiểu dữ liệu, kiểm tra dữ liệu hợp lệ
         int bookingId, numPeople;
         java.sql.Date departureDate;
         try {
@@ -147,7 +147,7 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             doGet(request, response);
             return;
         }
-        // 5. Lấy booking gốc để so sánh
+        //  Lấy booking gốc để so sánh
         Booking booking = null;
         Tour tour = null;
         try (Connection conn = new DBContext().getConnection()) {
@@ -166,14 +166,14 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(UpdateBookingTraveler_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // 6. Kiểm numPeople không vượt quá maxPeoplePerBooking
+        //  Kiểm numPeople không vượt quá maxPeoplePerBooking
         if (numPeople < 1 || numPeople > tour.getMaxPeoplePerBooking()) {
             request.setAttribute("error", "Number of people must be between 1 and " +
                                           tour.getMaxPeoplePerBooking() + ".");
             doGet(request, response);
             return;
         }
-        // 7. Cập nhật booking với dao
+        //  Cập nhật booking với dao
         booking.setNumPeople(numPeople);
         booking.setContactInfo(contactInfo);
         booking.setDepartureDate(departureDate);
@@ -191,8 +191,7 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             doGet(request, response);
             return;
         }
-        // 8. Nếu thành công, chuyển lại doGet (reload form) hoặc redirect nơi khác
-        // … sau khi update thành công
+   
 String redirectUrl = request.getContextPath()
     + "/UpdateBookingTraveler_servlet?bookingId=" + bookingId;
 response.sendRedirect(redirectUrl);

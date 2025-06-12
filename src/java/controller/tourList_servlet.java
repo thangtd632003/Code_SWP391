@@ -81,13 +81,11 @@ public class tourList_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Đọc tham số GET: keyword, sortField, sortDir
-        String keyword = request.getParameter("keyword");       // vd: "asia"
-        String sortField = request.getParameter("sortField");   // vd: "price", "days", ...
-        String sortDir = request.getParameter("sortDir");       // "asc" hoặc "desc"
+        String keyword = request.getParameter("keyword");       
+        String sortField = request.getParameter("sortField");   
+        String sortDir = request.getParameter("sortDir");       
         boolean sortAsc = !"desc".equalsIgnoreCase(sortDir);
 
-        // 3. Xác định xem có truyền keyword hay sortField lên hay không
         boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
         boolean hasSort = (sortField != null && !sortField.trim().isEmpty());
 
@@ -96,7 +94,7 @@ public class tourList_servlet extends HttpServlet {
             List<Tour> tours;
 
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: CHƯA NHẬP GÌ → lấy tất cả tour của guide
+                // Trường hợp: CHƯA NHẬP GÌ  lấy tất cả tour của guide
                 tours = dao.getToursByGuideId(userId);
 
             } else if (hasKeyword && !hasSort) {
@@ -108,20 +106,16 @@ public class tourList_servlet extends HttpServlet {
                 tours = dao.sortToursByGuideId(userId, sortField.trim(), sortAsc);
 
             } else {
-                // Có cả Search + Sort
-                // Nếu bạn đã định nghĩa `searchAndSortToursByGuideId(...)` thì gọi:
+               
                 tours = dao.searchAndSortToursByGuideId(userId, keyword.trim(), sortField.trim(), sortAsc);
 
-                // Nếu chưa có hàm gộp, bạn có thể fallback:
-                // List<Tour> tmp = dao.searchToursByGuideId(userId, keyword.trim());
-                // tours = sortInMemory(tmp, sortField.trim(), sortAsc);
+            
             }
 
-            // 4. Đẩy về JSP
+            //  Đẩy về JSP
          request.setAttribute("tours", tours);
 request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
 
-// Ép sortField về lowercase trước khi set
 if (hasSort) {
     String fieldLower = sortField.trim().toLowerCase();
     request.setAttribute("sortField", fieldLower);
@@ -159,8 +153,8 @@ String userRole = null;
 if (session != null) {
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
-        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+        userId = user.getId();      
+        userRole = user.getRole().toString();  
     }
 }
         if (userId == null || userRole == null || !"GUIDE".equalsIgnoreCase(userRole)) {
@@ -178,18 +172,13 @@ if (session != null) {
                 dao.toggleTourStatus(tourId);
             } catch (Exception ex) {
                 Logger.getLogger(tourList_servlet.class.getName()).log(Level.SEVERE, null, ex);
-                // bạn có thể set thông báo lỗi vào request/session nếu muốn
             }
-            // Sau khi xóa, redirect về chính servlet list
             response.sendRedirect(request.getContextPath() + "/tourList_servlet");
         } else if ("update".equalsIgnoreCase(action) && idParam != null) {
-            // chuyển sang servlet hoặc JSP xử lý update tour
             response.sendRedirect(request.getContextPath() + "/editTour_servlet?id=" + idParam);
         } else if ("add".equalsIgnoreCase(action)) {
-            // chuyển sang servlet hoặc JSP xử lý tạo mới tour
             response.sendRedirect(request.getContextPath() + "/createTour_servlet");
         } else {
-            // action không hợp lệ, quay lại list
             response.sendRedirect(request.getContextPath() + "/tourList_servlet");
         }
     }

@@ -75,7 +75,7 @@ public class detailTourUser_servlet extends HttpServlet {
             return;
         }
 
-        // 2. Lấy tourId từ param và kiểm tra
+        //  Lấy tourId từ param và kiểm tra
         String tourIdParam = request.getParameter("tourId");
         if (tourIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
@@ -90,7 +90,7 @@ public class detailTourUser_servlet extends HttpServlet {
             return;
         }
 
-        // 3. Kết nối DB, lấy thông tin tour và guide
+        //  Kết nối DB, lấy thông tin tour và guide
         try (Connection conn = new DBContext().getConnection()) {
             tourDao tourDao = new tourDao(conn);
             Tour tour = tourDao.getTourById(tourId);
@@ -112,7 +112,7 @@ public class detailTourUser_servlet extends HttpServlet {
             GuideProfile guideProfile = guideDao.getGuideProfileById(tour.getGuideId());
             // Nếu chưa có profile, guideProfile có thể null – xử lý phía JSP
 
-            // 4. Đưa vào request và forward sang JSP hiển thị
+            //  Đưa vào request và forward sang JSP hiển thị
             request.setAttribute("tour", tour);
             request.setAttribute("guideUser", guideUser);
             request.setAttribute("guideProfile", guideProfile);

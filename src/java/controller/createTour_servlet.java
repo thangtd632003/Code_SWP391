@@ -71,8 +71,8 @@ String userRole = null;
 if (session != null) {
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
-        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+        userId = user.getId();     
+        userRole = user.getRole().toString();   
     }
 }
 
@@ -102,8 +102,8 @@ String userRole = null;
 if (session != null) {
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        guideId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
-        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+        guideId = user.getId();      
+        userRole = user.getRole().toString();  
     }
 }
 
@@ -136,7 +136,6 @@ int days = 0;
             return;
         }
 
-        // Build Tour entity
         Tour tour = new Tour();
         tour.setGuideId(guideId);
         tour.setName(name);
