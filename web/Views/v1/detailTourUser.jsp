@@ -95,6 +95,7 @@
         <h2><c:out value="${tour.name}" /></h2>
         <p><strong>Price(USD):</strong> <c:out value="${tour.price}" /> VND</p>
         <p><strong>Days:</strong> <c:out value="${tour.days}" /></p>
+        <p><strong>Max people of booking:</strong> <c:out value="${tour.maxPeoplePerBooking}" /></p>
         <p><strong>Guide language used for instructions :</strong> <c:out value="${tour.language}" /></p>
         <p><strong>Description:</strong> <c:out value="${tour.description}" /></p>
                 <p><strong>Itinerary:</strong> <c:out value="${tour.itinerary}" /></p>

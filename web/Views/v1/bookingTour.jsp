@@ -157,6 +157,7 @@
         <p><strong>Name tour:</strong> <c:out value="${tour.name}" /></p>
         <p><strong>Price(USD):</strong> <c:out value="${tour.price}" /> VND</p>
         <p><strong>Days of tour:</strong> <c:out value="${tour.days}" /></p>
+        <p><strong>Max people of booking:</strong> <c:out value="${tour.maxPeoplePerBooking}" /></p>
         <p><strong>Language used by tour guide :</strong> <c:out value="${tour.language}" /></p>
       </div>
     </c:if>
