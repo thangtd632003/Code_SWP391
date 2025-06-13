@@ -89,8 +89,8 @@ public class listTourUser_servlet extends HttpServlet {
 
             //  Lấy danh sách tour chính (search nếu có, ngược lại lấy all)
             List<Tour> allTours = hasKeyword
-                    ? dao.searchTours(keyword.trim())
-                    : dao.getAllTours();
+                    ? dao.searchToursUsers(keyword.trim())
+                    : dao.getAllToursUsers();
 
             //  Lấy top 10 tour được booking nhiều nhất
             List<Tour> topTours = dao.getTop10ByBookings();

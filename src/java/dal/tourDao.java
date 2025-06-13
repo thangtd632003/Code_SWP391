@@ -534,6 +534,7 @@ public List<Tour> searchAndSortToursByGuideId(int guideId, String keyword, Strin
             "SELECT t.*, COUNT(b.id) AS booking_count " +
             "FROM tours t " +
             "JOIN bookings b ON t.id = b.tour_id " +
+             "WHERE t.status = 'active'"   +
             "GROUP BY t.id " +
             "ORDER BY booking_count DESC " +
             "LIMIT 10";
@@ -557,7 +558,7 @@ public List<Tour> searchAndSortToursByGuideId(int guideId, String keyword, Strin
              "SELECT t.* " +
             "FROM tours t " +
             "JOIN bookings b ON t.id = b.tour_id " +
-            "WHERE b.traveler_id = ? " +
+            "WHERE b.traveler_id = ? AND t.status = 'active' " +
             "GROUP BY t.id " +
             "ORDER BY MAX(b.created_at) DESC";
         List<Tour> list = new ArrayList<>();
@@ -571,7 +572,47 @@ public List<Tour> searchAndSortToursByGuideId(int guideId, String keyword, Strin
         }
         return list;
     }
-
+public List<Tour> getAllToursUsers() throws SQLException {
+    String sql = "SELECT * FROM tours WHERE status = 'active' ORDER BY created_at DESC";
+    List<Tour> list = new ArrayList<>();
+    try (PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            list.add(mapResultSetToTour(rs));
+        }
+    }
+    return list;
+}
+public List<Tour> searchToursUsers(String keyword) {
+    List<Tour> tours = new ArrayList<>();
+    String sql = "SELECT * FROM tours WHERE name LIKE ? AND tours.status='active'";
+    
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, "%" + keyword + "%");
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Tour t = new Tour();
+                t.setId(rs.getInt("id"));
+                t.setGuideId(rs.getInt("guide_id"));
+                t.setName(rs.getString("name"));
+                t.setDescription(rs.getString("description"));
+                t.setItinerary(rs.getString("itinerary"));
+                t.setPrice(rs.getBigDecimal("price"));
+                t.setMaxPeoplePerBooking(rs.getInt("max_people_per_booking"));
+                t.setDays(rs.getInt("days"));
+                t.setLanguage(rs.getString("language"));
+                t.setStatus(Status.valueOf(rs.getString("status").toUpperCase()));
+                t.setCreatedAt(rs.getTimestamp("created_at"));
+                t.setUpdatedAt(rs.getTimestamp("updated_at"));
+                // ... thêm các trường khác nếu có
+                tours.add(t);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return tours;
+}
     /**
      * Search Tour theo tên (keyword). 
      * Tìm tất cả tour có tên chứa keyword (không phân biệt hoa thường).
