@@ -63,6 +63,9 @@
     <c:if test="${tour != null}">
       <p><strong>ID:</strong> ${tour.id}</p>
       <p><strong>Name:</strong> ${tour.name}</p>
+       <p><strong>Id Guide:</strong> ${tour.guideId}</p>
+      <p><strong>Name Guide:</strong> ${guidename}</p>
+      <p><strong>Email Guide:</strong> ${guideEmail}</p>
       <p><strong>Description:</strong> ${tour.description}</p>
       <p><strong>Itinerary:</strong> ${tour.itinerary}</p>
       <p><strong>Price(USD):</strong> ${tour.price}</p>

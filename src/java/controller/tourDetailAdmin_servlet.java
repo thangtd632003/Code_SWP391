@@ -7,6 +7,7 @@ package controller;
 
 import dal.DBContext;
 import dal.tourDao;
+import dal.userDao;
 import entity.Tour;
 import entity.User;
 import java.io.IOException;
@@ -84,9 +85,13 @@ public class tourDetailAdmin_servlet extends HttpServlet {
         try(Connection conn = new DBContext().getConnection()) {
             int tourId = Integer.parseInt(idParam);
              tourDao dao = new tourDao(conn);
+             userDao udao = new userDao(conn);
             Tour tour = dao.getTourById(tourId);
+            User userG = udao.getUserById(tour.getGuideId());
             if (tour != null) {
                 request.setAttribute("tour", tour);
+                request.setAttribute("guidename",userG.getFullName());
+                request.setAttribute("guideEmail",userG.getEmail());
                 request.getRequestDispatcher("/Views/v1/tourDetail.jsp").forward(request, response);
             } else {
                 response.sendRedirect("tourList_servlet"); // Nếu không tìm thấy tour
