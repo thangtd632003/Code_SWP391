@@ -191,6 +191,8 @@
          
             <div class="card-body">
               <h3><c:out value="${t.name}" /></h3>
+               <p>Days: <c:out value="${t.days}" /></p>
+              <p>Language used by tour guide: <c:out value="${t.language}" /></p>
               <p class="price">${t.price} VND</p>
               <div class="buttons">
                 <input type="hidden" name="tourId" value="${t.id}" />
@@ -210,6 +212,8 @@
         <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card">
           <div class="card-body">
             <h3><c:out value="${t.name}" /></h3>
+                          <p>Days: <c:out value="${t.days}" /></p>
+              <p>Language used by tour guide: <c:out value="${t.language}" /></p>
             <p class="price">${t.price} USD</p>
             <div class="buttons">
               <input type="hidden" name="tourId" value="${t.id}" />
@@ -237,6 +241,8 @@
         <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card">
           <div class="card-body">
             <h3><c:out value="${t.name}" /></h3>
+                          <p>Days: <c:out value="${t.days}" /></p>
+              <p>Language used by tour guide: <c:out value="${t.language}" /></p>
             <p class="price">${t.price} USD</p>
             <div class="buttons">
               <input type="hidden" name="tourId" value="${t.id}" />
