@@ -535,8 +535,11 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
      *    Trả về true nếu có xung đột (tức đã tồn tại booking khác của user với cùng ngày).
      */
     public boolean isSameDateConflictForUser(int travelerId, java.util.Date departureDate) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM bookings " +
-                     "WHERE traveler_id = ? AND departure_date = ?";
+       String sql = "SELECT COUNT(*) FROM bookings " +
+             "WHERE traveler_id = ? " +
+             "AND departure_date = ? " +
+             "AND status NOT IN ('cancelled', 'rejected')";
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, travelerId);
             // Chuyển java.util.Date sang java.sql.Date
@@ -573,6 +576,7 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
             + "FROM bookings b "
             + "  JOIN tours t ON b.tour_id = t.id "
             + "WHERE b.traveler_id = ? "
+                  + "  AND b.status NOT IN ('cancelled', 'rejected') "
             + "  AND NOT ( "
             + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
             + "      OR  b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
