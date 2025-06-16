@@ -100,7 +100,7 @@
           <!-- Cột Name -->
           <th
             <c:if test="${sortField eq 'name'}">
-              class="${currentSortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
+              class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
             </c:if>
           >
             <a href="<c:url value='/listTourAdmin_servlet'>

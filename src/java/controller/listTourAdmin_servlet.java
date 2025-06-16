@@ -103,7 +103,7 @@ boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
             } else {
                 // Có cả Search + Sort
                
-                tours = dao.searchAndSortTours(keyword, sortDir, sortAsc);
+                tours = dao.searchAndSortTours(keyword, sortField, sortAsc);
 
                
             }
