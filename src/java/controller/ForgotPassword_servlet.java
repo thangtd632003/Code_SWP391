@@ -110,7 +110,8 @@ public class ForgotPassword_servlet extends HttpServlet {
         try (Connection conn = new DBContext().getConnection()) {
             userDao dao = new userDao(conn);
             boolean exists = dao.emailExists(email);
-
+session = request.getSession();
+    session.setMaxInactiveInterval(10 * 60);
             if (!exists) {
                 request.setAttribute("error", "Email not exits.");
                 request.getRequestDispatcher("/Views/v1/forgotPassword.jsp").forward(request, response);
