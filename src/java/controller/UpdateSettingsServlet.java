@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 import java.sql.Date;
 
 @WebServlet("/update-settings")
-public class UpdateSettingsServlet_Long extends HttpServlet {
+public class UpdateSettingsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

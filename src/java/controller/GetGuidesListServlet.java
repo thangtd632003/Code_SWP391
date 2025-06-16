@@ -17,7 +17,7 @@ import dal.UserDAO_Long;
 import entity.User;
 
 @WebServlet("/GetGuidesList")
-public class GetGuidesListServlet_Long extends HttpServlet {
+public class GetGuidesListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {

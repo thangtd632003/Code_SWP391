@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.List;
 
 @WebServlet("/api/guides/*")
-public class GuideDetailServlet_Long extends HttpServlet {
+public class GuideDetailServlet extends HttpServlet {
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

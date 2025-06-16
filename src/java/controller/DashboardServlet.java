@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
-public class DashboardServlet_Long extends HttpServlet {
+public class DashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
