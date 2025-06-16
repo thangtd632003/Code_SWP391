@@ -241,6 +241,10 @@ public List<Tour> sortTours(String sortBy, boolean sortAsc) {
         case "id":
             column="id";
             break;
+            case "name":
+            column = "name";
+            break;
+
         case "days":
             column = "days";
             break;
