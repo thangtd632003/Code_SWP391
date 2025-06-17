@@ -174,7 +174,7 @@ public class createBooking_servlet extends HttpServlet {
             boolean sameDateConflict = bookingDao.isSameDateConflictForUser(
                     user.getId(), departureDate);
             if (sameDateConflict) {
-                String m = "Date confict,check booking list";
+                String m = "Booking Fail.Departure date confict,check booking list";
                 response.sendRedirect(request.getContextPath() 
                         + "/createBooking_servlet?tourId=" + tourId 
                         + "&message=" + m);
@@ -183,7 +183,7 @@ public class createBooking_servlet extends HttpServlet {
             boolean periodConflictUser = bookingDao.isPeriodConflictForUser(
                     user.getId(), departureDate, tourDays);
             if (periodConflictUser) {
-                  String m1 = "Date overlap with orther booking, check bookinglist";
+                  String m1 = "Booking Fail.Time of booking overlap with orther booking, check bookinglist";
                 response.sendRedirect(request.getContextPath()
                         + "/createBooking_servlet?tourId=" + tourId
                         + "&message=" +m1 );
