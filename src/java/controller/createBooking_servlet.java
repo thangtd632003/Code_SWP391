@@ -18,6 +18,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -209,7 +210,11 @@ public class createBooking_servlet extends HttpServlet {
             newBooking.setContactInfo(contactInfo);
             newBooking.setStatus(BookingStatus.PENDING);
             newBooking.setDepartureDate(departureDate);
-
+            newBooking.setTourName(tour.getName());
+            newBooking.setTourDays(tour.getDays());
+            newBooking.setTourLanguage(tour.getLanguage());
+            newBooking.setTourPrice(tour.getPrice());
+            newBooking.setTourItinerary(tour.getItinerary());
             boolean created = bookingDao.addBooking(newBooking);
             if (!created) {
                 // Nếu insertion thất bại

@@ -8,6 +8,8 @@ package entity;
  *
  * @author thang
  */
+import java.math.BigDecimal;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,50 @@ public class Booking {
     private BookingStatus status;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+     private String tourName;
+    private BigDecimal tourPrice;
+    private int tourDays;
+    private String tourLanguage;
+    private String tourItinerary;
+
+public String getTourItinerary() {
+    return tourItinerary;
+}
+
+public void setTourItinerary(String tourItinerary) {
+    this.tourItinerary = tourItinerary;
+}
+ public String getTourName() {
+        return tourName;
+    }
+
+    public void setTourName(String tourName) {
+        this.tourName = tourName;
+    }
+
+    public BigDecimal getTourPrice() {
+        return tourPrice;
+    }
+
+    public void setTourPrice(BigDecimal tourPrice) {
+        this.tourPrice = tourPrice;
+    }
+
+    public int getTourDays() {
+        return tourDays;
+    }
+
+    public void setTourDays(int tourDays) {
+        this.tourDays = tourDays;
+    }
+
+    public String getTourLanguage() {
+        return tourLanguage;
+    }
+
+    public void setTourLanguage(String tourLanguage) {
+        this.tourLanguage = tourLanguage;
+    }
 private Date departureDate;
     private List<Review> review = new ArrayList<>();
 

@@ -128,6 +128,11 @@ private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
     booking.setCreatedAt(rs.getTimestamp("created_at"));
     booking.setUpdatedAt(rs.getTimestamp("updated_at"));
     booking.setDepartureDate(rs.getDate("departure_date"));
+       booking.setTourName(rs.getString("tour_name"));
+    booking.setTourPrice(rs.getBigDecimal("tour_price"));
+    booking.setTourDays(rs.getInt("tour_days"));
+    booking.setTourLanguage(rs.getString("tour_language"));
+    booking.setTourItinerary(rs.getString("tour_itinerary"));
     return booking;
 }
 public List<Booking> searchBookings(String keyword) {
@@ -645,30 +650,37 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
         return false;
     }
  public boolean addBooking(Booking booking) throws SQLException {
-        String sql = "INSERT INTO bookings "
-                   + "(traveler_id, tour_id, num_people, contact_info, status, departure_date, created_at, updated_at) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
-        try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, booking.getTravelerId());
-            ps.setInt(2, booking.getTourId());
-            ps.setInt(3, booking.getNumPeople());
-            ps.setString(4, booking.getContactInfo());
-            ps.setString(5, booking.getStatus().name());
-            // Chuyển java.util.Date sang java.sql.Date
-            ps.setDate(6, new java.sql.Date(booking.getDepartureDate().getTime()));
+String sql = "INSERT INTO bookings "
+           + "(traveler_id, tour_id, num_people, contact_info, status, departure_date, "
+           + "tour_name, tour_price, tour_days, tour_language, tour_itinerary, "
+           + "created_at, updated_at) "
+           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+    
+    try (PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        ps.setInt(1, booking.getTravelerId());
+        ps.setInt(2, booking.getTourId());
+        ps.setInt(3, booking.getNumPeople());
+        ps.setString(4, booking.getContactInfo());
+        ps.setString(5, booking.getStatus().name());
+        ps.setDate(6, new java.sql.Date(booking.getDepartureDate().getTime()));
 
-            int affected = ps.executeUpdate();
-            if (affected > 0) {
-                // Nếu muốn lấy ID của booking vừa tạo, có thể:
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        booking.setId(rs.getInt(1));
-                    }
+        // Các trường snapshot
+        ps.setString(7, booking.getTourName());
+        ps.setBigDecimal(8, booking.getTourPrice());
+        ps.setInt(9, booking.getTourDays());
+        ps.setString(10, booking.getTourLanguage());
+ps.setString(11, booking.getTourItinerary());
+        int affected = ps.executeUpdate();
+        if (affected > 0) {
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    booking.setId(rs.getInt(1));
                 }
-                return true;
             }
-            return false;
+            return true;
         }
+        return false;
+    }
     }
    public boolean isDepartureInPast(int bookingId) throws SQLException {
         String sql = "SELECT departure_date FROM bookings WHERE id = ?";
