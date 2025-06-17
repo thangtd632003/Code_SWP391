@@ -183,7 +183,7 @@ public class createBooking_servlet extends HttpServlet {
             boolean periodConflictUser = bookingDao.isPeriodConflictForUser(
                     user.getId(), departureDate, tourDays);
             if (periodConflictUser) {
-                  String m1 = "Date confict with other traveler";
+                  String m1 = "Date overlap with orther booking, check bookinglist";
                 response.sendRedirect(request.getContextPath()
                         + "/createBooking_servlet?tourId=" + tourId
                         + "&message=" +m1 );
