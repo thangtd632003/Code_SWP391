@@ -583,7 +583,7 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
             + "WHERE b.traveler_id = ? "
                   + "  AND b.status NOT IN ('cancelled', 'rejected') "
             + "  AND NOT ( "
-            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "         DATE_ADD(b.departure_date, INTERVAL b.tour_days DAY) <= ? "
             + "      OR  b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
             + "      )";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -626,7 +626,7 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
             + "WHERE t.guide_id = ? "
             + "  AND b.status = ? "
             + "  AND NOT ( "
-            + "        DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "        DATE_ADD(b.departure_date, INTERVAL b.tour_days DAY) <= ? "
             + "     OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
             + "      )";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -719,7 +719,7 @@ ps.setString(11, booking.getTourItinerary());
             + "    ) "
             + "  AND b.status = ? "
             + "  AND NOT ( "
-            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "         DATE_ADD(b.departure_date, INTERVAL b.tour_days DAY) <= ? "
             + "      OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
             + "      )";
 
@@ -761,7 +761,7 @@ ps.setString(11, booking.getTourItinerary());
             + "    ) "
             + "  AND b.status = ? "
             + "  AND NOT ( "
-            + "         DATE_ADD(b.departure_date, INTERVAL t.days DAY) <= ? "
+            + "         DATE_ADD(b.departure_date, INTERVAL b.tour_days DAY) <= ? "
             + "      OR b.departure_date >= DATE_ADD(?, INTERVAL ? DAY) "
             + "      )";
 
