@@ -154,4 +154,17 @@ private Date departureDate;
     public Date getDepartureDate() {
         return departureDate;
     }
+    public void setStatusFromString(String statusStr) {
+    try {
+        this.status = BookingStatus.valueOf(statusStr.toUpperCase());
+    } catch (IllegalArgumentException e) {
+        // Xử lý trường hợp giá trị không khớp với enum
+        System.out.println("Invalid booking status: " + statusStr);
+        // Đặt giá trị mặc định là PENDING
+        this.status = BookingStatus.PENDING;
+    }
+}
+
+    
+    
 }

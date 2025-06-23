@@ -17,9 +17,7 @@ public class ReviewDAO_Long {
     public List<Review> getAllReviews() {
         List<Review> list = new ArrayList<>();
         String sql = "SELECT * FROM reviews";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Review r = new Review();
                 r.setId(rs.getInt("id"));
@@ -35,13 +33,63 @@ public class ReviewDAO_Long {
         }
         return list;
     }
+public List<Review> getReviewsByGuideId(int guideId) throws Exception {
+    List<Review> list = new ArrayList<>();
+    String sql = "SELECT * FROM reviews WHERE guide_id = ?";
+    
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, guideId);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Review review = new Review();
+            review.setId(rs.getInt("id"));
+            review.setBookingId(rs.getInt("booking_id"));
+            review.setGuideId(rs.getInt("guide_id"));
+            review.setRating(rs.getInt("rating"));
+            review.setComment(rs.getString("comment"));
+            review.setCreatedAt(rs.getTimestamp("created_at"));
+            list.add(review);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error getting reviews by guide ID: " + e.getMessage());
+    }
+    
+    return list;
+}
+
+public List<Review> getRecentReviewsByGuideId(int guideId, int limit) throws Exception {
+    List<Review> list = new ArrayList<>();
+    String sql = "SELECT * FROM reviews WHERE guide_id = ? ORDER BY created_at DESC LIMIT ?";
+    
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, guideId);
+        ps.setInt(2, limit);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Review review = new Review();
+            review.setId(rs.getInt("id"));
+            review.setBookingId(rs.getInt("booking_id"));
+            review.setGuideId(rs.getInt("guide_id"));
+            review.setRating(rs.getInt("rating"));
+            review.setComment(rs.getString("comment"));
+            review.setCreatedAt(rs.getTimestamp("created_at"));
+            list.add(review);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error getting recent reviews by guide ID: " + e.getMessage());
+    }
+    
+    return list;
+}
 
     // Đếm số lượng review
     public int countAll() {
         String sql = "SELECT COUNT(*) FROM reviews";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
@@ -50,12 +98,11 @@ public class ReviewDAO_Long {
         }
         return 0;
     }
-
+    
     // Thêm review mới
     public boolean addReview(Review review) {
         String sql = "INSERT INTO reviews (booking_id, guide_id, rating, comment) VALUES (?, ?, ?, ?)";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, review.getBookingId());
             stmt.setInt(2, review.getGuideId());
             stmt.setInt(3, review.getRating());
@@ -66,12 +113,26 @@ public class ReviewDAO_Long {
             return false;
         }
     }
+    public boolean hasReviewForBooking(int bookingId) {
+    String sql = "SELECT COUNT(*) FROM reviews WHERE booking_id = ?";
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, bookingId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+    } catch (Exception e) {
+        System.out.println("Error checking review existence: " + e.getMessage());
+    }
+    return false;
+}
 
+    
     // Cập nhật review
     public boolean updateReview(Review review) {
         String sql = "UPDATE reviews SET booking_id=?, guide_id=?, rating=?, comment=? WHERE id=?";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, review.getBookingId());
             stmt.setInt(2, review.getGuideId());
             stmt.setInt(3, review.getRating());
@@ -93,8 +154,7 @@ public class ReviewDAO_Long {
     // Xóa review
     public boolean deleteReview(int reviewId) {
         String sql = "DELETE FROM reviews WHERE id=?";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, reviewId);
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
@@ -106,8 +166,7 @@ public class ReviewDAO_Long {
     // Lấy review theo ID
     public Review getReviewById(int reviewId) {
         String sql = "SELECT * FROM reviews WHERE id=?";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, reviewId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -130,8 +189,7 @@ public class ReviewDAO_Long {
     public List<Review> getRecentReviews(int limit) {
         List<Review> list = new ArrayList<>();
         String sql = "SELECT * FROM reviews ORDER BY created_at DESC LIMIT ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, limit);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -154,16 +212,14 @@ public class ReviewDAO_Long {
     // Hàm kiểm tra kết nối và lấy dữ liệu review đầu tiên
     public void testConnectionAndFetch() {
         String sql = "SELECT * FROM reviews LIMIT 1";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 System.out.println("Kết nối thành công! Có dữ liệu review:");
-                System.out.println("ID: " + rs.getInt("id") +
-                        ", BookingID: " + rs.getInt("booking_id") +
-                        ", GuideID: " + rs.getInt("guide_id") +
-                        ", Rating: " + rs.getInt("rating") +
-                        ", Comment: " + rs.getString("comment"));
+                System.out.println("ID: " + rs.getInt("id")
+                        + ", BookingID: " + rs.getInt("booking_id")
+                        + ", GuideID: " + rs.getInt("guide_id")
+                        + ", Rating: " + rs.getInt("rating")
+                        + ", Comment: " + rs.getString("comment"));
             } else {
                 System.out.println("Kết nối thành công! Nhưng bảng reviews không có dữ liệu.");
             }
@@ -175,8 +231,7 @@ public class ReviewDAO_Long {
 
     public double getAverageRating() {
         String sql = "SELECT AVG(rating) as avg_rating FROM Reviews";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getDouble("avg_rating");
@@ -189,8 +244,7 @@ public class ReviewDAO_Long {
 
     public double getAverageRatingByGuideId(int guideId) {
         String sql = "SELECT AVG(rating) as avg_rating FROM reviews WHERE guide_id = ?";
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, guideId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -210,4 +264,54 @@ public class ReviewDAO_Long {
             System.out.println(r);
         }
     }
+    // Kiểm tra xem người dùng đã đánh giá booking này chưa
+
+    public boolean hasReviewedBooking(int bookingId) {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE booking_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+// Lấy thông tin đánh giá theo ID booking
+    public Review getReviewByBookingId(int bookingId) {
+        String sql = "SELECT * FROM reviews WHERE booking_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Review review = new Review();
+                    review.setId(rs.getInt("id"));
+                    review.setBookingId(rs.getInt("booking_id"));
+                    review.setGuideId(rs.getInt("guide_id"));
+                    review.setRating(rs.getInt("rating"));
+                    review.setComment(rs.getString("comment"));
+                    review.setCreatedAt(rs.getTimestamp("created_at"));
+                    return review;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

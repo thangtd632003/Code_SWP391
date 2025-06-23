@@ -3,7 +3,7 @@ package context;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class DBContext_Long {
+public class DBContext {
     /*USE BELOW METHOD FOR YOUR DATABASE CONNECTION FOR BOTH SINGLE AND MULTILPE SQL SERVER INSTANCE(s)*/
     /*DO NOT EDIT THE BELOW METHOD, YOU MUST USE ONLY THIS ONE FOR YOUR DATABASE CONNECTION*/
     public Connection getConnection() throws Exception {
@@ -19,10 +19,10 @@ public class DBContext_Long {
     private final String dbName = "swp391_db2";
     private final String portNumber = "3306"; // MySQL default port
     private final String userID = "root";     // Thay đổi nếu user khác
-    private final String password = "123456"; // Thay đổi password cho phù hợp
+    private final String password = "1234"; // Thay đổi password cho phù hợp
     public static void main(String[] args) {
         try {
-            Connection conn = new DBContext_Long().getConnection();
+            Connection conn = new DBContext().getConnection();
             if (conn != null && !conn.isClosed()) {
                 System.out.println("Kết nối CSDL thành công!");
             } else {

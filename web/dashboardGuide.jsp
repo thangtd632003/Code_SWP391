@@ -1,341 +1,571 @@
 <%-- 
-    Document   : dashboardGuide
-    Created on : May 27, 2025, 4:01:59 PM
+    Document   : guide-dashboard
+    Created on : June 22, 2025
     Author     : thang
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-            <!DOCTYPE html>
-            <html lang="vi">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
+<html lang="vi">
 
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Tour Management Dashboard</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-                <link rel="stylesheet" href="css/dashboard.css">
-            </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Guide Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
 
-            <body class="dashboard-body">
+<body class="dashboard-body">
 
-                <div class="dashboard-container">
-                    <!-- Sidebar -->
-                    <aside class="sidebar" id="sidebar">
-                        <div class="sidebar-header">
-                            <img src="img/logo.png" alt="Logo" class="logo">
-                            <h2 class="brand-text">Tour System</h2>
-                            <button id="sidebar-close" class="sidebar-close">
-                                <i class="fas fa-times"></i>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="Logo" class="logo">
+                <h2 class="brand-text">Tour System</h2>
+                <button id="sidebar-close" class="sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Main Menu</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item active">
+                            <a href="/Code_SWP391/guide-dashboard" class="nav-link">
+                                <i class="fas fa-home"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Management</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#my-tours" class="nav-link">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>My Tours</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#bookings" class="nav-link">
+                                <i class="fas fa-calendar-check"></i>
+                                <span>Bookings</span>
+                                <span class="badge">
+                                    <c:out value="${pendingBookings}" />
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#reviews" class="nav-link">
+                                <i class="fas fa-star"></i>
+                                <span>My Reviews</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h5 class="nav-section-title">Settings</h5>
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#settings" class="nav-link">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Code_SWP391/ProfileTravler_servlet" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Account information</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Code_SWP391/guideProfile_servlet" class="nav-link">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Guide Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <nav class="top-nav">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <div class="nav-actions">
+                    <button class="nav-action-btn" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">${pendingBookings}</span>
+                    </button>
+                    <button class="nav-action-btn" id="messagesBtn">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">0</span>
+                    </button>
+                    <div class="user-menu">
+                        <button class="user-menu-btn">
+                            <img src="img/logi.jpg" alt="User Avatar" class="user-avatar" hidden>
+                            <span class="user-name">
+                                <c:out value="${currentUser.fullName}" />
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="/Code_SWP391/ProfileTravler_servlet" class="dropdown-item">
+                                <i class="fas fa-user"></i> Account information
+                            </a>
+                            <a href="/Code_SWP391/guideProfile_servlet" class="dropdown-item">
+                                <i class="fas fa-user"></i> Profile
+                            </a>
+                            <a href="#settings" class="dropdown-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/Code_SWP391/logout" class="dropdown-item text-danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Guide Profile Card -->
+                <div class="card mb-4">
+                    <div class="card-body d-flex align-items-center p-4">
+                        <div class="guide-avatar me-4">
+                            <i class="fas fa-user-tie fa-4x"></i>
+                        </div>
+                        <div class="guide-info">
+                            <h2 class="mb-1">${currentUser.fullName}</h2>
+                            <p class="text-muted mb-2"><i class="fas fa-envelope me-2"></i>${currentUser.email}</p>
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <span class="fw-bold">${averageRating}</span>
+                                    <span class="text-warning">
+                                        <c:forEach begin="1" end="5" var="i">
+                                            <c:choose>
+                                                <c:when test="${i <= averageRating}">
+                                                    <i class="fas fa-star"></i>
+                                                </c:when>
+                                                <c:when test="${i > averageRating && i <= averageRating + 0.5}">
+                                                    <i class="fas fa-star-half-alt"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="far fa-star"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </span>
+                                </div>
+                                <span class="badge bg-primary me-2">Tour Guide</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Total Tours</h3>
+                            <div class="stat-value">${totalTours}</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-route"></i> Active Tours
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Total Bookings</h3>
+                            <div class="stat-value">${totalBookings}</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-users"></i> Travelers
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Pending Bookings</h3>
+                            <div class="stat-value">${pendingBookings}</div>
+                            <div class="stat-change neutral">
+                                <i class="fas fa-clock"></i> Waiting Approval
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-content">
+                            <h3>Average Rating</h3>
+                            <div class="stat-value">${averageRating}/5.0</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-thumbs-up"></i> Customer Satisfaction
+                            </div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-grid">
+                    <div class="chart-card main-chart">
+                        <div class="chart-header">
+                            <h3>Bookings Overview</h3>
+                            <div class="chart-actions">
+                                <select class="chart-period-select">
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last 3 Months</option>
+                                    <option>Last Year</option>
+                                </select>
+                                <button class="chart-action-btn">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="bookingsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Rating Distribution</h3>
+                            <button class="chart-action-btn">
+                                <i class="fas fa-ellipsis-v"></i>
                             </button>
                         </div>
+                        <div class="chart-body">
+                            <canvas id="ratingsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
-                        <nav class="sidebar-nav">
-                            <div class="nav-section">
-                                <h5 class="nav-section-title">Main Menu</h5>
-                                <ul class="nav-list">
-                                    <li class="nav-item active">
-                                        <a href="#dashboard" class="nav-link">
-                                            <i class="fas fa-home"></i>
-                                            <span>Dashboard</span>
-                                        </a>
-                                    </li>
-                                   
-                                  
-                                </ul>
-                            </div>
+                <!-- Upcoming Tours -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Upcoming Tours</h3>
+                        <button class="btn btn-sm btn-outline-primary">View All</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Tour ID</th>
+                                        <th>Tour Name</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Capacity</th>
+                                        <th>Bookings</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${not empty upcomingTours}">
+                                            <c:forEach var="tour" items="${upcomingTours}">
+                                                <tr>
+                                                    <td>${tour.id}</td>
+                                                    <td>${tour.name}</td>
+                                                    <td><fmt:formatDate value="${tour.startDate}" pattern="dd/MM/yyyy" /></td>
+                                                    <td><fmt:formatDate value="${tour.endDate}" pattern="dd/MM/yyyy" /></td>
+                                                    <td>${tour.capacity}</td>
+                                                    <td>${tour.bookedCount}/${tour.capacity}</td>
+                                                    <td>
+                                                        <span class="badge ${tour.status == 'Active' ? 'bg-success' : 'bg-secondary'}">
+                                                            ${tour.status}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-sm btn-outline-primary">
+                                                                <i class="fas fa-eye"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-outline-secondary">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="8" class="text-center">No upcoming tours found</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="nav-section">
-                                <h5 class="nav-section-title">Management</h5>
-                                <ul class="nav-list">
-                                    <li class="nav-item">
-                                        <a href="#guides" class="nav-link">
-                                            <i class="fas fa-user-tie"></i>
-                                            <span>Tour Guides</span>
-                                        </a>
-                                    </li>
-                                     <li class="nav-item">
-                                        <a href="/Code_SWP391/tourList_servlet" class="nav-link">
-                                            <i class="fas fa-calendar-check"></i>
-                                            <span>Bookings List</span>
-                                           
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="/Code_SWP391/tourList_servlet" class="nav-link">
-                                            <i class="fas fa-map-marked-alt"></i>
-                                            <span>Tours List</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#reviews" class="nav-link">
-                                            <i class="fas fa-star"></i>
-                                            <span>Reviews</span>
-                                            <span class="badge">
-                                                <c:out value="${reviewCount}" />
-                                            </span>
-                                        </a>
-                                    </li>
-                                
-                                </ul>
-                            </div>
-
-                            <div class="nav-section">
-                                <h5 class="nav-section-title">Settings</h5>
-                                <ul class="nav-list">
-                                    <li class="nav-item">
-                                        <a href="#settings" class="nav-link">
-                                            <i class="fas fa-cog"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>
-                                    <!-- thông tin account đã code -->
-                                    <li class="nav-item">
-                                        <a href="/Code_SWP391/ProfileTravler_servlet" class="nav-link">
-                                            <i class="fas fa-user-circle"></i>
-                                            <span>Account information</span>
-                                        </a>
-                                    </li>
-                                     <li class="nav-item">
-                                        <a href="/Code_SWP391/guideProfile_servlet" class="nav-link">
-                                            <i class="fas fa-user-circle"></i>
-                                            <span>Guide Profile</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </aside>
-
-                    <!-- Main Content -->
-                    <main class="main-content">
-                        <!-- Top Navigation -->
-                        <nav class="top-nav">
-                            <button id="sidebar-toggle" class="sidebar-toggle">
-                                <i class="fas fa-bars"></i>
-                            </button>
-
-                            <div class="search-box">
-                                <input type="text" placeholder="Search...">
-                                <i class="fas fa-search"></i>
-                            </div>
-
-                            <div class="nav-actions">
-                                <button class="nav-action-btn" id="notificationsBtn">
-                                    <i class="fas fa-bell"></i>
-                                    <span class="badge">3</span>
-                                </button>
-                                <button class="nav-action-btn" id="messagesBtn">
-                                    <i class="fas fa-envelope"></i>
-                                    <span class="badge">5</span>
-                                </button>
-                                <div class="user-menu">
-                                    <button class="user-menu-btn">
-                                        <img src="img/logi.jpg" alt="User Avatar" class="user-avatar" hidden>
-                                        <span class="user-name">
-                                            <c:out value="${sessionScope.user.fullName}" />
-                                        </span>
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a href="/Code_SWP391/ProfileTravler_servlet" class="dropdown-item">
-                                            <i class="fas fa-user"></i> Account information
-                                        </a>
-                                         <a href="/Code_SWP391/guideProfile_servlet" class="dropdown-item">
-                                            <i class="fas fa-user"></i> Profile
-                                        </a>
-                                        <a href="#settings" class="dropdown-item">
-                                            <i class="fas fa-cog"></i> Settings
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="/Code_SWP391/logout" class="dropdown-item text-danger">
-                                            <i class="fas fa-sign-out-alt"></i> Logout
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </nav>
-
-                        <!-- Dashboard Content -->
-                        <div class="dashboard-content">
-                            <!-- Statistics Cards -->
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Total Revenue</h3>
-                                        <div class="stat-value">$54,598</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 12.5%
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
-
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Total Bookings</h3>
-                                        <div class="stat-value">845</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 8.2%
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-calendar-check"></i>
-                                    </div>
-                                </div>
-
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Active Tours</h3>
-                                        <div class="stat-value">124</div>
-                                        <div class="stat-change negative">
-                                            <i class="fas fa-arrow-down"></i> 3.1%
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-route"></i>
-                                    </div>
-                                </div>
-
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Customer Rating</h3>
-                                        <div class="stat-value">4.8</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 0.3
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Charts Section -->
-                            <div class="charts-grid">
-                                <div class="chart-card main-chart">
-                                    <div class="chart-header">
-                                        <h3>Revenue Overview</h3>
-                                        <div class="chart-actions">
-                                            <select class="chart-period-select">
-                                                <option>Last 7 Days</option>
-                                                <option>Last 30 Days</option>
-                                                <option>Last 3 Months</option>
-                                                <option>Last Year</option>
-                                            </select>
-                                            <button class="chart-action-btn">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="chart-body">
-                                        <canvas id="revenueChart"></canvas>
-                                    </div>
-                                </div>
-
-                                <div class="chart-card">
-                                    <div class="chart-header">
-                                        <h3>Popular Tours</h3>
-                                        <button class="chart-action-btn">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                    <div class="chart-body">
-                                        <canvas id="toursChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Recent Activity -->
-                            <div class="activity-grid">
-                                <!-- Recent Bookings -->
-                                <div class="card recent-bookings">
-                                    <div class="card-header">
-                                        <h3>Recent Bookings</h3>
-                                        <button class="view-all-btn">View All</button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Booking ID</th>
-                                                        <th>Customer</th>
-                                                        <th>Tour</th>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="recentBookingsTable">
-                                                    <!-- Dynamic content will be loaded here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Recent Reviews -->
-                                <div class="card recent-reviews">
-                                    <div class="card-header">
-                                        <h3>Recent Reviews</h3>
-                                        <button class="view-all-btn">View All</button>
-                                    </div>
-                                    <div class="card-body" id="recentReviews">
+                <!-- Recent Activity -->
+                <div class="activity-grid">
+                    <!-- Recent Bookings -->
+                    <div class="card recent-bookings">
+                        <div class="card-header">
+                            <h3>Recent Bookings</h3>
+                            <button class="view-all-btn">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Customer</th>
+                                            <th>Tour</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         <c:choose>
-                                            <c:when test="${not empty recentReviews}">
-                                                <ul class="list-group list-group-flush">
-                                                    <c:forEach var="review" items="${recentReviews}">
-                                                        <li class="list-group-item">
-                                                            <div>
-                                                                <strong>Booking ID:</strong> ${review.bookingId}
-                                                                <span class="ms-2"><strong>Guide ID:</strong>
-                                                                    ${review.guideId}</span>
-                                                                <span class="ms-2"><strong>Rating:</strong>
-                                                                    <c:forEach begin="1" end="${review.rating}" var="i">
-                                                                        <i class="fas fa-star text-warning"></i>
-                                                                    </c:forEach>
-                                                                </span>
+                                            <c:when test="${not empty recentBookings}">
+                                                <c:forEach var="booking" items="${recentBookings}">
+                                                    <tr>
+                                                        <td>${booking.id}</td>
+                                                        <td>${booking.customerName}</td>
+                                                        <td>${booking.tourName}</td>
+                                                        <td><fmt:formatDate value="${booking.bookingDate}" pattern="dd/MM/yyyy" /></td>
+                                                        <td>
+                                                            <span class="badge ${booking.status == 'Confirmed' ? 'bg-success' : booking.status == 'Pending' ? 'bg-warning' : 'bg-danger'}">
+                                                                ${booking.status}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <button class="btn btn-sm btn-outline-primary" 
+                                                                        onclick="viewBookingDetails(${booking.id})">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </button>
+                                                                <c:if test="${booking.status == 'Pending'}">
+                                                                    <button class="btn btn-sm btn-outline-success" 
+                                                                            onclick="updateBookingStatus(${booking.id}, 'Confirmed')">
+                                                                        <i class="fas fa-check"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-outline-danger" 
+                                                                            onclick="updateBookingStatus(${booking.id}, 'Cancelled')">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </button>
+                                                                </c:if>
                                                             </div>
-                                                            <div>
-                                                                <em>${review.comment}</em>
-                                                            </div>
-                                                            <div class="text-muted small">
-                                                                <fmt:formatDate value="${review.createdAt}"
-                                                                    pattern="dd/MM/yyyy HH:mm" />
-                                                            </div>
-                                                        </li>
-                                                    </c:forEach>
-                                                </ul>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="text-muted">No reviews yet.</div>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">No recent bookings found</td>
+                                                </tr>
                                             </c:otherwise>
                                         </c:choose>
-                                    </div>
-                                </div>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </main>
+                    </div>
+
+                    <!-- Recent Reviews -->
+                    <div class="card recent-reviews">
+                        <div class="card-header">
+                            <h3>Recent Reviews</h3>
+                            <button class="view-all-btn">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <c:choose>
+                                <c:when test="${not empty recentReviews}">
+                                    <ul class="list-group list-group-flush">
+                                        <c:forEach var="review" items="${recentReviews}">
+                                            <li class="list-group-item">
+                                                <div>
+                                                    <strong>Booking ID:</strong> ${review.bookingId}
+                                                    <span class="ms-2"><strong>Rating:</strong>
+                                                        <c:forEach begin="1" end="${review.rating}" var="i">
+                                                            <i class="fas fa-star text-warning"></i>
+                                                        </c:forEach>
+                                                        <c:forEach begin="${review.rating + 1}" end="5" var="i">
+                                                            <i class="far fa-star text-warning"></i>
+                                                        </c:forEach>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <em>${review.comment}</em>
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <fmt:formatDate value="${review.createdAt}" pattern="dd/MM/yyyy HH:mm" />
+                                                </div>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="text-muted text-center p-3">No reviews yet.</div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </main>
+    </div>
 
-                <!-- Notification Panel -->
-                <div class="notifications-panel" id="notificationsPanel">
-                    <!-- Will be populated dynamically -->
-                </div>
+    <!-- Notification Panel -->
+    <div class="notifications-panel" id="notificationsPanel">
+        <!-- Will be populated dynamically -->
+    </div>
 
-                <!-- Messages Panel -->
-                <div class="messages-panel" id="messagesPanel">
-                    <!-- Will be populated dynamically -->
-                </div>
+    <!-- Messages Panel -->
+    <div class="messages-panel" id="messagesPanel">
+        <!-- Will be populated dynamically -->
+    </div>
 
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="js/dashboard.js"></script>
-            </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <script>
+        // Function to handle booking status updates
+        function updateBookingStatus(bookingId, status) {
+            if (confirm('Are you sure you want to change this booking status to ' + status + '?')) {
+                fetch('/Code_SWP391/guide-dashboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'action=updateBookingStatus&bookingId=' + bookingId + '&status=' + status
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Booking status updated successfully');
+                        location.reload();
+                    } else {
+                        alert('Failed to update booking status');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating booking status');
+                });
+            }
+        }
+        
+        // Function to view booking details
+        function viewBookingDetails(bookingId) {
+            // Redirect to booking details page or show modal
+            alert('View booking details for ID: ' + bookingId);
+            // window.location.href = '/Code_SWP391/booking-details?id=' + bookingId;
+        }
+        
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bookings Chart
+            const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+            const bookingsChart = new Chart(bookingsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [12, 19, 3, 5, 2, 3, 7],
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Ratings Chart
+            const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
+            const ratingsChart = new Chart(ratingsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+                    datasets: [{
+                        data: [15, 8, 3, 1, 0],
+                        backgroundColor: [
+                            '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'
+                        ],
+                        hoverBackgroundColor: [
+                            '#17a673', '#2c9faf', '#dda20a', '#be2617', '#6e707e'
+                        ],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        });
+    </script>
+</body>
 
-            </html>
+</html>

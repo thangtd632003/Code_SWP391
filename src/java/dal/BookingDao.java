@@ -10,66 +10,162 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.*;
 import java.util.*;
+
 /**
  *
  * @author thang
  */
 public class BookingDao {
-     private Connection conn;
-     public BookingDao(Connection conn){
-         this.conn = conn;
-     }
- public List<Booking> getBookingsByTravelerId(int travelerId) throws Exception {
-    List<Booking> bookings = new ArrayList<>();
-    String sql = "SELECT * FROM bookings WHERE traveler_id = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, travelerId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Booking booking = mapResultSetToBooking(rs);
-            bookings.add(booking);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return bookings;
-}
 
-   public List<Booking> getBookingsByGuideId(int guideId) {
-    List<Booking> bookings = new ArrayList<>();
-    String sql = """
+    private Connection conn;
+
+    public BookingDao(Connection conn) {
+        this.conn = conn;
+    }
+
+  
+
+    public int countBookingsByGuide(int guideId) {
+        String sql = "SELECT COUNT(*) FROM bookings b JOIN tours t ON b.tour_id = t.id WHERE t.guide_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int countBookingsByGuideId(int guideId) {
+        String sql = "SELECT COUNT(*) FROM bookings b "
+                + "JOIN tours t ON b.tour_id = t.id "
+                + "WHERE t.guide_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int countPendingBookingsByGuideId(int guideId) {
+        String sql = "SELECT COUNT(*) FROM bookings b "
+                + "JOIN tours t ON b.tour_id = t.id "
+                + "WHERE t.guide_id = ? AND b.status = 'pending'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public List<Booking> getRecentBookingsByGuideId(int guideId, int limit) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT b.* FROM bookings b "
+                + "JOIN tours t ON b.tour_id = t.id "
+                + "WHERE t.guide_id = ? "
+                + "ORDER BY b.booking_date DESC LIMIT ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ps.setInt(2, limit);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setId(rs.getInt("id"));
+                booking.setTourId(rs.getInt("tour_id"));
+                booking.setTravelerId(rs.getInt("traveler_id"));
+                booking.setNumPeople(rs.getInt("num_people"));
+                booking.setContactInfo(rs.getString("contact_info"));
+                booking.setStatusFromString(rs.getString("status"));
+                booking.setCreatedAt(rs.getTimestamp("created_at"));
+                booking.setUpdatedAt(rs.getTimestamp("updated_at"));
+                booking.setDepartureDate(rs.getDate("departure_date"));
+                bookings.add(booking);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    public boolean updateBookingStatus(int bookingId, String status) {
+        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, bookingId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Booking> getBookingsByTravelerId(int travelerId) throws Exception {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM bookings WHERE traveler_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, travelerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking booking = mapResultSetToBooking(rs);
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    public List<Booking> getBookingsByGuideId(int guideId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = """
         SELECT b.* FROM bookings b
         JOIN tours t ON b.tour_id = t.id
         WHERE t.guide_id = ?
     """;
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, guideId);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Booking booking = mapResultSetToBooking(rs);
-            bookings.add(booking);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, guideId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Booking booking = mapResultSetToBooking(rs);
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return bookings;
     }
-    return bookings;
-}
 
-public Booking getBookingById(int bookingId) {
-    String sql = "SELECT * FROM bookings WHERE id = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, bookingId);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return mapResultSetToBooking(rs);
+    public Booking getBookingById(int bookingId) {
+        String sql = "SELECT * FROM bookings WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, bookingId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToBooking(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
-public boolean updateBooking(Booking booking) {
-    String sql = """
+
+    public boolean updateBooking(Booking booking) {
+        String sql = """
         UPDATE bookings 
         SET traveler_id = ?, 
             tour_id = ?, 
@@ -80,15 +176,15 @@ public boolean updateBooking(Booking booking) {
             
         WHERE id = ?
     """;
-    
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, booking.getTravelerId());
-        ps.setInt(2, booking.getTourId());
-        ps.setInt(3, booking.getNumPeople());
-        ps.setString(4, booking.getContactInfo());
-        ps.setString(5, booking.getStatus().name());
-        ps.setDate(6, new java.sql.Date(booking.getDepartureDate().getTime()));
-        ps.setInt(7, booking.getId());
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, booking.getTravelerId());
+            ps.setInt(2, booking.getTourId());
+            ps.setInt(3, booking.getNumPeople());
+            ps.setString(4, booking.getContactInfo());
+            ps.setString(5, booking.getStatus().name());
+            ps.setDate(6, new java.sql.Date(booking.getDepartureDate().getTime()));
+            ps.setInt(7, booking.getId());
 
         int affectedRows = ps.executeUpdate();
         return affectedRows > 0;
@@ -98,20 +194,66 @@ public boolean updateBooking(Booking booking) {
     return false;
 }
 
-public boolean updateBookingStatus(int bookingId, BookingStatus newStatus) {
-    String sql = "UPDATE bookings SET status = ? WHERE id = ?";
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, newStatus.name());
-        ps.setInt(2, bookingId);
-        int affectedRows = ps.executeUpdate();
-        return affectedRows > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
+    public boolean updateBookingStatus(int bookingId, BookingStatus newStatus) {
+        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newStatus.name());
+            ps.setInt(2, bookingId);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
 
+    private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
+        Booking booking = new Booking();
+        booking.setId(rs.getInt("id"));
+        booking.setTravelerId(rs.getInt("traveler_id"));
+        booking.setTourId(rs.getInt("tour_id"));
+        booking.setNumPeople(rs.getInt("num_people"));
+        booking.setContactInfo(rs.getString("contact_info"));
+        try {
+            booking.setStatus(BookingStatus.valueOf(rs.getString("status").trim().toUpperCase()));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            // fallback hoặc log lỗi
+            booking.setStatus(BookingStatus.PENDING); // hoặc null hoặc throw
+        }
+        booking.setCreatedAt(rs.getTimestamp("created_at"));
+        booking.setUpdatedAt(rs.getTimestamp("updated_at"));
+        booking.setDepartureDate(rs.getDate("departure_date"));
+        return booking;
+    }
 
+    public List<Booking> searchBookings(String keyword) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Booking WHERE contact_info LIKE ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setTravelerId(rs.getInt("traveler_id"));
+                    // Lưu ý: có thể tên cột là tour_id hoặc schedule_id tùy DB
+                    booking.setTourId(rs.getInt("schedule_id"));
+                    booking.setNumPeople(rs.getInt("num_people"));
+                    booking.setContactInfo(rs.getString("contact_info"));
+                    booking.setStatus(BookingStatus.valueOf(rs.getString("status").toUpperCase()));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    booking.setDepartureDate(rs.getDate("departure_date"));
+                    // ... thêm các trường khác nếu có
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
 private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
     Booking booking = new Booking();
     booking.setId(rs.getInt("id"));
@@ -216,9 +358,9 @@ public List<Booking> searchBookings(String keyword) {
         }
 
         // 2. Xây dựng SQL với ORDER BY động
-        String sql = "SELECT * FROM bookings " +
-                     "WHERE traveler_id = ? " +
-                     "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+        String sql = "SELECT * FROM bookings "
+                + "WHERE traveler_id = ? "
+                + "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, travelerId);
@@ -358,9 +500,9 @@ public List<Booking> searchBookings(String keyword) {
         }
 
         // 2. Xây dựng SQL với search và ORDER BY
-        String sql = "SELECT * FROM bookings " +
-                     "WHERE traveler_id = ? AND contact_info LIKE ? " +
-                     "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+        String sql = "SELECT * FROM bookings "
+                + "WHERE traveler_id = ? AND contact_info LIKE ? "
+                + "ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, travelerId);
@@ -489,61 +631,62 @@ public List<Booking> searchBookings(String keyword) {
         return bookings;
     }
 
-public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
-    List<Booking> bookings = new ArrayList<>();
+    public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
+        List<Booking> bookings = new ArrayList<>();
 
-    // Mapping sortBy từ input Java sang cột trong CSDL
-    String column;
-    switch (sortBy.toLowerCase()) {
-        case "tourid":
-            // Lưu ý: nếu DB thực sự đặt tên cột là tour_id
-            column = "schedule_id"; 
-            break;
-        case "numpeople":
-            column = "num_people";
-            break;
-        case "status":
-            column = "status";
-            break;
-        default:
-            // Mặc định sắp xếp theo updated_at
-            column = "updated_at";
-    }
-
-    String sql = "SELECT * FROM Booking ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
-
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Booking booking = new Booking();
-                booking.setId(rs.getInt("id"));
-                booking.setTravelerId(rs.getInt("traveler_id"));
-                booking.setTourId(rs.getInt("schedule_id"));
-                booking.setNumPeople(rs.getInt("num_people"));
-                booking.setContactInfo(rs.getString("contact_info"));
-                booking.setStatus(BookingStatus.valueOf(rs.getString("status").toUpperCase()));
-                booking.setCreatedAt(rs.getTimestamp("created_at"));
-                booking.setUpdatedAt(rs.getTimestamp("updated_at"));
-                booking.setDepartureDate(rs.getDate("departure_date"));
-                // ... thêm các trường khác nếu có
-                bookings.add(booking);
-            }
+        // Mapping sortBy từ input Java sang cột trong CSDL
+        String column;
+        switch (sortBy.toLowerCase()) {
+            case "tourid":
+                // Lưu ý: nếu DB thực sự đặt tên cột là tour_id
+                column = "schedule_id";
+                break;
+            case "numpeople":
+                column = "num_people";
+                break;
+            case "status":
+                column = "status";
+                break;
+            default:
+                // Mặc định sắp xếp theo updated_at
+                column = "updated_at";
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return bookings;
-}
 
- /**
-     * 1. Kiểm tra xem user này đã có 1 booking trùng hoàn toàn cùng ngày departure_date hay chưa.
-     *    Trả về true nếu có xung đột (tức đã tồn tại booking khác của user với cùng ngày).
+        String sql = "SELECT * FROM Booking ORDER BY " + column + (sortAsc ? " ASC" : " DESC");
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setTravelerId(rs.getInt("traveler_id"));
+                    booking.setTourId(rs.getInt("schedule_id"));
+                    booking.setNumPeople(rs.getInt("num_people"));
+                    booking.setContactInfo(rs.getString("contact_info"));
+                    booking.setStatus(BookingStatus.valueOf(rs.getString("status").toUpperCase()));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    booking.setDepartureDate(rs.getDate("departure_date"));
+                    // ... thêm các trường khác nếu có
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    /**
+     * 1. Kiểm tra xem user này đã có 1 booking trùng hoàn toàn cùng ngày
+     * departure_date hay chưa. Trả về true nếu có xung đột (tức đã tồn tại
+     * booking khác của user với cùng ngày).
      */
     public boolean isSameDateConflictForUser(int travelerId, java.util.Date departureDate) throws SQLException {
-       String sql = "SELECT COUNT(*) FROM bookings " +
-             "WHERE traveler_id = ? " +
-             "AND departure_date = ? " +
-             "AND status NOT IN ('cancelled', 'rejected')";
+        String sql = "SELECT COUNT(*) FROM bookings "
+                + "WHERE traveler_id = ? "
+                + "AND departure_date = ? "
+                + "AND status NOT IN ('cancelled', 'rejected')";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, travelerId);
@@ -559,20 +702,21 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
     }
 
     /**
-     * 2. Kiểm tra xung đột khoảng thời gian giữa booking mới và booking cũ của cùng user.
-     *    Khoảng thời gian của booking được tính là:
-     *      [departure_date, departure_date + days_of_tour]
-     *    Hai khoảng thời gian (newStart, newEnd) và (existStart, existEnd) xung đột nếu:
-     *      newStart < existEnd AND existStart < newEnd
+     * 2. Kiểm tra xung đột khoảng thời gian giữa booking mới và booking cũ của
+     * cùng user. Khoảng thời gian của booking được tính là: [departure_date,
+     * departure_date + days_of_tour] Hai khoảng thời gian (newStart, newEnd) và
+     * (existStart, existEnd) xung đột nếu: newStart < existEnd AND existStart <
+     * newEnd
      *
-     *    newEnd = DATE_ADD(newStart, INTERVAL newDays DAY)
-     *    existEnd = DATE_ADD(b.departure_date, INTERVAL t.days DAY)
+     * newEnd = DATE_ADD(newStart, INTERVAL newDays DAY) existEnd =
+     * DATE_ADD(b.departure_date, INTERVAL t.days DAY)
      *
-     *    Trả về true nếu có booking cũ nào của travelerId overlap khoảng newStart..newEnd.
+     * Trả về true nếu có booking cũ nào của travelerId overlap khoảng
+     * newStart..newEnd.
      *
-     * @param travelerId   ID của traveler
+     * @param travelerId ID của traveler
      * @param newDeparture Ngày mới (java.util.Date) muốn book
-     * @param newDays      Số ngày của tour mới
+     * @param newDays Số ngày của tour mới
      * @return true nếu có xung đột, false nếu không
      */
     public boolean isPeriodConflictForUser(int travelerId, java.util.Date newDeparture, int newDays) throws SQLException {
@@ -606,17 +750,18 @@ public List<Booking> sortBookings(String sortBy, boolean sortAsc) {
     }
 
     /**
-     * 3. Kiểm tra xung đột khoảng thời gian booking mới với các booking đã "APPROVED" của guide,
-     *    dù booking đó là của bất kỳ user nào.
+     * 3. Kiểm tra xung đột khoảng thời gian booking mới với các booking đã
+     * "APPROVED" của guide, dù booking đó là của bất kỳ user nào.
      *
-     *    Giả sử "APPROVED" mapping sang giá trị BookingStatus.APPROVED.name().
-     *    Logic điều kiện xung đột tương tự trên, nhưng chỉ lấy những booking
-     *    mà tour thuộc về guideId và status = 'APPROVED'.
+     * Giả sử "APPROVED" mapping sang giá trị BookingStatus.APPROVED.name().
+     * Logic điều kiện xung đột tương tự trên, nhưng chỉ lấy những booking mà
+     * tour thuộc về guideId và status = 'APPROVED'.
      *
-     * @param guideId      ID của guide
+     * @param guideId ID của guide
      * @param newDeparture Ngày mới (java.util.Date) muốn book
-     * @param newDays      Số ngày của tour mới
-     * @return true nếu có xung đột với booking APPROVED của guide, false nếu không
+     * @param newDays Số ngày của tour mới
+     * @return true nếu có xung đột với booking APPROVED của guide, false nếu
+     * không
      */
     public boolean isPeriodConflictForGuide(int guideId, java.util.Date newDeparture, int newDays) throws SQLException {
         String sql = ""
@@ -682,7 +827,8 @@ ps.setString(11, booking.getTourItinerary());
         return false;
     }
     }
-   public boolean isDepartureInPast(int bookingId) throws SQLException {
+
+    public boolean isDepartureInPast(int bookingId) throws SQLException {
         String sql = "SELECT departure_date FROM bookings WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, bookingId);
@@ -699,11 +845,12 @@ ps.setString(11, booking.getTourItinerary());
     }
 
     /**
-     * 2. Kiểm tra xung đột với các booking đã được "APPROVED" khác của cùng guide.
-     *    Trả về true nếu có ít nhất một booking APPROVED khác overlap khoảng thời gian.
+     * 2. Kiểm tra xung đột với các booking đã được "APPROVED" khác của cùng
+     * guide. Trả về true nếu có ít nhất một booking APPROVED khác overlap
+     * khoảng thời gian.
      *
-     *    bookingId: ID của booking hiện tại (đang muốn approve) → để loại trừ chính nó
-     *    newDeparture, newDays: khoảng thời gian của booking này
+     * bookingId: ID của booking hiện tại (đang muốn approve) → để loại trừ
+     * chính nó newDeparture, newDays: khoảng thời gian của booking này
      */
     public boolean hasApprovedConflict(int bookingId, java.util.Date newDeparture, int newDays) throws SQLException {
         String sql = ""
@@ -741,11 +888,12 @@ ps.setString(11, booking.getTourItinerary());
     }
 
     /**
-     * 3. Lấy danh sách các booking có trạng thái CHƯA APPROVED (PENDING) của cùng guide,
-     *    mà khoảng thời gian (departure_date + days) overlap với booking mới.
-     *    Dùng để thông báo guide: "Những booking chưa duyệt khác cũng trùng thời gian".
+     * 3. Lấy danh sách các booking có trạng thái CHƯA APPROVED (PENDING) của
+     * cùng guide, mà khoảng thời gian (departure_date + days) overlap với
+     * booking mới. Dùng để thông báo guide: "Những booking chưa duyệt khác cũng
+     * trùng thời gian".
      */
-    public List<Booking> getOverlappingPendingForGuide(int bookingId, java.util.Date  newDeparture, int newDays) throws SQLException {
+    public List<Booking> getOverlappingPendingForGuide(int bookingId, java.util.Date newDeparture, int newDays) throws SQLException {
         List<Booking> result = new ArrayList<>();
 
         String sql = ""
@@ -782,4 +930,5 @@ ps.setString(11, booking.getTourItinerary());
         return result;
     }
 
+   
 }
