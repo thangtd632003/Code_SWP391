@@ -21,6 +21,9 @@ public class guideDao {
         this.conn = conn;
     }
 
+    public guideDao() {
+    }
+
     /**
      * Lấy GuideProfile theo guideId
      */

@@ -3,7 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Long/Desktop/Code_SWP391/src/java/controller/UpdateSettingsServlet_Long.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/entity/Booking.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/tourDao.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/entity/Tour.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/web/dashboardTraveler.jsp</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/controller/GuideDashboardServlet.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/controller/GuideDetailServlet.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/userDao.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/BookingDao.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/controller/LoginController.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/web/dashboard.jsp</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/ReviewDAO_Long.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/guideDao.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/web/login.jsp</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/src/java/dal/UserDAO_Long.java</file>
+            <file>file:/D:/Code_SWP391-smile/Code_SWP391-smile/web/dashboardGuide.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -184,4 +184,19 @@
         <servlet-name>detailTourUser_servlet</servlet-name>
         <url-pattern>/detailTourUser_servlet</url-pattern>
     </servlet-mapping>
+     <servlet>
+        <servlet-name>RatingServlet</servlet-name>
+        <servlet-class>controller.RatingServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>RatingServlet</servlet-name>
+        <url-pattern>/rating</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+
 </web-app>
