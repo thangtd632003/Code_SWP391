@@ -207,53 +207,9 @@ public class BookingDao {
         return false;
     }
 
-    private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
-        Booking booking = new Booking();
-        booking.setId(rs.getInt("id"));
-        booking.setTravelerId(rs.getInt("traveler_id"));
-        booking.setTourId(rs.getInt("tour_id"));
-        booking.setNumPeople(rs.getInt("num_people"));
-        booking.setContactInfo(rs.getString("contact_info"));
-        try {
-            booking.setStatus(BookingStatus.valueOf(rs.getString("status").trim().toUpperCase()));
-        } catch (IllegalArgumentException | NullPointerException e) {
-            // fallback hoặc log lỗi
-            booking.setStatus(BookingStatus.PENDING); // hoặc null hoặc throw
-        }
-        booking.setCreatedAt(rs.getTimestamp("created_at"));
-        booking.setUpdatedAt(rs.getTimestamp("updated_at"));
-        booking.setDepartureDate(rs.getDate("departure_date"));
-        return booking;
-    }
 
-    public List<Booking> searchBookings(String keyword) {
-        List<Booking> bookings = new ArrayList<>();
-        String sql = "SELECT * FROM Booking WHERE contact_info LIKE ?";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, "%" + keyword + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Booking booking = new Booking();
-                    booking.setId(rs.getInt("id"));
-                    booking.setTravelerId(rs.getInt("traveler_id"));
-                    // Lưu ý: có thể tên cột là tour_id hoặc schedule_id tùy DB
-                    booking.setTourId(rs.getInt("schedule_id"));
-                    booking.setNumPeople(rs.getInt("num_people"));
-                    booking.setContactInfo(rs.getString("contact_info"));
-                    booking.setStatus(BookingStatus.valueOf(rs.getString("status").toUpperCase()));
-                    booking.setCreatedAt(rs.getTimestamp("created_at"));
-                    booking.setUpdatedAt(rs.getTimestamp("updated_at"));
-                    booking.setDepartureDate(rs.getDate("departure_date"));
-                    // ... thêm các trường khác nếu có
-                    bookings.add(booking);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return bookings;
-    }
+
 private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
     Booking booking = new Booking();
     booking.setId(rs.getInt("id"));

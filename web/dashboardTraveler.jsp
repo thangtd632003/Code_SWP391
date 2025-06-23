@@ -44,14 +44,14 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#bookings" class="nav-link">
+                                        <a href="/Code_SWP391/ListBookingTraveler_servlet" class="nav-link">
                                             <i class="fas fa-calendar-check"></i>
                                             <span>Bookings</span>
                                             <span class="badge">12</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#tours" class="nav-link">
+                                        <a href="/Code_SWP391/listTourUser_servlet" class="nav-link">
                                             <i class="fas fa-map-marked-alt"></i>
                                             <span>Tours</span>
                                         </a>
@@ -68,12 +68,7 @@
                             <div class="nav-section">
                                 <h5 class="nav-section-title">Management</h5>
                                 <ul class="nav-list">
-                                    <li class="nav-item">
-                                        <a href="#guides" class="nav-link">
-                                            <i class="fas fa-user-tie"></i>
-                                            <span>Tour Guides</span>
-                                        </a>
-                                    </li>
+                                   
                                     <li class="nav-item">
                                         <a href="#reviews" class="nav-link">
                                             <i class="fas fa-star"></i>
@@ -83,24 +78,14 @@
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="#reports" class="nav-link">
-                                            <i class="fas fa-chart-bar"></i>
-                                            <span>Reports</span>
-                                        </a>
-                                    </li>
+                                 
                                 </ul>
                             </div>
 
                             <div class="nav-section">
                                 <h5 class="nav-section-title">Settings</h5>
                                 <ul class="nav-list">
-                                    <li class="nav-item">
-                                        <a href="#settings" class="nav-link">
-                                            <i class="fas fa-cog"></i>
-                                            <span>Settings</span>
-                                        </a>
-                                    </li>
+                                  
                                     <li class="nav-item">
                                         <a href="/Code_SWP391/ProfileTravler_servlet" class="nav-link">
                                             <i class="fas fa-user-circle"></i>

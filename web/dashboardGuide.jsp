@@ -49,13 +49,13 @@
                     <h5 class="nav-section-title">Management</h5>
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="#my-tours" class="nav-link">
+                            <a href="tourList_servlet" class="nav-link">
                                 <i class="fas fa-map-marked-alt"></i>
                                 <span>My Tours</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#bookings" class="nav-link">
+                            <a href="/Code_SWP391/ListBookingGuide_servlet" class="nav-link">
                                 <i class="fas fa-calendar-check"></i>
                                 <span>Bookings</span>
                                 <span class="badge">

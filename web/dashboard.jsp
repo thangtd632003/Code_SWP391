@@ -202,7 +202,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="tours">
+                <a class="nav-link" href="/Code_SWP391/listTourAdmin_servlet">
                     <i class="fas fa-map-marked-alt"></i> Tours
                 </a>
             </li>
@@ -216,6 +216,11 @@
                     <i class="fas fa-star"></i> Reviews
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link" href="/Code_SWP391/userList_servlet">
+                    <i class="fas fa-map-marked-alt"></i> Users
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="profile">
                     <i class="fas fa-user"></i> Profile
@@ -226,6 +231,7 @@
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </li>
+            
         </ul>
     </div>
 
