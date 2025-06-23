@@ -14,6 +14,7 @@ import entity.Booking;
 import entity.BookingStatus;
 import entity.Tour;
 import entity.User;
+import dal.userDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -26,6 +27,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+import java.util.Properties;
 
 /**
  *
@@ -33,6 +38,12 @@ import java.util.logging.Logger;
  */
 public class createBooking_servlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+     private static final String SMTP_HOST = "smtp.gmail.com";
+    private static final String SMTP_PORT = "587";
+    // Thay báº±ng email + máº­t kháº©u á»©ng dá»¥ng (app password) cá»§a báº¡n:
+    private static final String SMTP_USERNAME = "quizlet875@gmail.com";
+    private static final String SMTP_PASSWORD = "fcrg hpnd xcmt hfye";
 
     // Định dạng ngày nhận từ form, ví dụ "yyyy-MM-dd"
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -162,9 +173,11 @@ public class createBooking_servlet extends HttpServlet {
             // Nạp DAO
             BookingDao bookingDao = new BookingDao(conn);
             tourDao tourDao = new tourDao(conn);
-
+userDao userDao = new userDao(conn);
             // Lấy thông tin tour (để biết số ngày)
             Tour tour = tourDao.getTourById(tourId);
+            //lấy guide account
+            User guide = userDao.getUserById(tour.getGuideId());
             if (tour == null) {
                 response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
                 return;
@@ -216,13 +229,18 @@ public class createBooking_servlet extends HttpServlet {
             newBooking.setTourPrice(tour.getPrice());
             newBooking.setTourItinerary(tour.getItinerary());
             boolean created = bookingDao.addBooking(newBooking);
+            
             if (!created) {
+                
                 // Nếu insertion thất bại
                 response.sendRedirect(request.getContextPath()
                         + "/createBooking_servlet?tourId=" + tourId
                         + "&message=creationFailed");
                 return;
             }
+            
+            boolean mailSent = sendNewBookingToGuide(guide.getEmail());
+
         } catch (SQLException ex) {
             throw new ServletException("Lỗi khi tạo booking mới.", ex);
         } catch (Exception ex) {
@@ -232,6 +250,43 @@ public class createBooking_servlet extends HttpServlet {
         //  Nếu thành công, chuyển về trang xác nhận hoặc danh sách booking
         response.sendRedirect(request.getContextPath() + "/createBooking_servlet?tourId=" + tourId+"&message=bookingSuccess");
     }
+private boolean sendNewBookingToGuide(String guideEmail) {
+    try {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", SMTP_HOST);
+        props.put("mail.smtp.port", SMTP_PORT);
+        props.put("mail.smtp.ssl.trust", SMTP_HOST);
+        props.put("mail.smtp.starttls.required", "true");
+
+        Session mailSession = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SMTP_USERNAME, SMTP_PASSWORD);
+            }
+        });
+        mailSession.setDebug(true);
+
+        Message message = new MimeMessage(mailSession);
+        message.setFrom(new InternetAddress(SMTP_USERNAME));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(guideEmail));
+        message.setSubject("Có booking mới cho tour bạn phụ trách");
+
+        String content = "Xin chào,\n\n"
+                + "Bạn vừa nhận được một booking mới cho tour bạn phụ trách. Check booking list.\n\n"
+          
+                + "Vui lòng chuẩn bị và liên hệ với khách hàng khi cần thiết.\n"
+                + "Trân trọng.";
+
+        message.setText(content);
+        Transport.send(message);
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 
     /** 
      * Returns a short description of the servlet.

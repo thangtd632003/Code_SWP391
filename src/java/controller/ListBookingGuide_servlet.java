@@ -22,6 +22,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import dal.tourDao;
 import entity.Tour;
+import dal.userDao;
+
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
+
+import java.util.Properties;
 /**
  *
  * @author thang
@@ -29,6 +36,7 @@ import entity.Tour;
 public class ListBookingGuide_servlet extends HttpServlet {
        private BookingDao bookingDao;
        private tourDao tourDao;
+       private userDao userDao;
  @Override
     public void init() throws ServletException {
         super.init();
@@ -36,9 +44,17 @@ public class ListBookingGuide_servlet extends HttpServlet {
             Connection conn = new DBContext().getConnection();
             bookingDao = new BookingDao(conn);
            tourDao = new tourDao(conn);
+           userDao = new userDao(conn);
         } catch (Exception e) {
             throw new ServletException("Cannot initialize DAOs in DetailBookingGuideServlet", e);
         }}
+    
+     private static final String SMTP_HOST = "smtp.gmail.com";
+    private static final String SMTP_PORT = "587";
+    // Thay báº±ng email + máº­t kháº©u á»©ng dá»¥ng (app password) cá»§a báº¡n:
+    private static final String SMTP_USERNAME = "quizlet875@gmail.com";
+    private static final String SMTP_PASSWORD = "fcrg hpnd xcmt hfye";
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -205,15 +221,20 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                             doGet(request, response);
                             return;
                         }
-
+ User traveler = userDao.getUserById(booking.getTravelerId());
                         bookingDao.updateBookingStatus(bookingId, newStatus);
+                              boolean mailSent = sendNewBookingToTraveler(traveler.getEmail(),bookingId);
                         request.setAttribute("message",
                             " Booking has been approved successfully.");
                         doGet(request, response);
                         return;
                     }
-
+                    Booking b = bookingDao.getBookingById(bookingId);
+                  User traveler = userDao.getUserById(b.getTravelerId());
                     bookingDao.updateBookingStatus(bookingId, newStatus);
+                    
+            boolean mailSent = sendNewBookingToTraveler(traveler.getEmail(),bookingId);
+
                     request.setAttribute("message",
                         "✅ Booking status updated successfully.");
                     doGet(request, response);
@@ -241,7 +262,43 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
                 break;
         }
     }
+private boolean sendNewBookingToTraveler(String travelerEmail,int bookingID) {
+    try {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", SMTP_HOST);
+        props.put("mail.smtp.port", SMTP_PORT);
+        props.put("mail.smtp.ssl.trust", SMTP_HOST);
+        props.put("mail.smtp.starttls.required", "true");
 
+        Session mailSession = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(SMTP_USERNAME, SMTP_PASSWORD);
+            }
+        });
+        mailSession.setDebug(true);
+
+        Message message = new MimeMessage(mailSession);
+        message.setFrom(new InternetAddress(SMTP_USERNAME));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(travelerEmail));
+        message.setSubject("Có booking mới cho tour bạn phụ trách");
+
+        String content = "Xin chào,\n\n"
+                + "Booking bạn vừa cập nhật. Check booking list.\n\n"
+          + "Mã Booking     : " + bookingID + "\n"
+                + "Vui lòng chuẩn bị và liên hệ với khách hàng khi cần thiết.\n"
+                + "Trân trọng.";
+
+        message.setText(content);
+        Transport.send(message);
+        return true;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
