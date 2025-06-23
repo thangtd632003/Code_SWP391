@@ -24,19 +24,20 @@ public class DashboardServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
-         if(user.getRole().name().equalsIgnoreCase("guide")){
-               request.getRequestDispatcher("dashboardGuide.jsp").forward(request, response);
-         }
-          if(user.getRole().name().equalsIgnoreCase("traveler")){
-               request.getRequestDispatcher("dashboardTraveler.jsp").forward(request, response);
-         }
+       
         // Refresh user data from database
         UserDAO_Long userDAO = new UserDAO_Long();
         User refreshedUser = userDAO.getUserById(user.getId()); 
         if (refreshedUser != null) {
             session.setAttribute("user", refreshedUser);
         }
-
+  if(user.getRole().name().equalsIgnoreCase("guide")){
+response.sendRedirect(request.getContextPath() + "/guide-dashboard");
+               return;
+         }
+          if(user.getRole().name().equalsIgnoreCase("traveler")){
+               request.getRequestDispatcher("dashboardTraveler.jsp").forward(request, response);
+         }
         double averageRating = reviewDAO.getAverageRating();
         int totalGuides = UserDAO_Long.countGuides();
         int totalTravelers = UserDAO_Long.countTravelers();

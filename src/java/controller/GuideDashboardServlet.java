@@ -18,7 +18,8 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/guide-dashboard")
+@WebServlet(name = "DashboardGuide", urlPatterns = {"/guide-dashboard"})
+
 public class GuideDashboardServlet extends HttpServlet {
     private guideDao guideDAO;
     private ReviewDAO_Long reviewDAO;
@@ -56,7 +57,7 @@ public class GuideDashboardServlet extends HttpServlet {
     } else {
         System.out.println("Không có user nào trong session");
     }
-        if (currentUser == null || !currentUser.getRole().equals("guide")) {
+        if (currentUser == null || !currentUser.getRole().name().equalsIgnoreCase("guide")) {
             response.sendRedirect("login");
             return;
         }
@@ -86,7 +87,7 @@ public class GuideDashboardServlet extends HttpServlet {
         request.setAttribute("upcomingTours", upcomingTours);
 
         // Forward to dashboard.jsp
-        request.getRequestDispatcher("guide-dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("dashboardGuide.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
