@@ -120,7 +120,7 @@ public class ChangePassword_servlet extends HttpServlet {
                 // Xóa thông tin tạm (otp & email) khỏi session
                 session.removeAttribute("resetEmail");
                 session.removeAttribute("resetOTP");
-
+session.invalidate();
                 // Chuyển về trang login hoặc gửi thông báo thành công
                 response.sendRedirect(request.getContextPath() + "/login.jsp?reset=success");
             } else {

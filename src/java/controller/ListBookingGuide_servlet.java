@@ -282,20 +282,21 @@ private boolean sendNewBookingToTraveler(String travelerEmail,int bookingID) {
         Message message = new MimeMessage(mailSession);
         message.setFrom(new InternetAddress(SMTP_USERNAME));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(travelerEmail));
-        message.setSubject("Có booking mới cho tour bạn phụ trách");
+        message.setSubject("Have a new status booking for your booking");
 
-        String content = "Xin chào,\n\n"
-                + "Booking bạn vừa cập nhật. Check booking list.\n\n"
-          + "Mã Booking     : " + bookingID + "\n"
-                + "Vui lòng chuẩn bị và liên hệ với khách hàng khi cần thiết.\n"
-                + "Trân trọng.";
+        String content = "Hi,This is mail from website connection traveler and guide.\n\n"
+                + "Booking you just updated. Check booking list.\n\n"
+          + "Booking ID     : " + bookingID + "\n"
+                
+                + "Thank you.";
 
         message.setText(content);
         Transport.send(message);
         return true;
 
     } catch (Exception e) {
-        e.printStackTrace();
+       Logger.getLogger(ListBookingGuide_servlet.class.getName())
+      .log(Level.SEVERE, "An error occurred", e);
         return false;
     }
 }

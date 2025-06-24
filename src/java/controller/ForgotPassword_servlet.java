@@ -170,10 +170,10 @@ mailSession.setDebug(true);
             Message message = new MimeMessage(mailSession);
             message.setFrom(new InternetAddress(SMTP_USERNAME));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
-            message.setSubject("Mã xác thực khôi phục mật khẩu");
-            message.setText("Mã xác thực của bạn là: " + otp + "\n\n"
-                    + "Vui lòng không cung cấp mã này cho bất cứ ai.\n"
-                    + "Nếu bạn không yêu cầu khôi phục mật khẩu, có thể bỏ qua email này.");
+            message.setSubject("Password recovery authentication code");
+            message.setText("Hi,This is mail from website connection traveler and guide.Your verification code is: " + otp + "\n\n"
+                    + "Please do not give this code to anyone..\n"
+                    + "If you do not request password recovery, you can ignore this email.");
 
             Transport.send(message);
             return true;

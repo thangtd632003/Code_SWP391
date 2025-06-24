@@ -270,20 +270,21 @@ private boolean sendNewBookingToGuide(String guideEmail) {
         Message message = new MimeMessage(mailSession);
         message.setFrom(new InternetAddress(SMTP_USERNAME));
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(guideEmail));
-        message.setSubject("Có booking mới cho tour bạn phụ trách");
+        message.setSubject("You have a booking for tour");
 
-        String content = "Xin chào,\n\n"
-                + "Bạn vừa nhận được một booking mới cho tour bạn phụ trách. Check booking list.\n\n"
+        String content = "Hi,\n\n"
+                + "This is mail from website connection traveler and guideYou have just received a new booking for the tour you are in charge of. Check booking list.\n\n"
           
-                + "Vui lòng chuẩn bị và liên hệ với khách hàng khi cần thiết.\n"
-                + "Trân trọng.";
+                + "Please be prepared and contact customers as needed..\n"
+                + "Thank.";
 
         message.setText(content);
         Transport.send(message);
         return true;
 
     } catch (Exception e) {
-        e.printStackTrace();
+      Logger.getLogger(createBooking_servlet.class.getName())
+      .log(Level.SEVERE, "An error occurred", e);
         return false;
     }
 }
