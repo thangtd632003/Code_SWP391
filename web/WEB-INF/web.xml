@@ -88,6 +88,10 @@
         <servlet-name>report_page</servlet-name>
         <servlet-class>controller.ReportServlet_servlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListBookingAdmin_servlet</servlet-name>
+        <servlet-class>controller.ListBookingAdmin_servlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_servlet</servlet-name>
         <url-pattern>/tourList_servlet</url-pattern>
@@ -199,6 +203,10 @@
     <servlet-mapping>
         <servlet-name>report_page</servlet-name>
         <url-pattern>/report_page</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListBookingAdmin_servlet</servlet-name>
+        <url-pattern>/ListBookingAdmin_servlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
