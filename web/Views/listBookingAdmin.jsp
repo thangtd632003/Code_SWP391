@@ -194,12 +194,11 @@
             <td><c:out value="${b.status}"/></td>
             <td><c:out value="${b.departureDate}"/></td>
             <td>
-              <form method="post" style="display:inline;"
-                    action="${pageContext.request.contextPath}/ListBookingAdmin_servlet">
-                <input type="hidden" name="action" value="view"/>
-                <input type="hidden" name="id"     value="${b.id}"/>
-                <button class="action-btn" type="submit">Detail</button>
-              </form>
+            <form method="get" style="display:inline;"
+      action="${pageContext.request.contextPath}/DetailBookingAdmin_servlet">
+    <input type="hidden" name="bookingId" value="${b.id}"/>
+    <button class="action-btn" type="submit">Detail</button>
+</form>
               
             </td>
           </tr>
