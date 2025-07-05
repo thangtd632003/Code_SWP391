@@ -206,7 +206,7 @@
     </c:if>
 
     <!-- 2. Section: Top 10 tour được booking nhiều nhất -->
-    <h2 class="section-title">Top 10 Tour Phổ biến</h2>
+    <h2 class="section-title">Top 10 Most Booked Tours </h2>
     <div class="card-grid">
       <c:forEach var="t" items="${topTours}">
         <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card">

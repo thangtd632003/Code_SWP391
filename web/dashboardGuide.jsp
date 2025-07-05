@@ -33,17 +33,7 @@
             </div>
 
             <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <h5 class="nav-section-title">Main Menu</h5>
-                    <ul class="nav-list">
-                        <li class="nav-item active">
-                            <a href="/Code_SWP391/guide-dashboard" class="nav-link">
-                                <i class="fas fa-home"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                
 
                 <div class="nav-section">
                     <h5 class="nav-section-title">Management</h5>
@@ -66,21 +56,17 @@
                         <li class="nav-item">
                             <a href="#reviews" class="nav-link">
                                 <i class="fas fa-star"></i>
-                                <span>My Reviews</span>
+                                <span>Reviews</span>
                             </a>
                         </li>
+                         
                     </ul>
                 </div>
 
                 <div class="nav-section">
                     <h5 class="nav-section-title">Settings</h5>
                     <ul class="nav-list">
-                        <li class="nav-item">
-                            <a href="#settings" class="nav-link">
-                                <i class="fas fa-cog"></i>
-                                <span>Settings</span>
-                            </a>
-                        </li>
+                      
                         <li class="nav-item">
                             <a href="/Code_SWP391/ProfileTravler_servlet" class="nav-link">
                                 <i class="fas fa-user-circle"></i>
@@ -91,6 +77,13 @@
                             <a href="/Code_SWP391/guideProfile_servlet" class="nav-link">
                                 <i class="fas fa-user-circle"></i>
                                 <span>Guide Profile</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                                                       <a href="/Code_SWP391/report_page" class="nav-link">
+
+                                <i class="fas fa-file"></i>
+                                <span>Send report to admin </span>
                             </a>
                         </li>
                     </ul>
@@ -107,22 +100,14 @@
                 </button>
 
                 <div class="search-box">
-                    <input type="text" placeholder="Search...">
-                    <i class="fas fa-search"></i>
+                   
                 </div>
 
                 <div class="nav-actions">
-                    <button class="nav-action-btn" id="notificationsBtn">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">${pendingBookings}</span>
-                    </button>
-                    <button class="nav-action-btn" id="messagesBtn">
-                        <i class="fas fa-envelope"></i>
-                        <span class="badge">0</span>
-                    </button>
+                   
                     <div class="user-menu">
                         <button class="user-menu-btn">
-                            <img src="img/logi.jpg" alt="User Avatar" class="user-avatar" hidden>
+                           
                             <span class="user-name">
                                 <c:out value="${currentUser.fullName}" />
                             </span>
@@ -135,9 +120,7 @@
                             <a href="/Code_SWP391/guideProfile_servlet" class="dropdown-item">
                                 <i class="fas fa-user"></i> Profile
                             </a>
-                            <a href="#settings" class="dropdown-item">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
+                          
                             <div class="dropdown-divider"></div>
                             <a href="/Code_SWP391/logout" class="dropdown-item text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -152,9 +135,7 @@
                 <!-- Guide Profile Card -->
                 <div class="card mb-4">
                     <div class="card-body d-flex align-items-center p-4">
-                        <div class="guide-avatar me-4">
-                            <i class="fas fa-user-tie fa-4x"></i>
-                        </div>
+                        
                         <div class="guide-info">
                             <h2 class="mb-1">${currentUser.fullName}</h2>
                             <p class="text-muted mb-2"><i class="fas fa-envelope me-2"></i>${currentUser.email}</p>
@@ -237,83 +218,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Charts Section -->
-                <div class="charts-grid">
-                    <div class="chart-card main-chart">
-                        <div class="chart-header">
-                            <h3>Bookings Overview</h3>
-                            <div class="chart-actions">
-                                <select class="chart-period-select">
-                                    <option>Last 7 Days</option>
-                                    <option>Last 30 Days</option>
-                                    <option>Last 3 Months</option>
-                                    <option>Last Year</option>
-                                </select>
-                                <button class="chart-action-btn">
-                                    <i class="fas fa-download"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="chart-body">
-                            <canvas id="bookingsChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3>Rating Distribution</h3>
-                            <button class="chart-action-btn">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                        </div>
-                        <div class="chart-body">
-                            <canvas id="ratingsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-             
-
-                    <!-- Recent Reviews -->
-                    <div class="card recent-reviews">
-                        <div class="card-header">
-                            <h3>Recent Reviews</h3>
-                            <button class="view-all-btn">View All</button>
-                        </div>
-                        <div class="card-body">
-                            <c:choose>
-                                <c:when test="${not empty recentReviews}">
-                                    <ul class="list-group list-group-flush">
-                                        <c:forEach var="review" items="${recentReviews}">
-                                            <li class="list-group-item">
-                                                <div>
-                                                    <strong>Booking ID:</strong> ${review.bookingId}
-                                                    <span class="ms-2"><strong>Rating:</strong>
-                                                        <c:forEach begin="1" end="${review.rating}" var="i">
-                                                            <i class="fas fa-star text-warning"></i>
-                                                        </c:forEach>
-                                                        <c:forEach begin="${review.rating + 1}" end="5" var="i">
-                                                            <i class="far fa-star text-warning"></i>
-                                                        </c:forEach>
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <em>${review.comment}</em>
-                                                </div>
-                                                <div class="text-muted small">
-                                                    <fmt:formatDate value="${review.createdAt}" pattern="dd/MM/yyyy HH:mm" />
-                                                </div>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="text-muted text-center p-3">No reviews yet.</div>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>

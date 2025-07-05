@@ -18,6 +18,157 @@
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
                 <link rel="stylesheet" href="css/dashboard.css">
+                <style>
+    /* Toàn trang */
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff; /* nền trắng */
+      margin: 0; 
+      padding: 0;
+    }
+
+    /* Thanh cố định trên cùng */
+    .top-bar {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 100%;
+  
+      color: #1565C0;
+      background-color:#ffffff; 
+    
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    .top-bar a.dashboard-link {
+   color: #1565C0;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    .top-bar a.dashboard-link:hover {
+        color:  #cce0f0;
+    }
+
+    /* Form tìm kiếm bên tay phải */
+    .top-bar form {
+      display: flex;
+      align-items: center;
+    }
+    .top-bar input[type="text"] {
+      padding: 6px; 
+      font-size: 14px; 
+      width: 200px;
+      border: none; 
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .top-bar button.search-btn {
+      padding: 6px 10px; 
+      font-size: 14px;
+      border: none; 
+      border-radius: 4px;
+      background: #ff8c00; /* cam tươi */
+      color: #fff;
+      cursor: pointer;
+    }
+    .top-bar button.search-btn:hover {
+      background: #e57c00;
+    }
+
+    /* Khu vực nội dung chính */
+    .container {
+      margin-top: 70px; /* chừa chỗ cho thanh top-bar */
+      padding: 20px;
+    }
+    h2.section-title {
+      margin-top: 40px; 
+      margin-bottom: 10px; 
+      color: #005ea8; /* tiêu đề màu xanh dương */
+    }
+
+    /* Lưới hiển thị các card */
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: calc(25% - 16px);
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
+    }
+    .card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .card-body {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-body h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #003b5c; /* xanh dương đậm hơn cho tên tour */
+    }
+    .card-body p.price {
+      margin: 0 0 12px;
+      font-size: 16px;
+      color: #ff8c00; /* cam */
+      font-weight: bold;
+    }
+    .card-body .buttons {
+      margin-top: auto;
+      display: flex;
+      gap: 6px;
+    }
+    .card-body .buttons button {
+      flex: 1;
+      padding: 6px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #fff;
+    }
+    .btn-detail {
+      background: #007bff; /* xanh dương */
+    }
+    .btn-detail:hover {
+      background: #006ae0;
+    }
+    .btn-book {
+      background: #28a745; /* xanh lá */
+    }
+    .btn-book:hover {
+      background: #218838;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .card { width: calc(33.333% - 16px); }
+    }
+    @media (max-width: 768px) {
+      .card { width: calc(50% - 16px); }
+    }
+    @media (max-width: 480px) {
+      .card { width: 100%; }
+    }
+  </style>
             </head>
 
             <body class="dashboard-body">
@@ -37,50 +188,25 @@
                             <div class="nav-section">
                                 <h5 class="nav-section-title">Main Menu</h5>
                                 <ul class="nav-list">
-                                    <li class="nav-item active">
-                                        <a href="#dashboard" class="nav-link">
-                                            <i class="fas fa-home"></i>
-                                            <span>Dashboard</span>
-                                        </a>
-                                    </li>
+                                   
                                     <li class="nav-item">
                                         <a href="/Code_SWP391/ListBookingTraveler_servlet" class="nav-link">
                                             <i class="fas fa-calendar-check"></i>
-                                            <span>Bookings</span>
-                                            <span class="badge">12</span>
+                                            <span>My Bookings</span>
+                                          
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="/Code_SWP391/listTourUser_servlet" class="nav-link">
                                             <i class="fas fa-map-marked-alt"></i>
-                                            <span>Tours</span>
+                                            <span>All Tours of Website</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="#customers" class="nav-link">
-                                            <i class="fas fa-users"></i>
-                                            <span>Customers</span>
-                                        </a>
-                                    </li>
+                                     
                                 </ul>
                             </div>
 
-                            <div class="nav-section">
-                                <h5 class="nav-section-title">Management</h5>
-                                <ul class="nav-list">
-                                   
-                                    <li class="nav-item">
-                                        <a href="#reviews" class="nav-link">
-                                            <i class="fas fa-star"></i>
-                                            <span>Reviews</span>
-                                            <span class="badge">
-                                                <c:out value="${reviewCount}" />
-                                            </span>
-                                        </a>
-                                    </li>
-                                 
-                                </ul>
-                            </div>
+                        
 
                             <div class="nav-section">
                                 <h5 class="nav-section-title">Settings</h5>
@@ -90,6 +216,12 @@
                                         <a href="/Code_SWP391/ProfileTravler_servlet" class="nav-link">
                                             <i class="fas fa-user-circle"></i>
                                             <span>Account information</span>
+                                        </a>
+                                    </li>
+                                     <li class="nav-item">
+                                        <a href="/Code_SWP391/report_page" class="nav-link">
+                                               <i class="fas fa-file"></i>
+                                            <span>Send report to admin</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -106,19 +238,11 @@
                             </button>
 
                             <div class="search-box">
-                                <input type="text" placeholder="Search...">
-                                <i class="fas fa-search"></i>
+                             
                             </div>
 
                             <div class="nav-actions">
-                                <button class="nav-action-btn" id="notificationsBtn">
-                                    <i class="fas fa-bell"></i>
-                                    <span class="badge">3</span>
-                                </button>
-                                <button class="nav-action-btn" id="messagesBtn">
-                                    <i class="fas fa-envelope"></i>
-                                    <span class="badge">5</span>
-                                </button>
+                               
                                 <div class="user-menu">
                                     <button class="user-menu-btn">
                                         <img src="img/logi.jpg" alt="User Avatar" class="user-avatar" hidden>
@@ -131,9 +255,7 @@
                                         <a href="/Code_SWP391/ProfileTravler_servlet" class="dropdown-item">
                                             <i class="fas fa-user"></i> Account information
                                         </a>
-                                        <a href="#settings" class="dropdown-item">
-                                            <i class="fas fa-cog"></i> Settings
-                                        </a>
+                                   
                                         <div class="dropdown-divider"></div>
                                         <a href="/Code_SWP391/logout" class="dropdown-item text-danger">
                                             <i class="fas fa-sign-out-alt"></i> Logout
@@ -146,27 +268,13 @@
                         <!-- Dashboard Content -->
                         <div class="dashboard-content">
                             <!-- Statistics Cards -->
-                            <div class="stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Total Revenue</h3>
-                                        <div class="stat-value">$54,598</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 12.5%
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-dollar-sign"></i>
-                                    </div>
-                                </div>
+                           >
 
                                 <div class="stat-card">
                                     <div class="stat-card-content">
                                         <h3>Total Bookings</h3>
-                                        <div class="stat-value">845</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 8.2%
-                                        </div>
+                                        <div class="stat-value">${totalBookings}</div>
+                                        
                                     </div>
                                     <div class="stat-icon">
                                         <i class="fas fa-calendar-check"></i>
@@ -175,134 +283,35 @@
 
                                 <div class="stat-card">
                                     <div class="stat-card-content">
-                                        <h3>Active Tours</h3>
-                                        <div class="stat-value">124</div>
-                                        <div class="stat-change negative">
-                                            <i class="fas fa-arrow-down"></i> 3.1%
-                                        </div>
+                                        <h3>Total booking Approved</h3>
+                                        <div class="stat-value">${approvedBookings}</div>
+                                       
                                     </div>
                                     <div class="stat-icon">
                                         <i class="fas fa-route"></i>
                                     </div>
                                 </div>
+   <h2 class="section-title">Tour booked</h2>
+    <div class="card-grid">
+      <c:forEach var="t" items="${tours}">
+        <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card">
+          <div class="card-body">
+            <h3><c:out value="${t.name}" /></h3>
+                          <p>Days: <c:out value="${t.days}" /></p>
+              <p>Language used by tour guide: <c:out value="${t.language}" /></p>
+            <p class="price">${t.price} USD</p>
+            <div class="buttons">
+              <input type="hidden" name="tourId" value="${t.id}" />
+              <button type="submit" name="action" value="detail" class="btn-detail">Detail</button>
+              <button type="submit" name="action" value="book" class="btn-book">Book Again</button>
+            </div>
+          </div>
+        </form>
+      </c:forEach>
+    </div>
 
-                                <div class="stat-card">
-                                    <div class="stat-card-content">
-                                        <h3>Customer Rating</h3>
-                                        <div class="stat-value">4.8</div>
-                                        <div class="stat-change positive">
-                                            <i class="fas fa-arrow-up"></i> 0.3
-                                        </div>
-                                    </div>
-                                    <div class="stat-icon">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Charts Section -->
-                            <div class="charts-grid">
-                                <div class="chart-card main-chart">
-                                    <div class="chart-header">
-                                        <h3>Revenue Overview</h3>
-                                        <div class="chart-actions">
-                                            <select class="chart-period-select">
-                                                <option>Last 7 Days</option>
-                                                <option>Last 30 Days</option>
-                                                <option>Last 3 Months</option>
-                                                <option>Last Year</option>
-                                            </select>
-                                            <button class="chart-action-btn">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="chart-body">
-                                        <canvas id="revenueChart"></canvas>
-                                    </div>
-                                </div>
-
-                                <div class="chart-card">
-                                    <div class="chart-header">
-                                        <h3>Popular Tours</h3>
-                                        <button class="chart-action-btn">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                    </div>
-                                    <div class="chart-body">
-                                        <canvas id="toursChart"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Recent Activity -->
-                            <div class="activity-grid">
-                                <!-- Recent Bookings -->
-                                <div class="card recent-bookings">
-                                    <div class="card-header">
-                                        <h3>Recent Bookings</h3>
-                                        <button class="view-all-btn">View All</button>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Booking ID</th>
-                                                        <th>Customer</th>
-                                                        <th>Tour</th>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="recentBookingsTable">
-                                                    <!-- Dynamic content will be loaded here -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Recent Reviews -->
-                                <div class="card recent-reviews">
-                                    <div class="card-header">
-                                        <h3>Recent Reviews</h3>
-                                        <button class="view-all-btn">View All</button>
-                                    </div>
-                                    <div class="card-body" id="recentReviews">
-                                        <c:choose>
-                                            <c:when test="${not empty recentReviews}">
-                                                <ul class="list-group list-group-flush">
-                                                    <c:forEach var="review" items="${recentReviews}">
-                                                        <li class="list-group-item">
-                                                            <div>
-                                                                <strong>Booking ID:</strong> ${review.bookingId}
-                                                                <span class="ms-2"><strong>Guide ID:</strong>
-                                                                    ${review.guideId}</span>
-                                                                <span class="ms-2"><strong>Rating:</strong>
-                                                                    <c:forEach begin="1" end="${review.rating}" var="i">
-                                                                        <i class="fas fa-star text-warning"></i>
-                                                                    </c:forEach>
-                                                                </span>
-                                                            </div>
-                                                            <div>
-                                                                <em>${review.comment}</em>
-                                                            </div>
-                                                            <div class="text-muted small">
-                                                                <fmt:formatDate value="${review.createdAt}"
-                                                                    pattern="dd/MM/yyyy HH:mm" />
-                                                            </div>
-                                                        </li>
-                                                    </c:forEach>
-                                                </ul>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="text-muted">No reviews yet.</div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
+                          
                             </div>
                         </div>
                     </main>
