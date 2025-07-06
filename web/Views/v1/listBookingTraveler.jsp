@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ page import="java.util.Date" %>
+<%
+long nowTime = System.currentTimeMillis();
+request.setAttribute("nowTime", nowTime);
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -271,7 +275,7 @@
                                     </form>
                                 </c:when>
                                 <c:otherwise>
-                                    <span>-</span>
+                                    <span></span>
                                 </c:otherwise>
                             </c:choose>
 
@@ -285,9 +289,17 @@
                                     </form>
                                 </c:when>
                                 <c:otherwise>
-                                    <span>-</span>
+                                    <span></span>
                                 </c:otherwise>
                             </c:choose>
+                                    <c:if test="${b.status.name() == 'APPROVED' 
+             and b.departureDate.time lt nowTime}">
+  <form method="get" action="${pageContext.request.contextPath}/ReviewBookingTraveler_servlet"
+        style="display:inline;">
+    <input type="hidden" name="bookingId" value="${b.id}"/>
+    <button type="submit" class="action-btn">Review</button>
+  </form>
+</c:if>
                         </td>
                     </tr>
                 </c:forEach>

@@ -96,6 +96,10 @@
         <servlet-name>detailBookingAdmin_servlet</servlet-name>
         <servlet-class>controller.detailBookingAdmin_servlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReviewBookingTraveler_servlet</servlet-name>
+        <servlet-class>controller.ReviewBookingTraveler_servlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>tourList_servlet</servlet-name>
         <url-pattern>/tourList_servlet</url-pattern>
@@ -215,6 +219,10 @@
     <servlet-mapping>
         <servlet-name>detailBookingAdmin_servlet</servlet-name>
         <url-pattern>/DetailBookingAdmin_servlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewBookingTraveler_servlet</servlet-name>
+        <url-pattern>/ReviewBookingTraveler_servlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
