@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Hệ thống quản lý tour</title>
+    <title>Dashboard - Page manage website connection with travelers and tour guides</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -193,7 +193,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="text-center mb-4">
-            <h4>Tour Management</h4>
+            <h4>Website Management</h4>
         </div>
         <ul class="nav flex-column">
          
@@ -235,9 +235,8 @@
     <div class="main-content">
         <!-- Profile Header -->
         <div class="profile-header">
-            <img src="${currentUser.profilePicture != null ? currentUser.profilePicture : 'assets/img/default-avatar.png'}" alt="Profile Picture" class="profile-pic">
             <div class="welcome-text">
-                <h4>Hello, ${currentUser.fullName}</h4>
+                <h4>Hello, Admin</h4>
                
             </div>
         </div>

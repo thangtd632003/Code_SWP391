@@ -71,7 +71,7 @@
 </head>
 <body>
     <div class="top-bar">
-  <a href="/Code_SWP391/tourList_servlet">← Dashboard</a>
+  <a href="/Code_SWP391/tourList_servlet">← Tour List</a>
 </div>
   <div class="form-box">
     <h2>Create New Tour</h2>

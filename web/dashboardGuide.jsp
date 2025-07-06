@@ -26,7 +26,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <img src="img/logo.png" alt="Logo" class="logo">
-                <h2 class="brand-text">Tour System</h2>
+                <h2 class="brand-text">Website connection with travelers and tour guides</h2>
                 <button id="sidebar-close" class="sidebar-close">
                     <i class="fas fa-times"></i>
                 </button>
