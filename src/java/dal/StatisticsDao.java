@@ -66,7 +66,7 @@ public class StatisticsDao {
      * Tổng số booking có status = 'APPROVED' trong hệ thống
      */
     public int countApprovedBookings() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM bookings WHERE status = 'APPROVED'";
+        String sql = "SELECT COUNT(*) FROM bookings WHERE status = 'approved'";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getInt(1) : 0;

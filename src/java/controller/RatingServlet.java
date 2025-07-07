@@ -1,6 +1,6 @@
 package controller;
 
-import dal.ReviewDAO_Long;
+import dal.ReviewDAO_2;
 import entity.Review;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,7 +27,7 @@ public class RatingServlet extends HttpServlet {
                 int guideId = Integer.parseInt(guideIdParam);
 
                 // Kiểm tra xem booking này đã được đánh giá chưa
-                ReviewDAO_Long reviewDAO = new ReviewDAO_Long();
+                ReviewDAO_2 reviewDAO = new ReviewDAO_2();
                 boolean hasReview = reviewDAO.hasReviewForBooking(bookingId); // Giả sử có phương thức này
 
                 if (hasReview) {
@@ -90,7 +90,7 @@ public class RatingServlet extends HttpServlet {
             review.setComment(comment);
 
             // Lưu đánh giá vào database
-            ReviewDAO_Long reviewDAO = new ReviewDAO_Long();
+            ReviewDAO_2 reviewDAO = new ReviewDAO_2();
             boolean success = reviewDAO.addReview(review);
 
             if (success) {

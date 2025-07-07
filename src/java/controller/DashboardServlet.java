@@ -2,8 +2,8 @@ package controller;
 import java.sql.Connection;
 
 import dal.DBContext;
-import dal.UserDAO_Long;
-import dal.ReviewDAO_Long;
+import dal.UserDAO_3;
+import dal.ReviewDAO_2;
 import entity.Review;
 import entity.User;
 import jakarta.servlet.ServletException;
@@ -19,7 +19,7 @@ public class DashboardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ReviewDAO_Long reviewDAO = new ReviewDAO_Long();
+        ReviewDAO_2 reviewDAO = new ReviewDAO_2();
         HttpSession session = request.getSession(false);
         User user = session != null ? (User) session.getAttribute("user") : null;
         if (user == null) {
@@ -28,7 +28,7 @@ public class DashboardServlet extends HttpServlet {
         }
 
         // Refresh user data
-        User refreshedUser = new UserDAO_Long().getUserById(user.getId());
+        User refreshedUser = new UserDAO_3().getUserById(user.getId());
         if (refreshedUser != null) {
             session.setAttribute("user", refreshedUser);
             user = refreshedUser;
@@ -65,8 +65,8 @@ public class DashboardServlet extends HttpServlet {
 
         // Còn lại: ADMIN hoặc khác
         double averageRating = reviewDAO.getAverageRating();
-        int totalGuides     = UserDAO_Long.countGuides();
-        int totalTravelers  = UserDAO_Long.countTravelers();
+        int totalGuides     = UserDAO_3.countGuides();
+        int totalTravelers  = UserDAO_3.countTravelers();
    try (Connection conn = new DBContext().getConnection()) {
         StatisticsDao stats = new StatisticsDao(conn);
         int toursNumber = stats.countAllTours();

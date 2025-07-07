@@ -5,7 +5,7 @@
 
 package controller;
 
-import dal.UserDAO_duy;
+import dal.UserDAO_2;
 import entity.Role;
 import entity.User;
 
@@ -16,8 +16,8 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet(name = "RegisterServlet_duy", urlPatterns = {"/RegisterServlet_duy"})
-public class RegisterServlet_duy extends HttpServlet {
-    private final UserDAO_duy userDao = new UserDAO_duy();
+public class RegisterServlet_servlet extends HttpServlet {
+    private final UserDAO_2 userDao = new UserDAO_2();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -38,8 +38,8 @@ public class RegisterServlet_duy extends HttpServlet {
 
             // Kiểm tra xem email đã tồn tại chưa
             if (userDao.emailExists(email)) {
-                request.setAttribute("error", "Email đã tồn tại. Vui lòng sử dụng email khác.");
-                request.getRequestDispatcher("register_duy.jsp").forward(request, response);
+                request.setAttribute("error", "Email already exists. Please use another email.");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
@@ -57,15 +57,15 @@ public class RegisterServlet_duy extends HttpServlet {
             if (registered) {
                 response.sendRedirect("login.jsp");
             } else {
-                request.setAttribute("error", "Đăng ký thất bại. Vui lòng thử lại.");
-                request.getRequestDispatcher("register_duy.jsp").forward(request, response);
+                request.setAttribute("error", "Registration failed. Please try again.");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
             }
         } catch (IllegalArgumentException e) {
-            request.setAttribute("error", "Vai trò không hợp lệ.");
-            request.getRequestDispatcher("register_duy.jsp").forward(request, response);
+            request.setAttribute("error", "Invalid role.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         } catch (Exception e) {
-            request.setAttribute("error", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
-            request.getRequestDispatcher("register_duy.jsp").forward(request, response);
+            request.setAttribute("error", "An error occurred. Please try again later.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
 

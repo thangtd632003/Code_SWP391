@@ -1,8 +1,8 @@
 package controller;
 
 import com.google.gson.Gson;
-import dal.UserDAO_Long;
-import dal.ReviewDAO_Long;
+import dal.UserDAO_3;
+import dal.ReviewDAO_2;
 import entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +25,7 @@ public class GuideDetailServlet extends HttpServlet {
         
         try {
             String pathInfo = request.getPathInfo();
-            UserDAO_Long userDAO = new UserDAO_Long();
+            UserDAO_3 userDAO = new UserDAO_3();
             
             // Nếu không có pathInfo hoặc là "/", trả về danh sách tất cả guides
             if (pathInfo == null || pathInfo.equals("/")) {
@@ -46,7 +46,7 @@ public class GuideDetailServlet extends HttpServlet {
                     return;
                 }
                 
-                ReviewDAO_Long reviewDAO = new ReviewDAO_Long();
+                ReviewDAO_2 reviewDAO = new ReviewDAO_2();
                 double avgRating = reviewDAO.getAverageRatingByGuideId(guideId);
                 
                 Map<String, Object> guideDetails = new HashMap<>();

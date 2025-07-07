@@ -105,7 +105,7 @@
         </select>
 
         <div class="form-footer">
-            <a href="ForgotPassword_servlet">Forgot Password?</a>
+            <a href="login">Login</a>
         </div>
 
         <button type="submit">Sign Up</button>

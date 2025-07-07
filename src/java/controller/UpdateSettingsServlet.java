@@ -1,6 +1,6 @@
 package controller;
 
-import dal.UserDAO_Long;
+import dal.UserDAO_3;
 import entity.User;
 import entity.Gender;
 
@@ -53,7 +53,7 @@ public class UpdateSettingsServlet extends HttpServlet {
             currentUser.setBirthDate(Date.valueOf(birthDate));
             
             // Lưu vào database
-            UserDAO_Long userDAO = new UserDAO_Long();
+            UserDAO_3 userDAO = new UserDAO_3();
             boolean updated = userDAO.updateUser(currentUser, null, newPassword);
             
             if (updated) {

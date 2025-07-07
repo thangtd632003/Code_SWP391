@@ -4,7 +4,7 @@ import com.sun.jdi.connect.spi.Connection;
 import dal.BookingDao;
 import dal.DBContext;
 import dal.tourDao;
-import dal.ReviewDAO_Long;
+import dal.ReviewDAO_2;
 import dal.guideDao;
 import dal.userDao;
 import entity.Booking;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class GuideDashboardServlet extends HttpServlet {
     private guideDao guideDAO;
-    private ReviewDAO_Long reviewDAO;
+    private ReviewDAO_2 reviewDAO;
     private tourDao tourDAO;
     private BookingDao bookingDAO;
 
@@ -34,7 +34,7 @@ public class GuideDashboardServlet extends HttpServlet {
            
             tourDAO = new tourDao(conn);
             bookingDAO = new BookingDao(conn);
-            reviewDAO = new ReviewDAO_Long();
+            reviewDAO = new ReviewDAO_2();
         } catch (Exception e) {
             throw new ServletException("Không thể khởi tạo database connection", e);
         }

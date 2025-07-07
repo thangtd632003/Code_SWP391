@@ -1,4 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,17 +12,17 @@
 <body>
 <!-- Header Controls -->
 <div class="header-controls">
-    <select id="lang-switcher">
+    <select id="lang-switcher" hidden="true">
         <option value="vi">Tiếng Việt</option>
         <option value="en">English</option>
     </select>
-    <button id="theme-toggle" class="theme-btn">
+    <button id="theme-toggle" class="theme-btn" hidden="true">
         <i class="fas fa-moon"></i>
     </button>
 </div>
 
 <!-- Notice -->
-<div class="notice-container">
+<div class="notice-container" hidden="true">
     <div class="db-notice welcome" id="welcome-notice">
         <i class="fas fa-hands-helping"></i>
         <span id="notice-text"></span>
@@ -33,40 +35,49 @@
         <div class="login-container">
             <div class="login-card">
                 <div class="login-header">
-                    <h1 id="welcome-text">Chào mừng trở lại</h1>
-                    <p id="welcome-subtext">Vui lòng đăng nhập để tiếp tục</p>
+                    <h1 id="welcome-text">Welcome back</h1>
+                    <p id="welcome-subtext">Please login to continue</p>
                 </div>
 
                 <form id="loginForm" method="post" action="login">
                     <div class="form-group">
-                        <label for="email" id="email-label">Địa chỉ email</label>
+                        <label for="email" id="email-label">Email andress</label>
                         <input type="email" id="email" name="email" class="form-input" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="password" id="password-label">Mật khẩu</label>
+                        <label for="password" id="password-label">Password</label>
                         <div class="password-input-container">
                             <input type="password" id="password" name="password" class="form-input" required>
                             <button type="button" id="togglePassword" class="password-toggle">
                                 <i class="far fa-eye"></i>
                             </button>
                         </div>
-                        <div class="error-message" id="password-error"></div>
+                        
+                       <c:choose>
+    <c:when test="${not empty error}">
+        <div class="error-message">${error}</div>
+    </c:when>
+
+    <c:otherwise>
+        <div class="error-message" id="password-error"></div>
+    </c:otherwise>
+</c:choose>
                     </div>
 
                     <div class="form-footer">
                         <label class="remember-me">
                             <input type="checkbox" name="remember" id="remember">
-                            <span id="remember-text">Ghi nhớ đăng nhập</span>
+                            <span id="remember-text">Remember to log in</span>
                         </label>
-                        <a href="ForgotPassword_servlet" class="forgot-password" id="forgot-text">Quên mật khẩu?</a>
+                        <a href="ForgotPassword_servlet" class="forgot-password" id="forgot-text">Forgot password?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="login-btn">
-                        Đăng nhập
+                       Log in
                     </button>
 
-                    <div class="social-login">
+                    <div class="social-login" hidden="true">
                         <p class="social-login-text" id="social-text">Hoặc tiếp tục với</p>
                         <div class="social-buttons">
                             <button type="button" class="btn btn-social">
@@ -84,7 +95,7 @@
                    
                 </form>
                  <div class="register-link" id="register-text">
-                        Chưa có tài khoản? <a href="${pageContext.request.contextPath}/register_duy.jsp">Đăng ký</a>
+                        Don't have an account? <a href="${pageContext.request.contextPath}/register.jsp">Register</a>
                     </div>
             </div>
         </div>

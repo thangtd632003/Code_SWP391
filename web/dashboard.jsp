@@ -207,11 +207,7 @@
                     <i class="fas fa-calendar-check"></i> Bookings
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="reviews">
-                    <i class="fas fa-star"></i> Reviews
-                </a>
-            </li>
+          
              <li class="nav-item">
                 <a class="nav-link" href="/Code_SWP391/userList_servlet">
                     <i class="fas fa-map-marked-alt"></i> Users
@@ -269,19 +265,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stat-card orange">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stat-value">${reviewCount}</div>
-                    <div class="stat-label">Total Review</div>
-                </div>
-                <div class="stat-icon">
-                    <i class="fas fa-comments"></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="col-md-3">
         <div class="stat-card red">
             <div class="d-flex justify-content-between align-items-center">
@@ -295,8 +279,7 @@
             </div>
         </div>
     </div>
-</div> 
- <div class="col-md-3">
+                     <div class="col-md-3">
         <div class="stat-card blue">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
@@ -309,12 +292,16 @@
             </div>
         </div>
     </div>
-        <div class="col-md-3">
-        <div class="stat-card gray">
+
+
+       
+   </div>    
+                     <div class="col-md-3">
+        <div class="stat-card green">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <div class="stat-value">${bookingNumber}</div>
-                    <div class="stat-label">Total booking of website</div>
+                    <div class="stat-label">Total approved booking of website</div>
                 </div>
                 <div class="stat-icon">
                     <i class="fas fa-user-tie"></i>
@@ -322,7 +309,6 @@
             </div>
         </div>
     </div>
-       
         </div>
     </div>
 

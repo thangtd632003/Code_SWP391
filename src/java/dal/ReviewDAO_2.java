@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReviewDAO_Long {
+public class ReviewDAO_2 {
 
     private Connection getConnection() throws Exception {
         return new DBContext().getConnection();
@@ -258,7 +258,7 @@ public List<Review> getRecentReviewsByGuideId(int guideId, int limit) throws Exc
     }
 
     public static void main(String[] args) {
-        ReviewDAO_Long dao = new ReviewDAO_Long();
+        ReviewDAO_2 dao = new ReviewDAO_2();
         List<Review> reviews = dao.getAllReviews();
         for (Review r : reviews) {
             System.out.println(r);

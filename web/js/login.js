@@ -253,7 +253,7 @@ async function handleLogin(e) {
         });
 
         const data = await response.json();
-        
+
         if (data.success) {
             // Hiển thị thông báo thành công (tùy chọn)
             const noticeContainer = document.querySelector('.notice-container');
@@ -273,8 +273,38 @@ async function handleLogin(e) {
                 window.location.href = data.redirect;
             }, 1000);
         } else {
-            const currentLang = localStorage.getItem('preferred-language') || 'vi';
-            showError(translations[currentLang].loginError);
+             console.log('Login failed, error code =', data.error);  // debug
+
+    const errorDiv = document.getElementById('password-error');
+    const currentLang = localStorage.getItem('preferred-language') || 'vi';
+    let message;
+const raw = data.error;
+const trimmed = (raw || '').trim();
+
+const code = (data.error || '')
+  .replace(/[\u200B-\u200D\uFEFF]/g, '')  
+  .trim()                                 
+  .toUpperCase();     
+console.log({ raw, typeofRaw: typeof raw, trimmed, code });
+    switch (code) {
+      
+      case 'invalid_credentials':
+        message = translations[currentLang].loginError;
+        break;
+      case 'system_error':
+        message = translations[currentLang].systemError;
+        break;
+        case 'LOCKED':
+        message = "Your account has been locked by admin";
+        break;
+      default:
+        message = translations[currentLang].loginError;
+    }
+
+
+   showError(message);
+
+  
         }
     } catch (error) {
         const currentLang = localStorage.getItem('preferred-language') || 'vi';
@@ -289,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Nếu có lỗi từ server
     if (error) {
-        showError();
+         showError(error); 
     }
 
     // Set up language switcher

@@ -14,7 +14,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UserDAO_duy extends DBContext {
+public class UserDAO_2 extends DBContext {
 
     public boolean registerUser(User user) {
         String sql = "INSERT INTO users (email, password_hash, full_name, phone, role) "
@@ -33,7 +33,7 @@ public class UserDAO_duy extends DBContext {
         } catch (SQLException e) {
             System.out.println("Error in registerUser: " + e.getMessage());
         } catch (Exception ex) {
-            Logger.getLogger(UserDAO_duy.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDAO_2.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }

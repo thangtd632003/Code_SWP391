@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import dal.UserDAO_Long;
+import dal.UserDAO_3;
 import entity.User;
 
 @WebServlet("/GetGuidesList")
@@ -26,7 +26,7 @@ public class GetGuidesListServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         try {
-            UserDAO_Long userDAO = new UserDAO_Long();
+            UserDAO_3 userDAO = new UserDAO_3();
             List<User> guides = userDAO.getAllGuides();
             
             Gson gson = new GsonBuilder()

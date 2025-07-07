@@ -1,7 +1,8 @@
 package controller;
 
-import dal.UserDAO_Long;
+import dal.UserDAO_3;
 import entity.User;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -32,9 +33,16 @@ public class LoginController extends HttpServlet {
             String password = request.getParameter("password");
             String remember = request.getParameter("remember");
 
-            UserDAO_Long dao = new UserDAO_Long();
-            User user = dao.login(email, password);
-
+            UserDAO_3 dao = new UserDAO_3();
+        
+boolean checkActive = dao.isUserActiveByEmail(email);
+if(checkActive == false){
+    String msg = "locked";
+    String json = "{\"success\": false, \"error\": \"" + msg + "\"}";
+    response.getWriter().write(json);
+    return;
+}
+    User user = dao.login(email, password);
             if (user == null) {
                 response.getWriter().write("{\"success\": false}");
                 return;
@@ -77,7 +85,7 @@ public class LoginController extends HttpServlet {
             }
             
             if (savedEmail != null && savedPassword != null) {
-                UserDAO_Long dao = new UserDAO_Long();
+                UserDAO_3 dao = new UserDAO_3();
                 User user = dao.login(savedEmail, savedPassword);
                 if (user != null) {
                     // Tạo session cho auto login

@@ -8,9 +8,30 @@ import entity.Status;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class UserDAO_Long {
-
+public class UserDAO_3 {
+public boolean isUserActiveByEmail(String email) throws SQLException {
+        String sql = "SELECT status FROM users WHERE email = ?";
+        try (Connection conn = new DBContext().getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            
+            
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String status = rs.getString("status");
+                    return "ACTIVE".equalsIgnoreCase(status);
+                }
+            }
+        } catch (Exception ex) {
+        Logger.getLogger(UserDAO_3.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        // Nếu không tìm thấy record hoặc status khác ACTIVE thì trả về false
+        return false;
+    }
     public User login(String email, String password) {
         String query = "SELECT * FROM users WHERE email = ? AND password_hash = ? AND status = 'active'";
         
@@ -260,7 +281,7 @@ public class UserDAO_Long {
     }
 
     public static void main(String[] args) {
-        UserDAO_Long dao = new UserDAO_Long();
+        UserDAO_3 dao = new UserDAO_3();
         // Thử đăng nhập với email và password mẫu
         String email = "admin@gmail.com";
         String password = "123456";
