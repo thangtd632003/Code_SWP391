@@ -54,7 +54,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#reviews" class="nav-link">
+                            <a href="/Code_SWP391/ListReviewGuide_servlet" class="nav-link">
                                 <i class="fas fa-star"></i>
                                 <span>Reviews</span>
                             </a>
