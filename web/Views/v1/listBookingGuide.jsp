@@ -272,7 +272,7 @@
                                   </form>
                                 </c:when>
                                 <c:otherwise>
-                                  <span>-</span>
+                                  <span></span>
                                 </c:otherwise>
                             </c:choose>
                         </td>

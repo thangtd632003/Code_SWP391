@@ -282,10 +282,11 @@ const raw = data.error;
 const trimmed = (raw || '').trim();
 
 const code = (data.error || '')
-  .replace(/[\u200B-\u200D\uFEFF]/g, '')  
-  .trim()                                 
-  .toUpperCase();     
-console.log({ raw, typeofRaw: typeof raw, trimmed, code });
+  .normalize('NFKC')                               // chuẩn hóa unicode
+  .replace(/[\u200B-\u200D\uFEFF]/g, '')           // bỏ zero-width space
+  .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')    // bỏ control char ASCII
+  .replace(/\s+/g, '')                             // bỏ mọi khoảng trắng
+  .toUpperCase();
     switch (code) {
       
       case 'invalid_credentials':
