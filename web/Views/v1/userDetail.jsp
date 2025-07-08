@@ -5,17 +5,8 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="entity.User" %>
 
-<%
-    User u = (User) request.getAttribute("userDetail");
-    if (u == null) {
-        // Redirect nếu lỡ trang này được gọi mà userDetail không tồn tại
-        response.sendRedirect(request.getContextPath() + "/userList_servlet");
-        return;
-    }
-%>
+
 
 <!DOCTYPE html>
 <html>
