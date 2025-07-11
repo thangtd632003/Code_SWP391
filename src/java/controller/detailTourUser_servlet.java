@@ -20,6 +20,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import dal.ReviewDAO_2;
 /**
  *
  * @author thang
@@ -110,12 +111,15 @@ public class detailTourUser_servlet extends HttpServlet {
             // Lấy thêm thông tin profile (bio, imageUrl) nếu có
             guideDao guideDao = new guideDao(conn);
             GuideProfile guideProfile = guideDao.getGuideProfileById(tour.getGuideId());
-            // Nếu chưa có profile, guideProfile có thể null – xử lý phía JSP
+           
+        ReviewDAO_2 reviewdao = new ReviewDAO_2();
+       
 
             //  Đưa vào request và forward sang JSP hiển thị
             request.setAttribute("tour", tour);
             request.setAttribute("guideUser", guideUser);
             request.setAttribute("guideProfile", guideProfile);
+            request.setAttribute("rating",  reviewdao.getAverageRatingByGuideId(tour.getGuideId()));
             request.getRequestDispatcher("/Views/v1/detailTourUser.jsp")
                    .forward(request, response);
 

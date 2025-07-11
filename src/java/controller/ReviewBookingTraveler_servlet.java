@@ -17,12 +17,15 @@ import dal.ReviewDao;
 import entity.Booking;
 import entity.Review;
 import entity.User;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -95,8 +98,17 @@ public class ReviewBookingTraveler_servlet extends HttpServlet {
         }
         int bookingId = Integer.parseInt(idParam);
         try {
+             LocalDate today = LocalDate.now();
+           
             Booking booking = bookingDao.getBookingById(bookingId);
-            if (booking == null || booking.getTravelerId() != user.getId()) {
+          Date utilDate = booking.getDepartureDate();
+
+Date cleanDate = new Date(utilDate.getTime());
+
+LocalDate departureDate = cleanDate.toInstant()
+    .atZone(ZoneId.systemDefault())
+    .toLocalDate();
+            if (booking == null || booking.getTravelerId() != user.getId()||!departureDate.isBefore(today)||!booking.getStatus().name().equalsIgnoreCase("APPROVED")) {
                 response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_thang");
                 return;
             }
@@ -142,8 +154,17 @@ public class ReviewBookingTraveler_servlet extends HttpServlet {
         }
         int bookingId = Integer.parseInt(idParam);
         try {
+                         LocalDate today = LocalDate.now();
+
             Booking booking = bookingDao.getBookingById(bookingId);
-            if (booking == null || booking.getTravelerId() != user.getId()) {
+                     Date utilDate = booking.getDepartureDate();
+
+Date cleanDate = new Date(utilDate.getTime()); 
+
+LocalDate departureDate = cleanDate.toInstant()
+    .atZone(ZoneId.systemDefault())
+    .toLocalDate();
+            if (booking == null || booking.getTravelerId() != user.getId()|| !departureDate.isBefore(today)||!booking.getStatus().name().equalsIgnoreCase("APPROVED")) {
                 response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_thang");
                 return;
             }
