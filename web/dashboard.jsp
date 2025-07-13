@@ -232,7 +232,7 @@
         <!-- Profile Header -->
         <div class="profile-header">
             <div class="welcome-text">
-                <h4>Hello, Admin</h4>
+                <h4>Hello Admin</h4>
                
             </div>
         </div>

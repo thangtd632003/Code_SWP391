@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import dal.ReviewDAO_2;
+import dal.ReviewDao;
+import entity.Review;
+import java.util.List;
 /**
  *
  * @author thang
@@ -113,13 +116,20 @@ public class detailTourUser_servlet extends HttpServlet {
             GuideProfile guideProfile = guideDao.getGuideProfileById(tour.getGuideId());
            
         ReviewDAO_2 reviewdao = new ReviewDAO_2();
-       
+       ReviewDao rDao = new ReviewDao(conn);
+       List<Review> reviewlist = rDao.getReviewsByGuideId(tour.getGuideId());
+       if(reviewlist==null||reviewlist.isEmpty()){
+            request.setAttribute("rating", "not rating for guide");
+       }else{
+           double rating = reviewdao.getAverageRatingByGuideId(tour.getGuideId());
+           String msg = rating + "/5";
+            request.setAttribute("rating", msg );
+       }
 
             //  Đưa vào request và forward sang JSP hiển thị
             request.setAttribute("tour", tour);
             request.setAttribute("guideUser", guideUser);
             request.setAttribute("guideProfile", guideProfile);
-            request.setAttribute("rating",  reviewdao.getAverageRatingByGuideId(tour.getGuideId()));
             request.getRequestDispatcher("/Views/v1/detailTourUser.jsp")
                    .forward(request, response);
 

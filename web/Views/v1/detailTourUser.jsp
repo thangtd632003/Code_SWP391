@@ -117,7 +117,7 @@
           <c:if test="${guideProfile != null && guideProfile.bio != null}">
             <p><strong>Bio:</strong> <c:out value="${guideProfile.bio}" /></p>
           </c:if>
-             <p><strong>Rating of guide:</strong> <c:out value="${rating}"/>/5</p>
+             <p><strong>Rating of guide:</strong> <c:out value="${rating}"/></p>
         </div>
       </div>
     </div>
