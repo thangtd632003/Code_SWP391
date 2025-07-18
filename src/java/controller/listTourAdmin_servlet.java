@@ -78,7 +78,6 @@ public class listTourAdmin_servlet extends HttpServlet {
             return;
         }
 
-        //  Đọc param search + sort + page (nếu cần phân trang)
         String keyword   = request.getParameter("keyword");     
         String sortField = request.getParameter("sortField");  
         String sortDir   = request.getParameter("sortDir");     
@@ -89,19 +88,15 @@ boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
         try (Connection conn = new DBContext().getConnection()) {
             tourDao dao = new tourDao(conn);
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: CHƯA NHẬP GÌ lấy tất cả tour của guide
                 tours = dao.getAllTours();
 
             } else if (hasKeyword && !hasSort) {
-                // Chỉ Search (có keyword, chưa Sort)
                 tours = dao.searchTours(keyword);
 
             } else if (!hasKeyword && hasSort) {
-                // Chỉ Sort (chưa Search)
                 tours = dao.sortTours(sortField, sortAsc);
 
             } else {
-                // Có cả Search + Sort
                
                 tours = dao.searchAndSortTours(keyword, sortField, sortAsc);
 
@@ -110,7 +105,6 @@ boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
               request.setAttribute("tours", tours);
 request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
 
-// Ép sortField về lowercase trước khi set
 if (hasSort) {
     String fieldLower = sortField.trim().toLowerCase();
     request.setAttribute("sortField", fieldLower);

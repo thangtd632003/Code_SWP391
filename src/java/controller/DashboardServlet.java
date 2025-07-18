@@ -27,29 +27,23 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
-        // Refresh user data
         User refreshedUser = new UserDAO_3().getUserById(user.getId());
         if (refreshedUser != null) {
             session.setAttribute("user", refreshedUser);
             user = refreshedUser;
         }
 
-        // Nếu là GUIDE
         if ("guide".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/guide-dashboard");
             return;
         }
 
-        // Nếu là TRAVELER
         if ("traveler".equalsIgnoreCase(user.getRole().name())) {
-            // khởi tạo StatisticsDao
             try (Connection conn = new DBContext().getConnection()) {
                 StatisticsDao stats = new StatisticsDao(conn);
                 tourDao tourdao= new tourDao(conn);
               List<Tour> t = tourdao.getToursBookedByUser(user.getId());
-                // tổng booking của traveler
                 int totalBookings      = stats.countBookingsByTraveler(user.getId());
-                // tổng booking đã approved của traveler
                 int approvedBookings   = stats.countApprovedBookingsByTraveler(user.getId());
                 request.setAttribute("totalBookings", totalBookings);
                 request.setAttribute("approvedBookings", approvedBookings);
@@ -57,13 +51,11 @@ public class DashboardServlet extends HttpServlet {
             } catch (Exception e) {
                 throw new ServletException("Cannot load booking statistics", e);
             }
-            // forward về trang riêng của traveler
             request.getRequestDispatcher("dashboardTraveler.jsp")
                    .forward(request, response);
             return;
         }
 
-        // Còn lại: ADMIN hoặc khác
         double averageRating = reviewDAO.getAverageRating();
         int totalGuides     = UserDAO_3.countGuides();
         int totalTravelers  = UserDAO_3.countTravelers();

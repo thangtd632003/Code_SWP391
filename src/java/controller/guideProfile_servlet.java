@@ -85,8 +85,8 @@ String userRole = null;
 if (session != null) {
     User user = (User) session.getAttribute("user");
     if (user != null) {
-        userId = user.getId();      // hoặc user.getUserId() tùy thuộc vào định nghĩa của class User
-        userRole = user.getRole().toString();   // hoặc user.getUserRole()
+        userId = user.getId();     
+        userRole = user.getRole().toString();   
     }
 }
         if (userId == null) {

@@ -93,16 +93,12 @@ public class ListReviewGuide_servlet extends HttpServlet {
         try {
             List<Review> reviews;
             if (!hasKeyword && !hasSort) {
-                // lấy tất cả
                 reviews = reviewDao.getReviewsByGuideId(guideId);
             } else if (hasKeyword && !hasSort) {
-                // chỉ search
                 reviews = reviewDao.searchReviewsByGuideId(guideId, keyword.trim());
             } else if (!hasKeyword && hasSort) {
-                // chỉ sort
                 reviews = reviewDao.sortReviewsByGuideId(guideId, sortAsc);
             } else {
-                // search + sort
                 reviews = reviewDao.searchAndSortReviewsByGuideId(guideId, keyword.trim(), sortAsc);
             }
 

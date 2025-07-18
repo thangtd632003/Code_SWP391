@@ -16,28 +16,23 @@ public class RatingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Lấy thông tin booking_id và guide_id từ request parameters
         String bookingIdParam = request.getParameter("bookingId");
         String guideIdParam = request.getParameter("guideId");
 
-        // Kiểm tra xem đã có parameters cần thiết chưa
         if (bookingIdParam != null && guideIdParam != null) {
             try {
                 int bookingId = Integer.parseInt(bookingIdParam);
                 int guideId = Integer.parseInt(guideIdParam);
 
-                // Kiểm tra xem booking này đã được đánh giá chưa
                 ReviewDAO_2 reviewDAO = new ReviewDAO_2();
                 boolean hasReview = reviewDAO.hasReviewForBooking(bookingId); // Giả sử có phương thức này
 
                 if (hasReview) {
-                    // Nếu đã đánh giá, chuyển hướng đến trang thank-you
                     request.setAttribute("successMessage", "Bạn đã đánh giá booking này trước đó!");
                     request.getRequestDispatcher("thank-you.jsp").forward(request, response);
                     return;
                 }
 
-                // Nếu chưa đánh giá, hiển thị form đánh giá
                 request.setAttribute("bookingId", bookingId);
                 request.setAttribute("guideId", guideId);
                 request.getRequestDispatcher("rating.jsp").forward(request, response);
@@ -89,16 +84,13 @@ public class RatingServlet extends HttpServlet {
             review.setRating(rating);
             review.setComment(comment);
 
-            // Lưu đánh giá vào database
             ReviewDAO_2 reviewDAO = new ReviewDAO_2();
             boolean success = reviewDAO.addReview(review);
 
             if (success) {
-                // Thông báo thành công và chuyển hướng
                 request.setAttribute("successMessage", "Cảm ơn bạn đã đánh giá!");
                 request.getRequestDispatcher("thank-you.jsp").forward(request, response);
             } else {
-                // Thông báo lỗi
                 request.setAttribute("errorMessage", "Có lỗi xảy ra khi lưu đánh giá");
                 request.getRequestDispatcher("rating.jsp").forward(request, response);
             }

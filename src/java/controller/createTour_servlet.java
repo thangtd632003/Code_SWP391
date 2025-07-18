@@ -81,7 +81,6 @@ if (session != null) {
             return;
         }
 
-        // Forward đến JSP tạo tour
         request.getRequestDispatcher("/Views/v1/createTour.jsp").forward(request, response);
     } 
 
@@ -112,7 +111,6 @@ if (session != null) {
             return;
         }
 
-        // Đọc dữ liệu form
         String name        = request.getParameter("name");
         String description = request.getParameter("description");
         String itinerary   = request.getParameter("itinerary");
@@ -122,7 +120,6 @@ String daysStr    = request.getParameter("days");
 String language   = request.getParameter("language");
 
 int days = 0;
-        // Chuyển kiểu
         BigDecimal price = BigDecimal.ZERO;
         int maxPeople   = 0;
         try {
@@ -131,7 +128,6 @@ int days = 0;
                 days      = Integer.parseInt(daysStr);
 
         } catch (NumberFormatException e) {
-            // nếu parse lỗi, chuyển về form với báo lỗi
             response.sendRedirect(request.getContextPath() + "/createTour_servlet?create=fail");
             return;
         }
@@ -146,7 +142,6 @@ int days = 0;
     tour.setDays(days);
     tour.setLanguage(language);
     tour.setStatus(Status.ACTIVE);
-        // Gọi DAO
         boolean created = false;
         try (Connection conn = new DBContext().getConnection()) {
             tourDao dao = new tourDao(conn);
@@ -157,7 +152,6 @@ int days = 0;
             Logger.getLogger(createTour_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // Redirect tùy kết quả
         if (created) {
             response.sendRedirect(request.getContextPath() + "/tourList_servlet?create=success");
         } else {

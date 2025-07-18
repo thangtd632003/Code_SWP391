@@ -68,7 +68,6 @@ public class ProfileTravler_servlet extends HttpServlet {
        User userSession=(User) session.getAttribute("user");
        if(userSession !=null){
         email= userSession.getEmail();}
-    //    String email = (String) session.getAttribute("userEmail");
 
         if (email == null) {
             response.sendRedirect("login.jsp");
@@ -112,7 +111,6 @@ public class ProfileTravler_servlet extends HttpServlet {
        User userSession=(User) session.getAttribute("user");
        if(userSession !=null){
         email= userSession.getEmail();}
-    //    String email = (String) session.getAttribute("userEmail");
 
         if (email == null) {
             response.sendRedirect("login.jsp");
@@ -125,7 +123,6 @@ public class ProfileTravler_servlet extends HttpServlet {
     updatedUser.setPhone(request.getParameter("phone"));
     updatedUser.setRole(Role.valueOf(request.getParameter("role").toUpperCase()));
     updatedUser.setStatus(Status.valueOf(request.getParameter("status").toUpperCase()));
-// Gender: lấy từ form, ép kiểu về enum
 String genderParam = request.getParameter("gender");
 if (genderParam != null && !genderParam.isEmpty()) {
     updatedUser.setGender(Gender.valueOf(genderParam.toUpperCase()));
@@ -133,7 +130,6 @@ if (genderParam != null && !genderParam.isEmpty()) {
     updatedUser.setGender(null); // nếu không chọn
 }
 
-// BirthDate: parse từ chuỗi yyyy-MM-dd
 String birthDateParam = request.getParameter("birthDate");
 if (birthDateParam != null && !birthDateParam.isEmpty()) {
     updatedUser.setBirthDate(Date.valueOf(birthDateParam)); // java.sql.Date.valueOf

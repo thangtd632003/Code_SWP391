@@ -73,7 +73,6 @@ public class userList_servlet extends HttpServlet {
             return;
         }
 
-        //  Đọc các tham số search / sort
         String keyword   = request.getParameter("keyword");      
         String sortField = request.getParameter("sortField");    
         String sortDir   = request.getParameter("sortDir");      
@@ -87,22 +86,18 @@ public class userList_servlet extends HttpServlet {
             List<User> users;
 
             if (!hasKeyword && !hasSort) {
-                // Lấy toàn bộ, mặc định sort theo updated_at DESC
                 users = dao.sortUsersByUpdatedAt(false);
             }
             else if (hasKeyword && !hasSort) {
                 users = dao.searchUsers(keyword.trim());
             }
             else if (!hasKeyword && hasSort) {
-                // Vì chỉ hỗ trợ sort theo updated_at, ta bỏ qua sortField khác
                 users = dao.sortUsersByField(sortField, sortAsc);
             }
             else {
-                // Có cả search + sort
                 users = dao.SearchAndSortUsers(keyword, sortField, sortAsc);
             }
 
-            //  Truyền sang JSP
             request.setAttribute("users", users);
             request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
             request.setAttribute("sortField", hasSort ? sortField : "");
@@ -141,7 +136,6 @@ public class userList_servlet extends HttpServlet {
             return;
         }
 
-        // Lấy action
         String action = request.getParameter("action");
         try (Connection conn = new DBContext().getConnection()) {
             userDao dao = new userDao(conn);
@@ -154,7 +148,6 @@ public class userList_servlet extends HttpServlet {
                     + "/userList_servlet?msg=" + (ok ? "statusOk" : "statusFail"));
             }
             else if ("detail".equalsIgnoreCase(action)) {
-                // Chỉ đơn giản redirect tới servlet detail, hoặc bạn có thể forward luôn
                 int id = Integer.parseInt(request.getParameter("id"));
          
     response.sendRedirect(request.getContextPath() + "/userDetail_servlet?id=" + id);

@@ -72,14 +72,12 @@ public class detailTourUser_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
         if (!user.getRole().name().equalsIgnoreCase("traveler")) {
-            // Nếu không phải TRAVELER, chuyển hướng về trang profile tương ứng
           
                 response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             
             return;
         }
 
-        //  Lấy tourId từ param và kiểm tra
         String tourIdParam = request.getParameter("tourId");
         if (tourIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
@@ -94,7 +92,6 @@ public class detailTourUser_servlet extends HttpServlet {
             return;
         }
 
-        //  Kết nối DB, lấy thông tin tour và guide
         try (Connection conn = new DBContext().getConnection()) {
             tourDao tourDao = new tourDao(conn);
             Tour tour = tourDao.getTourById(tourId);
@@ -103,7 +100,6 @@ public class detailTourUser_servlet extends HttpServlet {
                 return;
             }
 
-            // Lấy thông tin user (guide) theo guideId
             userDao userDao = new userDao(conn);
             User guideUser = userDao.getUserById(tour.getGuideId());
             if (guideUser == null) {
@@ -111,7 +107,6 @@ public class detailTourUser_servlet extends HttpServlet {
                 return;
             }
 
-            // Lấy thêm thông tin profile (bio, imageUrl) nếu có
             guideDao guideDao = new guideDao(conn);
             GuideProfile guideProfile = guideDao.getGuideProfileById(tour.getGuideId());
            
@@ -126,7 +121,6 @@ public class detailTourUser_servlet extends HttpServlet {
             request.setAttribute("rating", msg );
        }
 
-            //  Đưa vào request và forward sang JSP hiển thị
             request.setAttribute("tour", tour);
             request.setAttribute("guideUser", guideUser);
             request.setAttribute("guideProfile", guideProfile);

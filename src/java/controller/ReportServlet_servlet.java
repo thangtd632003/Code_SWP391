@@ -129,7 +129,6 @@ public class ReportServlet_servlet extends HttpServlet {
             error = "No admin email found";
         }
 
-        // redirect back to GET with a message
         String msg = sent
            ? "reportSent"
            : "reportFail" + (error != null ? ("_"+error) : "");

@@ -83,16 +83,13 @@ public class DetailBookingGuide_servlet extends HttpServlet {
             return;
         }
         User user = (User) session.getAttribute("user");
-        // Kiểm tra role: chỉ cho guide truy cập
         if (!"guide".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
 
-        // Lấy bookingId từ parameter
         String bookingIdParam = request.getParameter("bookingId");
         if (bookingIdParam == null) {
-            // Nếu không có bookingId, quay về danh sách
             response.sendRedirect(request.getContextPath() + "/ListBookingGuide_servlet");
             return;
         }
@@ -101,11 +98,9 @@ public class DetailBookingGuide_servlet extends HttpServlet {
             int bookingId = Integer.parseInt(bookingIdParam);
             Booking booking = bookingDao.getBookingById(bookingId);
             if (booking == null) {
-                // Nếu không tìm thấy booking, quay về danh sách
                 response.sendRedirect(request.getContextPath() + "/ListBookingGuide_servlet");
                 return;
             }
-            // Lấy thông tin Tour kèm theo
             Tour tour = tourDao.getTourById(booking.getTourId());
          User userTravelerInfo= userDao.getUserById(booking.getTravelerId());
             request.setAttribute("booking", booking);
@@ -134,16 +129,13 @@ public class DetailBookingGuide_servlet extends HttpServlet {
             return;
         }
         User user = (User) session.getAttribute("user");
-        // Kiểm tra role: chỉ cho guide truy cập
         if (!"guide".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
 
-        // Lấy action từ form (hidden input hoặc parameter)
         String action = request.getParameter("action");
         if (action == null) {
-            // Nếu không có action, quay về trang detail (với bookingId cũ nếu có)
             String bookingIdParam = request.getParameter("bookingId");
             response.sendRedirect(request.getContextPath() + "/DetailBookingGuide_servlet?bookingId=" + bookingIdParam);
             return;
@@ -159,13 +151,11 @@ public class DetailBookingGuide_servlet extends HttpServlet {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                // Sau khi đổi trạng thái xong, quay lại chính trang detail với bookingId
                 String bid = request.getParameter("bookingId");
                 response.sendRedirect(request.getContextPath() + "/DetailBookingGuide_servlet?bookingId=" + bid);
                 break;
 
             default:
-                // Trường hợp action không hợp lệ → quay lại trang detail
                 String bookingIdParam = request.getParameter("bookingId");
                 response.sendRedirect(request.getContextPath() + "/DetailBookingGuide_servlet?bookingId=" + bookingIdParam);
                 break;

@@ -48,14 +48,11 @@ if(checkActive == false){
                 return;
             }
 
-            // Tạo session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             
-            // Cập nhật last login
             dao.updateLastLogin(user.getId());
 
-            // Xử lý remember me
             if ("on".equals(remember)) {
                 addCookie(response, "email", email, 30 * 24 * 60 * 60);
                 addCookie(response, "password", password, 30 * 24 * 60 * 60);
@@ -64,7 +61,6 @@ if(checkActive == false){
                 addCookie(response, "password", "", 0);
             }
 
-            // Đúng: chuyển sang servlet dashboard
             response.getWriter().write("{\"success\": true, \"redirect\": \"" + request.getContextPath() + "/dashboard\"}");
             
         } catch (Exception e) {
@@ -88,11 +84,9 @@ if(checkActive == false){
                 UserDAO_3 dao = new UserDAO_3();
                 User user = dao.login(savedEmail, savedPassword);
                 if (user != null) {
-                    // Tạo session cho auto login
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     
-                    // Cập nhật last login
                     dao.updateLastLogin(user.getId());
                     
                     response.sendRedirect(request.getContextPath() + "/dashboard"); // Đúng: chuyển sang servlet

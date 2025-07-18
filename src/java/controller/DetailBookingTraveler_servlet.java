@@ -85,13 +85,11 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        //  Kiểm tra role: chỉ cho traveler truy cập
         if (!user.getRole().name().equalsIgnoreCase("traveler")) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             return;
         }
 
-        //  Lấy bookingId từ parameter
         String bookingIdParam = request.getParameter("bookingId");
         if (bookingIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_servlet");
@@ -105,7 +103,6 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/ListBookingTraveler_servlet");
                 return;
             }
-            //  Lấy thông tin Tour kèm theo
             Tour tour = tourDao.getTourById(booking.getTourId());
            User userGuideInfor = userDao.getUserById(tour.getGuideId());
             request.setAttribute("booking", booking);
@@ -135,13 +132,11 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        //  Kiểm tra role: chỉ cho traveler truy cập
         if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             return;
         }
 
-        //  Lấy action
         String action = request.getParameter("action");
         if (action == null) {
             String bookingIdParam = request.getParameter("bookingId");
@@ -159,7 +154,6 @@ public class DetailBookingTraveler_servlet extends HttpServlet {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                // Quay lại chính trang detail với cùng bookingId
                 String bid = request.getParameter("bookingId");
                 response.sendRedirect(request.getContextPath() + "/DetailBookingTraveler_servlet?bookingId=" + bid);
                 break;

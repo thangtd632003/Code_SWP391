@@ -97,7 +97,6 @@ public class ListBookingAdmin_servlet extends HttpServlet {
                 bookings = dao.searchAndSortBookings(keyword.trim(), sortField.trim(), sortAsc);
             }
 
-            // 5. Push to JSP
             request.setAttribute("bookings", bookings);
             request.setAttribute("keyword",   hasKeyword ? keyword.trim() : "");
             request.setAttribute("sortField", hasSort    ? sortField.trim() : "");

@@ -63,7 +63,6 @@ public class ForgotPassword_servlet extends HttpServlet {
      */
      private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
-    // Thay bằng email + mật khẩu ứng dụng (app password) của bạn:
     private static final String SMTP_USERNAME = "quizlet875@gmail.com";
     private static final String SMTP_PASSWORD = "fcrg hpnd xcmt hfye";
     @Override
@@ -77,7 +76,6 @@ public class ForgotPassword_servlet extends HttpServlet {
             return;
         }
 
-        // Nếu user đã login, forward đến trang nhập email
         request.getRequestDispatcher("/Views/v1/forgotPassword.jsp").forward(request, response);
     } 
 
@@ -106,7 +104,6 @@ public class ForgotPassword_servlet extends HttpServlet {
             return;
         }
 
-        // Kiểm tra email có tồn tại không
         try (Connection conn = new DBContext().getConnection()) {
             userDao dao = new userDao(conn);
             boolean exists = dao.emailExists(email);
@@ -118,13 +115,11 @@ session = request.getSession();
                 return;
             }
 
-            // Nếu email tồn tại -> tạo mã OTP ngẫu nhiên (6 chữ số)
             String otp = generateOTP(6);
 
             session.setAttribute("resetEmail", email);
             session.setAttribute("resetOTP", otp);
 
-            // Gửi mã OTP qua email
             boolean mailSent = sendOtpEmail(email, otp);
             if (!mailSent) {
                 request.setAttribute("error", "Send email error. Try again.");
@@ -132,7 +127,6 @@ session = request.getSession();
                 return;
             }
 
-            // Điều hướng sang trang nhập OTP & mật khẩu mới
             response.sendRedirect(request.getContextPath() + "/ChangePassword_servlet");
         } catch (Exception e) {
            Logger.getLogger(ForgotPassword_servlet.class.getName())
@@ -141,7 +135,6 @@ session = request.getSession();
         }
     }
 
-    // Hàm sinh OTP (chuỗi gồm 'length' chữ số ngẫu nhiên)
     private String generateOTP(int length) {
         Random rand = new Random();
         StringBuilder sb = new StringBuilder();
@@ -151,7 +144,6 @@ session = request.getSession();
         return sb.toString();
     }
 
-    // Hàm dùng Jakarta Mail (JavaMail) để gửi email có mã OTP
     private boolean sendOtpEmail(String toEmail, String otp) {
         try {
             Properties props = new Properties();

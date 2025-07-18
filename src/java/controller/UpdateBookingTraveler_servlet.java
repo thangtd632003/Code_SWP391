@@ -51,12 +51,10 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        //  Kiểm role (chỉ TRAVELER mới được cập nhật booking)
         if (!"traveler".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        //  Lấy bookingId từ request parameter (form trước có truyền ?bookingId=…)
         String bookingIdParam = (String ) request.getParameter("bookingId");
         if (bookingIdParam == null) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
@@ -69,7 +67,6 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        //  Lấy thông tin booking & tour tương ứng
         Booking booking = null;
         Tour tour = null;
       try (Connection conn = new DBContext().getConnection()) {
@@ -83,7 +80,6 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
                  response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
                 return;
             }
-            // Chỉ owner (traveler) của booking mới được sửa
             if (!Integer.valueOf(booking.getTravelerId()).equals(user.getId())){
       
                 response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
@@ -98,7 +94,6 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(UpdateBookingTraveler_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //  Đưa data vào request và forward sang JSP form
         String error = (String) request.getAttribute("error");
         request.setAttribute("errorMSG", error);
         request.setAttribute("booking", booking);
@@ -117,24 +112,20 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-      //  Kiểm session + login
         HttpSession session = request.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("user") : null;
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
-        //  Kiểm role
         if (!"TRAVELER".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
-        //  Đọc form data
         String idParam            = request.getParameter("id");
         String numPeopleParam     = request.getParameter("numPeople");
         String contactInfo        = request.getParameter("contactInfo");
         String departureDateParam = request.getParameter("departureDate");
-        //  Chuyển về kiểu dữ liệu, kiểm tra dữ liệu hợp lệ
         int bookingId, numPeople;
         java.sql.Date departureDate;
         try {
@@ -142,12 +133,10 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
             numPeople = Integer.parseInt(numPeopleParam);
             departureDate = java.sql.Date.valueOf(departureDateParam);
         } catch (Exception e) {
-            // Nếu parse lỗi, trả lại doGet kèm thông báo lỗi
             request.setAttribute("error", "Invalid input data.");
             doGet(request, response);
             return;
         }
-        //  Lấy booking gốc để so sánh
         Booking booking = null;
         Tour tour = null;
         try (Connection conn = new DBContext().getConnection()) {
@@ -157,7 +146,6 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
                 return;
             }
-            // Lấy tour để biết maxPeoplePerBooking
             tour = new tourDao(conn).getTourById(booking.getTourId());
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(UpdateBookingTraveler_servlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,14 +154,12 @@ public class UpdateBookingTraveler_servlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(UpdateBookingTraveler_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //  Kiểm numPeople không vượt quá maxPeoplePerBooking
         if (numPeople < 1 || numPeople > tour.getMaxPeoplePerBooking()) {
             request.setAttribute("error", "Number of people must be between 1 and " +
                                           tour.getMaxPeoplePerBooking() + ".");
             doGet(request, response);
             return;
         }
-        //  Cập nhật booking với dao
         booking.setNumPeople(numPeople);
         booking.setContactInfo(contactInfo);
         booking.setDepartureDate(departureDate);

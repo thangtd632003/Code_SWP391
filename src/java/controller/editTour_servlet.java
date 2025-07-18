@@ -90,7 +90,6 @@ public class editTour_servlet extends HttpServlet {
             return;
             }
             request.setAttribute("tour", tour);
-            // truyền trạng thái update (nếu có)
             String upd = request.getParameter("update");
             request.setAttribute("updateStatus", upd);
             request.getRequestDispatcher("/Views/v1/editTour.jsp").forward(request, response);
@@ -157,7 +156,6 @@ public class editTour_servlet extends HttpServlet {
             Logger.getLogger(editTour_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // redirect về doGet có param update
         String redirectUrl = String.format("%s/editTour_servlet?id=%s&update=%s", 
             request.getContextPath(), request.getParameter("id"), success ? "success" : "fail");
         response.sendRedirect(redirectUrl);

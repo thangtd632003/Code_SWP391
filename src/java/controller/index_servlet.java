@@ -63,7 +63,6 @@ User usersession = (User) session.getAttribute("user");
             response.sendRedirect(request.getContextPath() + "/ProfileTravler_servlet");
             return;
         } }
-            // Chưa đăng nhập → chuyển hướng đến welcomePage.jsp
             request.getRequestDispatcher("/Views/v1/welcomePage.jsp").forward(request, response);
 
     } 

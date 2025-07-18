@@ -51,7 +51,6 @@ public class ListBookingGuide_servlet extends HttpServlet {
     
      private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
-    // Thay báº±ng email + máº­t kháº©u á»©ng dá»¥ng (app password) cá»§a báº¡n:
     private static final String SMTP_USERNAME = "quizlet875@gmail.com";
     private static final String SMTP_PASSWORD = "fcrg hpnd xcmt hfye";
 
@@ -102,7 +101,6 @@ public class ListBookingGuide_servlet extends HttpServlet {
         }
         int guideId = user.getId();
 
-        // 2. Đọc tham số tìm kiếm & sắp xếp (nếu có)
         String keyword   = request.getParameter("keyword");    
         String sortDir   = request.getParameter("sortDir");  
                 String sortField = request.getParameter("sortField");
@@ -116,23 +114,18 @@ public class ListBookingGuide_servlet extends HttpServlet {
             List<Booking> bookings;
 
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: chưa search, chưa sort  lấy tất cả
                 bookings = bookingDao.getBookingsByGuideId(guideId);
 
             } else if (hasKeyword && !hasSort) {
-                // Chỉ search (theo keyword)
                 bookings = bookingDao.searchBookingsByGuideId(guideId, keyword);
 
             } else if (!hasKeyword && hasSort) {
-                // Chỉ sort (theo updated_at)
                 bookings = bookingDao.sortBookingsByGuideId(guideId, sortField, sortAsc);
 
             } else {
-                // Có cả search + sort
                 bookings = bookingDao.searchAndSortBookingsByGuideId(guideId, keyword, sortField, sortAsc);
             }
 
-            // 3. Đẩy dữ liệu về JSP
             request.setAttribute("bookings",       bookings);
             request.setAttribute("BookingStatus",   BookingStatus.class);
                         request.setAttribute("sortField", sortField);
@@ -166,16 +159,13 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
             return;
         }
         User user = (User) session.getAttribute("user");
-        // Kiểm tra role: chỉ cho guide truy cập
         if (!"guide".equalsIgnoreCase(user.getRole().name())) {
             response.sendRedirect(request.getContextPath() + "/ProfileTraveler_servlet");
             return;
         }
 
-        // Lấy action từ form (hidden input hoặc parameter)
         String action = request.getParameter("action");
         if (action == null) {
-            // Nếu không có action, chuyển về danh sách lại
             response.sendRedirect(request.getContextPath() + "/ListBookingGuide_servlet");
             return;
         }
@@ -250,14 +240,12 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
 
 
             case "detail":
-                // Chuyển đến servlet detail với bookingId
                 int bookingId = Integer.parseInt(request.getParameter("id"));
                 response.sendRedirect(request.getContextPath()
                         + "/DetailBookingGuide_servlet?bookingId=" + bookingId);
                 break;
 
             default:
-                // Nếu action không hợp lệ, quay lại trang danh sách
                 response.sendRedirect(request.getContextPath() + "/ListBookingGuide_servlet");
                 break;
         }

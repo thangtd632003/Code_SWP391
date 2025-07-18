@@ -70,7 +70,7 @@ public class ChangePassword_servlet extends HttpServlet {
             return;
         }
 
-        // Forward sang JSP nhập OTP + mật khẩu mới
+        
         request.getRequestDispatcher("Views/v1/changePassword.jsp").forward(request, response);
     } 
 
@@ -97,7 +97,7 @@ public class ChangePassword_servlet extends HttpServlet {
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        // Validations
+  
         if (inputOtp == null || !inputOtp.equals(sessionOtp)) {
             request.setAttribute("error", "Code OTP not correct");
             request.getRequestDispatcher("Views/v1/changePassword.jsp").forward(request, response);
@@ -111,17 +111,16 @@ public class ChangePassword_servlet extends HttpServlet {
 
       
 
-        // Cập nhật lại password trong DB
         try (Connection conn = new DBContext().getConnection()) {
             userDao dao = new userDao(conn);
             boolean updated = dao.updatePasswordByEmail(sessionEmail, newPassword);
 
             if (updated) {
-                // Xóa thông tin tạm (otp & email) khỏi session
+               
                 session.removeAttribute("resetEmail");
                 session.removeAttribute("resetOTP");
 session.invalidate();
-                // Chuyển về trang login hoặc gửi thông báo thành công
+                
                 response.sendRedirect(request.getContextPath() + "/login.jsp?reset=success");
             } else {
                 request.setAttribute("error", "Can not update, try againt.");

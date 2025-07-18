@@ -41,11 +41,9 @@ public class createBooking_servlet extends HttpServlet {
 
      private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
-    // Thay báº±ng email + máº­t kháº©u á»©ng dá»¥ng (app password) cá»§a báº¡n:
     private static final String SMTP_USERNAME = "quizlet875@gmail.com";
     private static final String SMTP_PASSWORD = "fcrg hpnd xcmt hfye";
 
-    // Định dạng ngày nhận từ form, ví dụ "yyyy-MM-dd"
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -84,16 +82,13 @@ public class createBooking_servlet extends HttpServlet {
     throws ServletException, IOException {
        HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            // Nếu chưa đăng nhập, chuyển hướng về login
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
         User user = (User) session.getAttribute("user");
 
-        //  Lấy tourId từ query string
         String tourIdParam = request.getParameter("tourId");
         if (tourIdParam == null) {
-            // Nếu không có tourId, quay về trang danh sách tour user
             response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
             return;
         }
@@ -102,17 +97,14 @@ public class createBooking_servlet extends HttpServlet {
         try {
             tourId = Integer.parseInt(tourIdParam);
         } catch (NumberFormatException e) {
-            // tourId không hợp lệ  quay về list
             response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
             return;
         }
 
-        //  Nạp thông tin tour để hiển thị lên form (nếu cần)
         try (Connection conn = new DBContext().getConnection()) {
             tourDao tourDao = new tourDao(conn);
             Tour tour = tourDao.getTourById(tourId);
             if (tour == null) {
-                // Nếu không tìm thấy tour, quay về list
                 response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
                 return;
             }
@@ -123,7 +115,6 @@ public class createBooking_servlet extends HttpServlet {
             Logger.getLogger(createBooking_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //  Chuyển đến JSP bookingTour.jsp để hiển thị form
         String message = request.getParameter("message");
         if (message != null) {
             request.setAttribute("message", message);
@@ -149,7 +140,6 @@ public class createBooking_servlet extends HttpServlet {
         }
         User user = (User) session.getAttribute("user");
 
-        //  Đọc tham số từ form
         String tourIdParam      = request.getParameter("tourId");
         String departureParam   = request.getParameter("departureDate"); // định dạng "yyyy-MM-dd"
         String numPeopleParam   = request.getParameter("numPeople");
@@ -163,20 +153,16 @@ public class createBooking_servlet extends HttpServlet {
             numPeople = Integer.parseInt(numPeopleParam);
             departureDate = DATE_FORMAT.parse(departureParam);
         } catch (NumberFormatException | ParseException e) {
-            // Nếu parse lỗi, quay về form với thông báo lỗi
             response.sendRedirect(request.getContextPath() + "/createBooking_servlet?tourId=" 
                     + tourIdParam + "&message=invalidInput");
             return;
         }
 
         try (Connection conn = new DBContext().getConnection()) {
-            // Nạp DAO
             BookingDao bookingDao = new BookingDao(conn);
             tourDao tourDao = new tourDao(conn);
 userDao userDao = new userDao(conn);
-            // Lấy thông tin tour (để biết số ngày)
             Tour tour = tourDao.getTourById(tourId);
-            //lấy guide account
             User guide = userDao.getUserById(tour.getGuideId());
             if (tour == null) {
                 response.sendRedirect(request.getContextPath() + "/listTourUser_servlet");
@@ -184,7 +170,6 @@ userDao userDao = new userDao(conn);
             }
             int tourDays = tour.getDays();
 
-            //  Kiểm tra xung đột với booking của chính user
             boolean sameDateConflict = bookingDao.isSameDateConflictForUser(
                     user.getId(), departureDate);
             if (sameDateConflict) {
@@ -204,7 +189,6 @@ userDao userDao = new userDao(conn);
                 return;
             }
 
-            //  Kiểm tra xung đột với booking APPROVED của guide
             boolean periodConflictGuide = bookingDao.isPeriodConflictForGuide(
                     tour.getGuideId(), departureDate, tourDays);
             if (periodConflictGuide) {
@@ -215,7 +199,6 @@ userDao userDao = new userDao(conn);
                 return;
             }
 
-            //  Thực hiện tạo booking mới (mặc định status = PENDING)
             Booking newBooking = new Booking();
             newBooking.setTravelerId(user.getId());
             newBooking.setTourId(tourId);
@@ -232,7 +215,6 @@ userDao userDao = new userDao(conn);
             
             if (!created) {
                 
-                // Nếu insertion thất bại
                 response.sendRedirect(request.getContextPath()
                         + "/createBooking_servlet?tourId=" + tourId
                         + "&message=creationFailed");
@@ -247,7 +229,6 @@ userDao userDao = new userDao(conn);
             Logger.getLogger(createBooking_servlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //  Nếu thành công, chuyển về trang xác nhận hoặc danh sách booking
         response.sendRedirect(request.getContextPath() + "/createBooking_servlet?tourId=" + tourId+"&message=bookingSuccess");
     }
 private boolean sendNewBookingToGuide(String guideEmail) {

@@ -69,9 +69,7 @@ public class listTourUser_servlet extends HttpServlet {
             return;
         }
         User current = (User) session.getAttribute("user");
-        // Chỉ cho phép traveler xem trang này (bạn có thể mở rộng cho GUIDE hoặc ADMIN nếu muốn)
         if (current.getRole() != Role.TRAVELER) {
-            // Nếu không phải traveler, redirect về trang profile tương ứng
             if (current.getRole() == Role.GUIDE) {
                 response.sendRedirect(request.getContextPath() + "/ProfileGuide_servlet");
             } else {
@@ -80,31 +78,25 @@ public class listTourUser_servlet extends HttpServlet {
             return;
         }
 
-        //  Đọc tham số "keyword" để search (nếu có)
         String keyword = request.getParameter("keyword");
         boolean hasKeyword = (keyword != null && !keyword.trim().isEmpty());
 
         try (Connection conn = new DBContext().getConnection()) {
             tourDao dao = new tourDao(conn);
 
-            //  Lấy danh sách tour chính (search nếu có, ngược lại lấy all)
             List<Tour> allTours = hasKeyword
                     ? dao.searchToursUsers(keyword.trim())
                     : dao.getAllToursUsers();
 
-            //  Lấy top 10 tour được booking nhiều nhất
             List<Tour> topTours = dao.getTop10ByBookings();
 
-            //  Lấy tour mà chính user đã booking
             List<Tour> userBookedTours = dao.getToursBookedByUser(current.getId());
 
-            //  Đặt vào request attribute
             request.setAttribute("allTours", allTours);
             request.setAttribute("topTours", topTours);
             request.setAttribute("userBookedTours", userBookedTours);
             request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
 
-            // Forward đến JSP listTourUser.jsp
             request.getRequestDispatcher("/Views/v1/listTourUser.jsp")
                    .forward(request, response);
         }

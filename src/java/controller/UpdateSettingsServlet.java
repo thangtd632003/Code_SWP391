@@ -31,7 +31,6 @@ public class UpdateSettingsServlet extends HttpServlet {
                 return;
             }
 
-            // Lấy các thông tin từ request
             String fullName = request.getParameter("fullName");
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
@@ -39,25 +38,21 @@ public class UpdateSettingsServlet extends HttpServlet {
             String birthDate = request.getParameter("birthDate");
             String newPassword = request.getParameter("newPassword");
             
-            // Validate fullName
             if (fullName == null || fullName.trim().isEmpty()) {
                 out.write("{\"success\": false, \"message\": \"Name cannot be empty\"}");
                 return;
             }
 
-            // Cập nhật thông tin user
             currentUser.setFullName(fullName.trim());
             currentUser.setEmail(email);
             currentUser.setPhone(phone);
             currentUser.setGender(Gender.valueOf(gender));
             currentUser.setBirthDate(Date.valueOf(birthDate));
             
-            // Lưu vào database
             UserDAO_3 userDAO = new UserDAO_3();
             boolean updated = userDAO.updateUser(currentUser, null, newPassword);
             
             if (updated) {
-                // Cập nhật session với thông tin mới
                 session.setAttribute("user", currentUser);
                 out.write("{\"success\": true, \"message\": \"Settings updated successfully\"}");
             } else {

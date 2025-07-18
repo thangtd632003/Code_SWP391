@@ -94,15 +94,12 @@ public class tourList_servlet extends HttpServlet {
             List<Tour> tours;
 
             if (!hasKeyword && !hasSort) {
-                // Trường hợp: CHƯA NHẬP GÌ  lấy tất cả tour của guide
                 tours = dao.getToursByGuideId(userId);
 
             } else if (hasKeyword && !hasSort) {
-                // Chỉ Search (có keyword, chưa Sort)
                 tours = dao.searchToursByGuideId(userId, keyword.trim());
 
             } else if (!hasKeyword && hasSort) {
-                // Chỉ Sort (chưa Search)
                 tours = dao.sortToursByGuideId(userId, sortField.trim(), sortAsc);
 
             } else {
@@ -112,7 +109,6 @@ public class tourList_servlet extends HttpServlet {
             
             }
 
-            //  Đẩy về JSP
          request.setAttribute("tours", tours);
 request.setAttribute("keyword", hasKeyword ? keyword.trim() : "");
 

@@ -36,7 +36,6 @@ public class RegisterServlet_servlet extends HttpServlet {
             String phone = request.getParameter("phone");
             String roleParam = request.getParameter("role");
 
-            // Kiểm tra xem email đã tồn tại chưa
             if (userDao.emailExists(email)) {
                 request.setAttribute("error", "Email already exists. Please use another email.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);

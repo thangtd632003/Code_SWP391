@@ -74,7 +74,6 @@ public class ListBookingTraveler_servlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         // 1. Kiểm tra session + user + role
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -87,7 +86,6 @@ public class ListBookingTraveler_servlet extends HttpServlet {
         }
         int travelerId = user.getId();
 
-        // 2. Đọc tham số tìm kiếm & sắp xếp (nếu có)
         String keyword   = request.getParameter("keyword");    // tìm kiếm theo contact_info
         String sortDir   = request.getParameter("sortDir");    // "asc" hoặc "desc"
         String sortField = request.getParameter("sortField");
@@ -101,23 +99,18 @@ public class ListBookingTraveler_servlet extends HttpServlet {
             List<Booking> bookings;
 
             if (!hasKeyword && !hasSort) {
-                // Chưa search, chưa sort  lấy toàn bộ booking
                 bookings = bookingDao.getBookingsByTravelerId(travelerId);
 
             } else if (hasKeyword && !hasSort) {
-                // Chỉ search
                 bookings = bookingDao.searchBookingsByTravelerId(travelerId, keyword);
 
             } else if (!hasKeyword && hasSort) {
-                // Chỉ sort theo updated_at
                 bookings = bookingDao.sortBookingsByTravelerId(travelerId, sortField, sortAsc);
 
             } else {
-                // Có cả search + sort
                 bookings = bookingDao.searchAndSortBookingsByTravelerId(travelerId, keyword, sortField, sortAsc);
             }
 
-            // 3. Đẩy dữ liệu về JSP
             request.setAttribute("bookings",       bookings);
             request.setAttribute("BookingStatus",   BookingStatus.class);
             request.setAttribute("keyword",         hasKeyword ? keyword.trim() : "");
