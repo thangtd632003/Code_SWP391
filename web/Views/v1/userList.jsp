@@ -216,7 +216,16 @@
             <td><c:out value="${u.fullName}"/></td>
             <td><c:out value="${u.email}"/></td>
             <td><c:out value="${u.phone}"/></td>
-            <td><c:out value="${u.status}"/></td>
+           <td>
+  <c:choose>
+    <c:when test="${u.status == 'ACTIVE'}">
+      Unlocked
+    </c:when>
+    <c:otherwise>
+      Locked
+    </c:otherwise>
+  </c:choose>
+</td>
             <td><c:out value="${u.updatedAt}"/></td>
             <td>
               <!-- Nút Detail -->
@@ -238,7 +247,7 @@
     <input type="hidden" name="newStatus"
           value="${u.status == 'ACTIVE' ? 'LOCKED' : 'ACTIVE'}"/>
     <button type="submit" class="action-btn">
-      <c:out value="${u.status == 'ACTIVE' ? 'Lock' : 'Activate'}"/>
+      <c:out value="${u.status == 'ACTIVE' ? 'Lock' : 'Unlock'}"/>
     </button>
   </form>
 </c:if>

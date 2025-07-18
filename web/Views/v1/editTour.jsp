@@ -145,7 +145,7 @@
       <div class="form-group">
         <label for="language">Language:</label>
         <select id="language" name="language" required>
-          <c:forEach var="lang" items="${['English','Japanese','Chinese','Germany','VietNamese']}">
+              <c:forEach var="lang" items="${['English','Japanese','Chinese','Germany','VietNamese']}">
             <option value="${lang}" <c:if test="${lang == tour.language}">selected</c:if>>
               ${lang}
             </option>
@@ -156,11 +156,14 @@
       <div class="form-group">
         <label for="status">Status:</label>
         <select id="status" name="status" required>
-          <c:forEach var="s" items="${['ACTIVE','LOCKED']}">
-            <option value="${s}" <c:if test="${s == tour.status.name()}">selected</c:if>>
-              ${s}
-            </option>
-          </c:forEach>
+       <c:forEach var="s" items="${['ACTIVE','LOCKED']}">
+    <option value="${s}" <c:if test="${s == tour.status.name()}">selected</c:if>>
+        <c:choose>
+            <c:when test="${s == 'ACTIVE'}">Unlocked</c:when>
+            <c:otherwise>Locked</c:otherwise>
+        </c:choose>
+    </option>
+</c:forEach>
         </select>
       </div>
 

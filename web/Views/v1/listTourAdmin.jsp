@@ -242,7 +242,16 @@
             <td><c:out value="${t.maxPeoplePerBooking}"/></td>
             <td><c:out value="${t.days}"/></td>
             <td><c:out value="${t.language}"/></td>
-            <td><c:out value="${t.status}"/></td>
+            <td>
+  <c:choose>
+    <c:when test="${t.status == 'ACTIVE'}">
+      Unlocked
+    </c:when>
+    <c:otherwise>
+      Locked
+    </c:otherwise>
+  </c:choose>
+</td>
             <td>
               <form method="post" style="display:inline;" action="${pageContext.request.contextPath}/listTourAdmin_servlet">
                 <input type="hidden" name="action" value="view"/>

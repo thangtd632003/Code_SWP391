@@ -72,7 +72,17 @@
       <p><strong>Max People:</strong> ${tour.maxPeoplePerBooking}</p>
       <p><strong>Days:</strong> ${tour.days}</p>
       <p><strong>Language:</strong> ${tour.language}</p>
-      <p><strong>Status:</strong> ${tour.status}</p>
+    <td>
+        <strong>Status:</strong>
+  <c:choose>
+    <c:when test="${tour.status == 'ACTIVE'}">
+      Unlocked
+    </c:when>
+    <c:otherwise>
+      Locked
+    </c:otherwise>
+  </c:choose>
+</td>
       <p><strong>Created At:</strong> ${tour.createdAt}</p>
       <p><strong>Updated At:</strong> ${tour.updatedAt}</p>
     </c:if>

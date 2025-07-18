@@ -250,7 +250,16 @@
             <td><c:out value="${t.maxPeoplePerBooking}" /></td>
             <td><c:out value="${t.days}" /></td>
             <td><c:out value="${t.language}" /></td>
-            <td><c:out value="${t.status}" /></td>
+            <td>
+  <c:choose>
+    <c:when test="${t.status == 'ACTIVE'}">
+      Unlocked
+    </c:when>
+    <c:otherwise>
+      Locked
+    </c:otherwise>
+  </c:choose>
+</td>
             <td>
               <button class="action-btn"
                       onclick="location.href='${pageContext.request.contextPath}/editTour_servlet?id=${t.id}'">

@@ -5,7 +5,7 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <!DOCTYPE html>
@@ -38,7 +38,16 @@
       <label>Phone:</label> <span>${userDetail.phone}</span>
     </div>
     <div class="field">
-      <label>Status:</label> <span>${userDetail.status}</span>
+      <label>Status:</label> <span><td>
+  <c:choose>
+    <c:when test="${t.status == 'ACTIVE'}">
+      Unlocked
+    </c:when>
+    <c:otherwise>
+      Locked
+    </c:otherwise>
+  </c:choose>
+</td></span>
     </div>
     <div class="field">
       <label>Created At:</label> <span>${userDetail.createdAt}</span>
