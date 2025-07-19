@@ -74,18 +74,16 @@
       background: #e57c00;
     }
 
-    /* Khu vực nội dung chính */
     .container {
-      margin-top: 70px; /* chừa chỗ cho thanh top-bar */
+      margin-top: 70px; 
       padding: 20px;
     }
     h2.section-title {
       margin-top: 40px; 
       margin-bottom: 10px; 
-      color: #005ea8; /* tiêu đề màu xanh dương */
+      color: #005ea8; 
     }
 
-    /* Lưới hiển thị các card */
     .card-grid {
       display: flex;
       flex-wrap: wrap;
@@ -139,18 +137,23 @@
       color: #fff;
     }
     .btn-detail {
-      background: #007bff; /* xanh dương */
+      background: #007bff; 
     }
     .btn-detail:hover {
       background: #006ae0;
     }
     .btn-book {
-      background: #28a745; /* xanh lá */
+      background: #28a745;
     }
     .btn-book:hover {
       background: #218838;
     }
-
+ .filter-bar { margin-top:70px; padding:10px 20px; background:#f9f9f9; border-bottom:1px solid #e0e0e0; display:flex; align-items:center; gap:10px; }
+    .filter-bar label { font-size:14px; }
+    .filter-bar select { padding:6px; font-size:14px; border:1px solid #ccc; border-radius:4px; }
+     .pagination { margin:20px 0; display:flex; list-style:none; gap:8px; }
+    .pagination li { cursor:pointer; padding:6px 12px; border:1px solid #ccc; border-radius:4px; }
+    .pagination li.active { background:#007bff; color:#fff; border-color:#007bff; }
     /* Responsive */
     @media (max-width: 1024px) {
       .card { width: calc(33.333% - 16px); }
@@ -164,12 +167,9 @@
   </style>
 </head>
 <body>
-  <!-- Thanh cố định -->
   <div class="top-bar">
-    <!-- Link về Dashboard -->
     <a href="${pageContext.request.contextPath}/dashboard" class="dashboard-link">← Dashboard</a>
 
-    <!-- Form tìm kiếm -->
     <form method="get" action="${pageContext.request.contextPath}/listTourUser_servlet">
       <input
         type="text"
@@ -179,10 +179,16 @@
       <button type="submit" class="search-btn">Search</button>
     </form>
   </div>
-
-  <!-- Nội dung chính -->
+  <div class="filter-bar">
+    <label for="dayFilter">Filter by days:</label>
+    <select id="dayFilter">
+      <option value="all">All</option>
+      <option value="1-3">1-3 days</option>
+      <option value="3-7">3-7 days</option>
+      <option value=">7">>7 days</option>
+    </select>
+  </div>
   <div class="container">
-    <!-- 1. Section: Các tour user đã booking -->
     <c:if test="${not empty userBookedTours}">
       <h2 class="section-title">List tour you booked</h2>
       <div class="card-grid">
@@ -205,7 +211,6 @@
       </div>
     </c:if>
 
-    <!-- 2. Section: Top 10 tour được booking nhiều nhất -->
     <h2 class="section-title">Top 10 Most Booked Tours </h2>
     <div class="card-grid">
       <c:forEach var="t" items="${topTours}">
@@ -225,7 +230,6 @@
       </c:forEach>
     </div>
 
-    <!-- 3. Section: Tất cả Tour (hoặc kết quả search) -->
     <h2 class="section-title">
       <c:choose>
         <c:when test="${not empty keyword}">
@@ -249,6 +253,7 @@
               <button type="submit" name="action" value="detail" class="btn-detail">Detail</button>
               <button type="submit" name="action" value="book" class="btn-book">Book</button>
             </div>
+             
           </div>
         </form>
       </c:forEach>
@@ -256,6 +261,58 @@
         <p>Not found.</p>
       </c:if>
     </div>
+      <ul id="pagination" class="pagination"></ul>
   </div>
+      <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const filter = document.getElementById('dayFilter');
+      const cards = Array.from(document.querySelectorAll('#allTours .card'));
+      const perPage = 8; let currentPage = 1;
+
+      function applyFilter() {
+        const val = filter.value;
+        cards.forEach(card => {
+          const days = parseInt(card.dataset.days, 10);
+          let show = false;
+          if (val === 'all') show = true;
+          else if (val === '1-3' && days >=1 && days <=3) show = true;
+          else if (val === '3-7' && days >=3 && days <=7) show = true;
+          else if (val === '>7' && days >7) show = true;
+          card.style.display = show ? '' : 'none';
+        });
+        setupPagination();
+      }
+
+      function setupPagination() {
+        const visible = cards.filter(c => c.style.display !== 'none');
+        const pageCount = Math.ceil(visible.length / perPage);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        for (let i=1; i<=pageCount; i++) {
+          const li = document.createElement('li'); li.textContent = i;
+          if (i=== currentPage) li.classList.add('active');
+          li.addEventListener('click', () => {
+            currentPage = i; showPage();
+          });
+          pagination.appendChild(li);
+        }
+        showPage();
+      }
+
+      function showPage() {
+        const visible = cards.filter(c => c.style.display !== 'none');
+        visible.forEach((card, idx) => {
+          card.style.order = '0';
+          card.style.display = 'none';
+        });
+        const start = (currentPage-1)*perPage;
+        visible.slice(start, start+perPage).forEach(card => card.style.display = '');
+      }
+
+      filter.addEventListener('change', () => { currentPage = 1; applyFilter(); });
+      applyFilter();
+    });
+  </script>
 </body>
+
 </html>

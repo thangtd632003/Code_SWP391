@@ -157,7 +157,6 @@
       </c:choose>
     </div>
 
-    <!-- Only show add form if no existing reviews -->
     <c:if test="${empty reviews}">
       <form method="post" action="${pageContext.request.contextPath}/ReviewBookingTraveler_servlet">
         <input type="hidden" name="bookingId" value="${booking.id}"/>

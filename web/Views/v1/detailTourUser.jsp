@@ -89,7 +89,6 @@
   </div>
 
   <div class="container">
-    <!-- Thông tin Tour -->
     <div class="tour-header">
       <div class="tour-info">
         <h2><c:out value="${tour.name}" /></h2>
@@ -103,7 +102,6 @@
       </div>
     </div>
 
-    <!-- Thông tin Guide -->
     <div class="guide-box">
       <h3>Guide:</h3>
       <div class="guide-info">

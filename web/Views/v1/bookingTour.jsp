@@ -132,7 +132,6 @@
 </head>
 <body>
   <div class="top-bar">
-    <!-- Nút Back to Tour List -->
     <button class="back-btn" onclick="location.href='${pageContext.request.contextPath}/listTourUser_servlet'">
       ← Back to Tours
     </button>
@@ -141,7 +140,6 @@
   <div class="container">
     <h2>Booking Tour</h2>
     
-    <!-- Hiển thị thông báo lỗi hoặc thành công nếu có -->
     <c:if test="${not empty errorMessage}">
       <div class="message error">${errorMessage}</div>
     </c:if>
@@ -151,7 +149,6 @@
     <c:if test="${not empty message}">
       <div class="message">${message}</div>
     </c:if>
-    <!-- Thông tin tóm tắt của tour -->
     <c:if test="${not empty tour}">
       <div class="tour-info">
         <p><strong>Name tour:</strong> <c:out value="${tour.name}" /></p>
@@ -162,12 +159,9 @@
       </div>
     </c:if>
     
-    <!-- Form đặt tour -->
     <form method="post" action="${pageContext.request.contextPath}/createBooking_servlet">
-      <!-- Giữ lại tourId -->
       <input type="hidden" name="tourId" value="${tour.id}" />
 
-      <!-- Ngày khởi hành -->
       <label for="departureDate">Depature date:</label>
       <input type="date"
              id="departureDate"
@@ -175,7 +169,6 @@
              required
              min="<%= todayStr %>" />
 
-      <!-- Số khách -->
       <label for="numPeople">Number people of tour:</label>
       <input type="number"
              id="numPeople"
@@ -185,7 +178,6 @@
              max="${tour.maxPeoplePerBooking}"
              value="1" />
 
-      <!-- Thông tin liên hệ -->
       <label for="contactInfo">Contact info:</label>
       <textarea id="contactInfo"
                 name="contactInfo"

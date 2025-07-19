@@ -63,7 +63,6 @@ request.setAttribute("nowTime", nowTime);
     </div>
 
     <div style="margin-top:60px;">
-        <!-- Form tìm kiếm theo contact -->
         <div class="controls">
             <form method="get" action="${pageContext.request.contextPath}/ListBookingTraveler_servlet">
                 <input type="text"
@@ -78,11 +77,9 @@ request.setAttribute("nowTime", nowTime);
             </form>
         </div>
 
-        <!-- Bảng hiển thị các booking đã được search/sort ở servlet -->
         <table id="bookingTable">
             <thead>
                 <tr>
-                    <!-- Cột ID -->
                     <th
                       <c:if test="${sortField eq 'id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -105,7 +102,6 @@ request.setAttribute("nowTime", nowTime);
                       </a>
                     </th>
 
-                    <!-- Cột Tour ID -->
                     <th
                       <c:if test="${sortField eq 'tour_id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -128,7 +124,6 @@ request.setAttribute("nowTime", nowTime);
                       </a>
                     </th>
 
-                    <!-- Cột Traveler ID -->
                     <th
                       <c:if test="${sortField eq 'traveler_id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -174,7 +169,6 @@ request.setAttribute("nowTime", nowTime);
                       </a>
                     </th>
 
-                    <!-- Cột Contact -->
                     <th
                       <c:if test="${sortField eq 'contact_info'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -197,7 +191,6 @@ request.setAttribute("nowTime", nowTime);
                       </a>
                     </th>
 
-                    <!-- Cột Status -->
                     <th
                       <c:if test="${sortField eq 'status'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -220,7 +213,6 @@ request.setAttribute("nowTime", nowTime);
                       </a>
                     </th>
 
-                    <!-- Cột Departure -->
                     <th
                       <c:if test="${sortField eq 'departure_date'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -257,14 +249,12 @@ request.setAttribute("nowTime", nowTime);
                         <td><c:out value="${b.status}" /></td>
                         <td><c:out value="${b.departureDate}" /></td>
                         <td>
-                            <!-- Nút Detail -->
                             <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_servlet">
                                 <input type="hidden" name="action" value="detail"/>
                                 <input type="hidden" name="id" value="${b.id}"/>
                                 <button class="action-btn" type="submit">Detail</button>
                             </form>
 
-                            <!-- Nút Cancel nếu status = PENDING -->
                             <c:choose>
                                 <c:when test="${b.status.name() == 'PENDING'}">
                                     <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_servlet">
@@ -279,7 +269,6 @@ request.setAttribute("nowTime", nowTime);
                                 </c:otherwise>
                             </c:choose>
 
-                            <!-- Nút Update nếu status = PENDING -->
                             <c:choose>
                                 <c:when test="${b.status.name() == 'PENDING'}">
                                     <form method="post" action="${pageContext.request.contextPath}/ListBookingTraveler_servlet">
@@ -315,29 +304,24 @@ request.setAttribute("nowTime", nowTime);
     </div>
 
     <script>
-        const rowsPerPage = 10;                 // số dòng hiển thị mỗi trang
-        let currentPage = 1;                    // trang hiện tại
+        const rowsPerPage = 10;                 
+        let currentPage = 1;                 
 
-        // Lấy mảng tất cả row (tr) trong tbody
         const allRows = Array.from(document.querySelectorAll('#bookingTable tbody tr'));
 
         function renderTable() {
-            // Tính tổng pages
             const totalRows = allRows.length;
             const totalPages = Math.ceil(totalRows / rowsPerPage);
             if (currentPage > totalPages) currentPage = totalPages || 1;
 
-            // Tính index đầu và cuối cho trang hiện tại
             const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
 
-            // Xóa hết tbody, rồi thêm lại hàng thuộc trang hiện tại
             const tbody = document.querySelector('#bookingTable tbody');
             tbody.innerHTML = '';
             const pageRows = allRows.slice(start, end);
             pageRows.forEach(row => tbody.appendChild(row));
 
-            // Xây phần pagination
             const paginationDiv = document.getElementById('pagination');
             paginationDiv.innerHTML = '';
             for (let i = 1; i <= totalPages; i++) {
@@ -352,7 +336,6 @@ request.setAttribute("nowTime", nowTime);
             }
         }
 
-        // Khi load trang lần đầu, in bảng và pagination
         renderTable();
     </script>
 </body>

@@ -44,7 +44,6 @@
 </c:if>
 
     <form method="post" action="${pageContext.request.contextPath}/UpdateBookingTraveler_servlet">
-      <!-- Giấu bookingId -->
       <input type="hidden" name="id" value="${booking.id}"/>
 
       <div class="form-group">

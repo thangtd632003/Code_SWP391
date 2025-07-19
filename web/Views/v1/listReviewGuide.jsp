@@ -67,7 +67,6 @@
       </form>
     </div>
 
-    <!-- Reviews table -->
     <table id="reviewTable">
       <thead>
         <tr>
@@ -176,7 +175,6 @@
       <p>No reviews found.</p>
     </c:if>
 
-    <!-- pagination -->
     <div class="pagination" id="pagination"></div>
   </div>
 

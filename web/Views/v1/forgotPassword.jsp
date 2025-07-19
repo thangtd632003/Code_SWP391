@@ -71,7 +71,6 @@
   <div class="form-container">
     <h2>Forgot Password</h2>
 
-    <!-- Hiển thị lỗi nếu có -->
     <c:if test="${not empty error}">
       <div class="error">${error}</div>
     </c:if>

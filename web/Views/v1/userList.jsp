@@ -61,7 +61,6 @@
   <div style="margin-top: 60px;">
     <h2>List User</h2>
 
-    <!-- Thông báo kết quả nếu có -->
     <c:if test="${param.msg == 'statusOk'}">
       <div class="message success">Change status succes!</div>
     </c:if>
@@ -69,7 +68,6 @@
       <div class="message fail">Change status fail!</div>
     </c:if>
 
-    <!-- Controls: Search + nút Add -->
     <div class="controls">
       <form method="get" action="${pageContext.request.contextPath}/userList_servlet">
         <input type="text"
@@ -81,19 +79,12 @@
         <button type="submit">Search</button>
       </form>
 
-      <!-- Nếu có trang tạo user mới, bạn có thể thêm button ở đây -->
-      <!--
-      <a href="${pageContext.request.contextPath}/createUser_servlet">
-        <button type="button">Add New User</button>
-      </a>
-      -->
+     
     </div>
 
-    <!-- Bảng User -->
     <table id="userTable">
       <thead>
         <tr>
-          <!-- Cột ID -->
           <th
             <c:if test="${sortField eq 'id'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -115,7 +106,6 @@
             </a>
           </th>
 
-          <!-- Cột Full Name -->
           <th
             <c:if test='${sortField eq "full_name"}'>
               class='${sortDir eq "asc" ? "sorted-asc" : "sorted-desc"}'
@@ -137,7 +127,6 @@
             </a>
           </th>
 
-          <!-- Cột Email -->
           <th
             <c:if test='${sortField eq "email"}'>
               class='${sortDir eq "asc" ? "sorted-asc" : "sorted-desc"}'
@@ -161,7 +150,6 @@
 
           <th>Phone</th>
 
-          <!-- Cột Status -->
           <th
             <c:if test='${sortField eq "status"}'>
               class='${sortDir eq "asc" ? "sorted-asc" : "sorted-desc"}'
@@ -183,7 +171,6 @@
             </a>
           </th>
 
-          <!-- Cột Updated At -->
           <th
             <c:if test='${sortField eq "updated_at"}'>
               class='${sortDir eq "asc" ? "sorted-asc" : "sorted-desc"}'
@@ -228,7 +215,6 @@
 </td>
             <td><c:out value="${u.updatedAt}"/></td>
             <td>
-              <!-- Nút Detail -->
               <form method="post"
                     action="${pageContext.request.contextPath}/userList_servlet"
                     style="display:inline;">
@@ -237,7 +223,6 @@
                 <button type="submit" class="action-btn">Detail</button>
               </form>
 
-              <!-- Nút Change Status (chỉ hiển thị nếu currentRole == "ADMIN") -->
               <c:if test="${currentRole == 'ADMIN' && u.role != 'ADMIN'}">
   <form method="post"
         action="${pageContext.request.contextPath}/userList_servlet"
@@ -261,11 +246,10 @@
       <p>Not Founds.</p>
     </c:if>
 
-    <!-- Phân trang sẽ được chèn tại đây -->
     <div id="pagination"></div>
   </div>
 
-  <!-- JavaScript phân trang client-side -->
+ 
   <script>
     (function() {
       const rowsPerPage = 10;
@@ -275,7 +259,7 @@
       const pagination = document.getElementById("pagination");
 
       if (rows.length === 0) {
-        return; // Nếu không có dòng, không cần phân trang
+        return; 
       }
 
       const totalPages = Math.ceil(rows.length / rowsPerPage);
@@ -288,7 +272,6 @@
           row.style.display = (index >= start && index < end) ? "" : "none";
         });
 
-        // Highlight nút hiện tại
         const btns = pagination.querySelectorAll("button");
         btns.forEach(btn => {
           btn.classList.toggle("active", Number(btn.textContent) === page);
@@ -307,7 +290,7 @@
       }
 
       setupPagination();
-      showPage(1); // Mặc định hiển thị trang 1
+      showPage(1); 
     })();
   </script>
 </body>

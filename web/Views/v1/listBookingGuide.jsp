@@ -72,11 +72,9 @@
     <div class="alert alert-info">${message}</div>
 </c:if>
 
-        <!-- Bảng hiển thị Booking (đã được search & sort ở servlet) -->
         <table id="bookingTable">
             <thead>
                 <tr>
-                    <!-- Cột ID -->
                     <th
                       <c:if test="${sortField eq 'id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -99,7 +97,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột Tour ID -->
                     <th
                       <c:if test="${sortField eq 'tour_id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -122,7 +119,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột Traveler ID -->
                     <th
                       <c:if test="${sortField eq 'traveler_id'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -145,7 +141,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột People -->
                     <th
                       <c:if test="${sortField eq 'num_people'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -168,7 +163,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột Contact -->
                     <th
                       <c:if test="${sortField eq 'contact_info'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -191,7 +185,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột Status -->
                     <th
                       <c:if test="${sortField eq 'status'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -214,7 +207,6 @@
                       </a>
                     </th>
 
-                    <!-- Cột Departure -->
                     <th
                       <c:if test="${sortField eq 'departure_date'}">
                         class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -290,29 +282,24 @@
     </div>
 
     <script>
-        const rowsPerPage = 10;                 // số dòng hiển thị mỗi trang
-        let currentPage = 1;                    // trang hiện tại
+        const rowsPerPage = 10;                 
+        let currentPage = 1;                  
 
-        // Lấy mảng tất cả row (tr) trong tbody
         const allRows = Array.from(document.querySelectorAll('#bookingTable tbody tr'));
 
         function renderTable() {
-            // Tính tổng pages
             const totalRows = allRows.length;
             const totalPages = Math.ceil(totalRows / rowsPerPage);
             if (currentPage > totalPages) currentPage = totalPages || 1;
 
-            // Tính index đầu và cuối cho trang hiện tại
             const start = (currentPage - 1) * rowsPerPage;
             const end = start + rowsPerPage;
 
-            // Xóa hết tbody, rồi thêm lại hàng thuộc trang hiện tại
             const tbody = document.querySelector('#bookingTable tbody');
             tbody.innerHTML = '';
             const pageRows = allRows.slice(start, end);
             pageRows.forEach(row => tbody.appendChild(row));
 
-            // Xây phần pagination
             const paginationDiv = document.getElementById('pagination');
             paginationDiv.innerHTML = '';
             for (let i = 1; i <= totalPages; i++) {
@@ -327,7 +314,6 @@
             }
         }
 
-        // Khi load trang lần đầu, hiển thị bảng và pagination
         renderTable();
     </script>
 </body>

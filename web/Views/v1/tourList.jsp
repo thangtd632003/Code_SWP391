@@ -60,7 +60,6 @@
 
 
   <div style="margin-top:60px;">
-    <!-- Form tìm kiếm -->
     <div class="controls">
       <form method="get" action="${pageContext.request.contextPath}/tourList_servlet">
         <input type="text"
@@ -77,11 +76,9 @@
       </div>
     </div>
 
-    <!-- Bảng hiển thị TOÀN BỘ tours (chưa cắt) -->
     <table id="tourTable">
       <thead>
         <tr>
-          <!-- Cột ID -->
           <th
             <c:if test="${sortField eq 'id'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -104,7 +101,6 @@
               ID
             </a>
           </th>
-          <!-- Cột Name -->
           <th
             <c:if test="${sortField eq 'name'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -126,7 +122,6 @@
               Name
             </a>
           </th>
-          <!-- Cột Price -->
           <th
             <c:if test="${sortField eq 'price'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -148,7 +143,6 @@
               Price(USD)
             </a>
           </th>
-          <!-- Cột Max People -->
           <th
             <c:if test="${sortField eq 'max_people_per_booking'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -170,7 +164,6 @@
               Max People
             </a>
           </th>
-          <!-- Cột Days -->
           <th
             <c:if test="${sortField eq 'days'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -192,7 +185,6 @@
               Days
             </a>
           </th>
-          <!-- Cột Language -->
           <th
             <c:if test="${sortField eq 'language'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -214,7 +206,6 @@
               Language
             </a>
           </th>
-          <!-- Cột Status -->
           <th
             <c:if test="${sortField eq 'status'}">
               class="${sortDir eq 'asc' ? 'sorted-asc' : 'sorted-desc'}"
@@ -241,7 +232,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- XUẤT TOÀN BỘ tours, không cắt -->
         <c:forEach var="t" items="${tours}">
           <tr>
             <td><c:out value="${t.id}" /></td>
@@ -300,29 +290,24 @@
   </div>
 
   <script>
-    const rowsPerPage = 10;                 // số dòng hiển thị mỗi trang
-    let currentPage = 1;                    // trang hiện tại
+    const rowsPerPage = 10;               
+    let currentPage = 1;                    
 
-    // Lấy mảng tất cả row (tr) trong tbody
     const allRows = Array.from(document.querySelectorAll('#tourTable tbody tr'));
 
     function renderTable() {
-      // Tính tổng pages
       const totalRows = allRows.length;
       const totalPages = Math.ceil(totalRows / rowsPerPage);
       if (currentPage > totalPages) currentPage = totalPages || 1;
 
-      // Tính index đầu và cuối cho trang hiện tại
       const start = (currentPage - 1) * rowsPerPage;
       const end = start + rowsPerPage;
 
-      // Xóa hết tbody, rồi thêm lại hàng thuộc trang hiện tại
       const tbody = document.querySelector('#tourTable tbody');
       tbody.innerHTML = '';
       const pageRows = allRows.slice(start, end);
       pageRows.forEach(row => tbody.appendChild(row));
 
-      // Xây phần pagination
       const paginationDiv = document.getElementById('pagination');
       paginationDiv.innerHTML = '';
       for (let i = 1; i <= totalPages; i++) {
@@ -337,7 +322,6 @@
       }
     }
 
-    // Khi load trang lần đầu, in bảng và pagination
     renderTable();
   </script>
 </body>
