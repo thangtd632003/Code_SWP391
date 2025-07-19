@@ -240,9 +240,9 @@
         </c:otherwise>
       </c:choose>
     </h2>
-    <div class="card-grid">
-      <c:forEach var="t" items="${allTours}">
-        <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card">
+    <div class="card-grid"  id="allTours">
+      <c:forEach var="t" items="${allTours}" >
+        <form method="post" action="${pageContext.request.contextPath}/listTourUser_servlet" class="card" data-days="${t.days}">
           <div class="card-body">
             <h3><c:out value="${t.name}" /></h3>
                           <p>Days: <c:out value="${t.days}" /></p>
@@ -264,54 +264,68 @@
       <ul id="pagination" class="pagination"></ul>
   </div>
       <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const filter = document.getElementById('dayFilter');
-      const cards = Array.from(document.querySelectorAll('#allTours .card'));
-      const perPage = 8; let currentPage = 1;
+   document.addEventListener('DOMContentLoaded', function() {
+  const filter = document.getElementById('dayFilter');
+  const cards = Array.from(document.querySelectorAll('#allTours .card'));
+  const pagination = document.getElementById('pagination');
+  const perPage = 8;
+  let currentPage = 1;
+  let filteredCards = [];
 
-      function applyFilter() {
-        const val = filter.value;
-        cards.forEach(card => {
-          const days = parseInt(card.dataset.days, 10);
-          let show = false;
-          if (val === 'all') show = true;
-          else if (val === '1-3' && days >=1 && days <=3) show = true;
-          else if (val === '3-7' && days >=3 && days <=7) show = true;
-          else if (val === '>7' && days >7) show = true;
-          card.style.display = show ? '' : 'none';
-        });
-        setupPagination();
-      }
-
-      function setupPagination() {
-        const visible = cards.filter(c => c.style.display !== 'none');
-        const pageCount = Math.ceil(visible.length / perPage);
-        const pagination = document.getElementById('pagination');
-        pagination.innerHTML = '';
-        for (let i=1; i<=pageCount; i++) {
-          const li = document.createElement('li'); li.textContent = i;
-          if (i=== currentPage) li.classList.add('active');
-          li.addEventListener('click', () => {
-            currentPage = i; showPage();
-          });
-          pagination.appendChild(li);
-        }
-        showPage();
-      }
-
-      function showPage() {
-        const visible = cards.filter(c => c.style.display !== 'none');
-        visible.forEach((card, idx) => {
-          card.style.order = '0';
-          card.style.display = 'none';
-        });
-        const start = (currentPage-1)*perPage;
-        visible.slice(start, start+perPage).forEach(card => card.style.display = '');
-      }
-
-      filter.addEventListener('change', () => { currentPage = 1; applyFilter(); });
-      applyFilter();
+  function applyFilter() {
+    const val = filter.value;
+    filteredCards = cards.filter(card => {
+      const days = parseInt(card.dataset.days, 10);
+      if (val === 'all') return true;
+      if (val === '1-3') return days >= 1 && days <= 3;
+      if (val === '3-7') return days >= 3 && days <= 7;
+      if (val === '>7')  return days > 7;
+      return false;
     });
+
+    currentPage = 1;
+    setupPagination();
+  }
+
+  function setupPagination() {
+    const pageCount = Math.ceil(filteredCards.length / perPage);
+    pagination.innerHTML = '';
+
+    if (pageCount <= 1) {
+      pagination.style.display = 'none';
+    } else {
+      pagination.style.display = 'flex';
+      for (let i = 1; i <= pageCount; i++) {
+        const li = document.createElement('li');
+        li.textContent = i;
+        if (i === currentPage) li.classList.add('active');
+        li.addEventListener('click', () => {
+          currentPage = i;
+          showPage();
+          setupPagination(); // cập nhật lại active
+        });
+        pagination.appendChild(li);
+      }
+    }
+
+    showPage();
+  }
+
+  function showPage() {
+    cards.forEach(card => {
+      card.style.display = 'none'; // ẩn tất cả
+    });
+
+    const start = (currentPage - 1) * perPage;
+    const end = start + perPage;
+    filteredCards.slice(start, end).forEach(card => {
+      card.style.display = ''; // chỉ hiển thị trang hiện tại
+    });
+  }
+
+  filter.addEventListener('change', applyFilter);
+  applyFilter(); // gọi lần đầu khi load
+});
   </script>
 </body>
 

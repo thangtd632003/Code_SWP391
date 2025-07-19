@@ -14,8 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import dal.BookingDao;
 import dal.ReviewDao;
+import dal.tourDao;
 import entity.Booking;
 import entity.Review;
+import entity.Tour;
 import entity.User;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -36,12 +38,14 @@ import java.util.logging.Logger;
 public class ReviewBookingTraveler_servlet extends HttpServlet {
     private BookingDao bookingDao;
     private ReviewDao reviewDao;
+    private tourDao tourDao;
   public void init() throws ServletException {
         super.init();
         try {
             Connection conn = new dal.DBContext().getConnection();
             bookingDao = new BookingDao(conn);
             reviewDao  = new ReviewDao(conn);
+            tourDao = new tourDao(conn);
         } catch (Exception e) {
             throw new ServletException("Unable to initialize DAOs", e);
         }
@@ -170,10 +174,10 @@ LocalDate departureDate = cleanDate.toInstant()
             }
             int rating = Integer.parseInt(request.getParameter("rating"));
             String comment = request.getParameter("comment");
-
+Tour t = tourDao.getTourById(booking.getTourId());
             Review r = new Review();
             r.setBookingId(bookingId);
-            r.setGuideId(booking.getTourId()); // lưu guideId đúng entity nếu Tour được join
+            r.setGuideId(t.getGuideId()); // lưu guideId đúng entity nếu Tour được join
             r.setRating(rating);
             r.setComment(comment);
 
