@@ -189,7 +189,7 @@ request.setAttribute("message", request.getAttribute("message")); // Giữ messa
 
                         Booking booking = bookingDao.getBookingById(bookingId);
                         java.util.Date departureDate = booking.getDepartureDate();
-                        Tour t = tourDao.getTourById(bookingId);
+                        Tour t = tourDao.getTourById(booking.getTourId());
                      Integer   tourDays = t.getDays();
 
                         boolean conflictApproved = bookingDao.hasApprovedConflict(
